@@ -24,17 +24,37 @@ int main(int argc, char *argv[])
     (s.sin_addr).s_addr = htonl(INADDR_ANY);
 
     // INTITIALISATION sockaddr_in
-    struct hostent* h;
+    struct hostent* host_info;
 
     //Creation de la socket d'ecoute (Primitive "socket")
     int p;
     // int socket(int domaine, int type, int protocole);
     p = socket(AF_INET,SOCK_STREAM,0);
     //On récupère l'adresse IP de l'host fournit
-    h = gethostbyname(argv[1]);
-    struct in_addr addr;
-    addr.s_addr = (u_long)h->h_addr_list[0];
-    printf("IP Address is : %s\n", inet_ntoa(addr));
+    char *host_name = argv[1];
+    host_info = gethostbyname(host_name);
+
+    if (host_info == NULL)
+    {
+        return(-1);
+    }
+
+    if (host_info->h_addrtype == AF_INET)
+    {
+        struct in_addr **address_list = (struct in_addr **)host_info->h_addr_list;
+        for(int i = 0; address_list[i] != NULL; i++)
+        {
+            printf("Adresse ipv4 : %s\n", inet_ntoa(*address_list[i]));
+        }
+    }
+    else if (host_info->h_addrtype == AF_INET6)
+    {
+        struct in6_addr **address_list = (struct in6_addr **)host_info->h_addr_list;
+        for(int i = 0; address_list[i] != NULL; i++)
+        {
+            printf("Adresse ipv6\n");
+        }
+    }
 
    }else
    {
