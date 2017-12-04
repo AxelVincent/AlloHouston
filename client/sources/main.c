@@ -6,6 +6,8 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
+#include "../headers/main.h"
+
 #define INVALID_SOCKET -1
 
 
@@ -41,5 +43,40 @@ int main(int argc, char *argv[])
      printf("Il doit y avoir 2 argument : HOST, PORT\n");
    }
    return 0;
+
+}
+
+int creationClient(char* hostname, int numeroPort, int descripteurSocketClient)
+{
+
+  struct sockaddr_in socketService;
+
+  socketService.sin_family = AF_INET;
+  socketService.sin_port = htons(numeroPort);
+  (socketService.sin_addr).s_addr = inet_addr("127.0.0.1");
+
+  int descripteur = socket(AF_INET,SOCK_STREAM,0);
+
+  if(descripteur>=3)
+  {
+    printf("socket fonctionne\n");
+
+    // int connect(int descripteur, const struct sockaddr *p, int len);
+    if(connect(descripteur,(struct sockaddr *) &socketService,sizeof(socketService)) == 0)
+    {
+      printf("Connexion sur %s:%d\n", inet_ntoa(socketService.sin_addr), htons(numeroPort));
+      return descripteur;
+    }
+    else
+    {
+        printf("Erreur lors de la connexion\n");
+    }
+
+  }
+  else
+  {
+    printf("Erreur lors de la creation de la socket\n");
+  }
+  return -1;
 
 }
