@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
    if(argc == 2)
    {
      // On a bien 1 argument qui doit etre le numero de PORT
-     creationServeur(atoi(argv[1]));
+
+     ecouteServeur(creationServeur(atoi(argv[1])));
    }else
    {
      printf("Il doit y avoir 1 argument : PORT\n");
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
 
 }
 
-void creationServeur(int numeroPort)
+int creationServeur(int numeroPort)
 {
   //Creation du serveur
   // TODO Verifier si c'est bien le socket d'ecoute
@@ -36,11 +37,11 @@ void creationServeur(int numeroPort)
   int descripteur;
   // int socket(int domaine, int type, int protocole);
   descripteur = socket(AF_INET,SOCK_STREAM,0);
-  
+
   //Attachement de la socket (Primitive "bind")
 
   // int bind(int descripteur, const struct sockaddr *p, int len);
-  if(descripteur>=2)
+  if(descripteur>=3)
   {
     printf("socket fonctionne\n");
     if(bind(descripteur,(struct sockaddr *) &socketEcoute,sizeof(socketEcoute)) == 0)
@@ -52,6 +53,7 @@ void creationServeur(int numeroPort)
       if(listen(descripteur, 100) == 0)
       {
         printf("listen fonctionne\n");
+        return descripteur;
 
       }
       else
@@ -64,13 +66,41 @@ void creationServeur(int numeroPort)
     {
       //Bind don't works
       printf("Erreur lors du bind\n");
+      printf("Peut etre que le port %d est deja utilise?\n", numeroPort);
     }
   }
   else
   {
     printf("Erreur lors de la creation de la socket\n");
   }
-
-
-
+  return -1;
 }
+
+  void ecouteServeur(int descripteur)
+  {
+
+    struct sockaddr_in socketService;
+    // TODO Peut etre besoin de ça ?
+    // socketService.sin_family = AF_INET;
+    // socketService.sin_port = htons(numeroPort);
+    // (socketService.sin_addr).s_addr = htonl(INADDR_ANY);
+
+    while(1)
+    {
+      //int accept(int descripteur, struct sockaddr *p, int *len);
+      //Attente d'acceptation client
+      printf("En attente de connexion...\n");
+      unsigned int tailleSocketService = sizeof(struct sockaddr_in);
+      int descripteurSocketService = accept(descripteur, (struct sockaddr *) &socketService, &tailleSocketService);
+      printf("%d\n",descripteurSocketService);
+      if(descripteurSocketService >= 4)
+      {
+          printf("accept fonctionne\n");
+      }
+      else
+      {
+        printf("Erreur lors de accept\n");
+      }
+
+    }
+  }

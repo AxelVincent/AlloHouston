@@ -1,5 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-void creationServeur(int numeroPort);
+int creationServeur(int numeroPort);
+void ecouteServeur(int descripteur);
 #endif
