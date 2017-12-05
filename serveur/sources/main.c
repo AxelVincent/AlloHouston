@@ -7,6 +7,7 @@
 
 #include "../headers/main.h"
 #include "../headers/service.h"
+#include "../headers/color.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +18,8 @@ int main(int argc, char *argv[])
 		ecouteServeur(creationServeur(atoi(argv[1])));
 	}else
 	{
-		printf("Il doit y avoir 1 argument : PORT\n");
+		fprintf(stderr, RED "Il doit y avoir 1 argument : "MAG"PORT "RESET "\n");
+		exit(-1);
 	}
 	return 0;
 
@@ -59,22 +61,25 @@ int creationServeur(int numeroPort)
 			}
 			else
 			{
-				printf("Erreur lors du listen\n");
+				fprintf(stderr, RED "Erreur lors du listen" RESET "\n");
+				exit(-1);
 			}
 
 		}
 		else
 		{
 			//Bind don't works
-			printf("Erreur lors du bind\n");
-			printf("Peut etre que le port %d est deja utilise?\n", numeroPort);
+			fprintf(stderr, RED "Erreur lors du listen" RESET "\n");
+			fprintf(stderr, "Peut etre que le port "YEL "%d" RESET " est deja utilise?\n", numeroPort);
+			exit(-1);
 		}
 	}
 	else
 	{
-		printf("Erreur lors de la creation de la socket\n");
+		fprintf(stderr, RED "Erreur lors de la creation de la socket" RESET "\n");
+		exit(-1);
 	}
-	return -1;
+
 }
 
 void ecouteServeur(int descripteur)
@@ -91,7 +96,6 @@ void ecouteServeur(int descripteur)
 		//int accept(int descripteur, struct sockaddr *p, int *len);
 		//Attente d'acceptation client
 		printf("En attente de connexion...\n");
-
 		unsigned int tailleSocketService = sizeof(struct sockaddr_in);
 		int descripteurSocketService = accept(descripteur, (struct sockaddr *) &socketService, &tailleSocketService);
 		printf("%d\n",descripteurSocketService);
@@ -101,25 +105,24 @@ void ecouteServeur(int descripteur)
 			switch (fork()) {
 				case -1:
 				// Erreur dans la création d'un FILS
-				printf("Erreur dans la création d'un fils");
+				fprintf(stderr, RED "Erreur dans la création d'un fils" RESET "\n");
+				exit(-1);
 
 				case 0:
 				// FILS
 				printf("Création du fils ayant pour numero de PID : %d\n",getpid());
 				nouveauService(descripteurSocketService);
-
+				break;
 				default:
 				// PERE
 				printf("Pere se remet en écoute : %d\n",getpid() );
-
 			}
 		}
 		else
 		{
-			printf("Erreur lors de accept\n");
+			fprintf(stderr, RED "Erreur lors du accept" RESET "\n");
+			exit(-1);
 		}
-
-
 
 	}
 }
