@@ -7,8 +7,20 @@
 
 #include "../headers/service.h"
 
+/**
+ * @file service.c
+ * @date 5 Dec 2017
+ * @brief Fichier permettant la création d'un nouveau service
+ *
+ * @see ../headers/service.h
+ */
 
-
+ /**
+  * @fn void nouveauService(int descripteurSocketService)
+  * @brief Crée un nouveau service
+  * @param descripteurSocketService descripteur de fichier associé au nouveau service, il est créé lorsque le serveur reçoit une nouvelle connexion
+  * @TODO créer la communication read write pour effectuer des actions sur le serveur
+  */
 void nouveauService(int descripteurSocketService)
 {
 	// Rechercher par :
