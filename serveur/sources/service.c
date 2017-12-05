@@ -29,7 +29,7 @@ void nouveauService(int descripteurSocketService)
 	//					- ville d'arrivée
 	//					- horaire de départ (train en question si l'heure est exacte, sinon le suivant)
 	//					- tranche horaire (départ, obtention d'une liste)
-	char * commandeRecu;
+	char commandeRecu[SIZE_MSG];
 	printf("nouveauService ok : %d\n",getpid());
 	read(descripteurSocketService, commandeRecu, SIZE_MSG);
 	printf("Commande reçu du client %s\n", commandeRecu);
