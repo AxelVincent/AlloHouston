@@ -109,7 +109,7 @@ int creationClient(char* adresse, int numeroPort)
     // int connect(int descripteur, const struct sockaddr *p, int len);
     if(connect(descripteur,(struct sockaddr *) &socketService,sizeof(socketService)) == 0)
     {
-      printf("Connexion sur %s:%d\n", inet_ntoa(socketService.sin_addr), htons(numeroPort));
+      printf("Connexion sur %s:%d\n", inet_ntoa(socketService.sin_addr), htons(socketService.sin_port));
       return descripteur;
     }
     else
