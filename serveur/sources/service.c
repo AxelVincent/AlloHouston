@@ -29,8 +29,22 @@ void nouveauService(int descripteurSocketService)
 	//					- ville d'arrivée
 	//					- horaire de départ (train en question si l'heure est exacte, sinon le suivant)
 	//					- tranche horaire (départ, obtention d'une liste)
-	char * messageRecu;
+	char * commandeRecu;
 	printf("nouveauService ok : %d\n",getpid());
-	read(descripteurSocketService, messageRecu, SIZE_MSG);
-	printf("Message recu du client %s\n", messageRecu );
+	read(descripteurSocketService, commandeRecu, SIZE_MSG);
+	printf("Commande reçu du client %s\n", commandeRecu);
+	//TODO voir en fonction du protocole d'échange
+	int commande = 1;//(commandeRecu);
+	switch (commande) {
+		case 1:
+		//Fonction 1 : Ville de départ + ville d'arrivée +  horaire de départ TODO faire les fonctions par ici
+		break;
+		case 2:
+		//Fonction 2 : ville de départ + ville d'arrivée + tranche horaire pour le départ TODO faire les fonctions par ici
+		break;
+		case 3:
+		//Fonction 3 : Ville de départ + arrivée = renvoi une liste TODO faire les fonctions par ici
+		break;
+
+	}
 }

@@ -26,12 +26,9 @@ int main(int argc, char *argv[])
     char* adresse = getHostName(host_name);
     if(adresse != NULL)
     {
-      char messageAEnvoyer[SIZE_MSG];
-      int descripteurClient = creationClient(adresse, numeroPort);
-      printf("Que voulez vous dire au serveur ? ");
-      scanf("%256[0-9a-zA-Z ]", &messageAEnvoyer);
-      printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
-      write(descripteurClient, messageAEnvoyer, SIZE_MSG);
+
+      interactionServeur(creationClient(adresse, numeroPort));
+
     }
     else
     {
@@ -112,5 +109,20 @@ int creationClient(char* adresse, int numeroPort)
     fprintf(stderr, RED "Erreur lors de la creation de la socket" RESET "\n");
     exit(-1);
   }
+
+}
+
+
+
+void interactionServeur(int descripteurSocketClient){
+
+  // Recevoir la liste des villes
+  // Afficher la liste des villes
+
+  char messageAEnvoyer[SIZE_MSG];
+  printf("Que voulez vous dire au serveur ? ");
+  scanf("%256[0-9a-zA-Z ]", &messageAEnvoyer);
+  printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
+  write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
 
 }
