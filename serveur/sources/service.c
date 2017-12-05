@@ -6,9 +6,7 @@
 #include <unistd.h>
 
 #include "../headers/service.h"
-<<<<<<< HEAD
 #define SIZE_MSG 256
-=======
 
 /**
  * @file service.c
@@ -17,7 +15,6 @@
  *
  * @see ../headers/service.h
  */
->>>>>>> 6817827da14dea82cd9152e183b090505b2b65ca
 
  /**
   * @fn void nouveauService(int descripteurSocketService)
