@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 
 #include "../headers/main.h"
+#include "../headers/color.h"
 
 #define INVALID_SOCKET -1
 
@@ -18,14 +19,6 @@ int main(int argc, char *argv[])
     // On a bien 1 argument qui doit etre l'adresse IP cible
     printf("HostName fournit : %s, port : %s\n", argv[1], argv[2]);
 
-    // INTITIALISATION sockaddr_in
-    /*
-    struct sockaddr_in s;
-    int numeroPort = atoi(argv[2]);
-    s.sin_family = AF_INET;
-    s.sin_port = htons(numeroPort);
-    (s.sin_addr).s_addr = htonl(INADDR_ANY);
-    */
     char *host_name = argv[1];
     int numeroPort = atoi(argv[2]);
     char* adresse = getHostName(host_name);
@@ -35,26 +28,14 @@ int main(int argc, char *argv[])
     }
     else
     {
-      printf("Probleme pour resoudre le nom de domaine.\n");
+      fprintf(stderr, RED "Probleme pour resoudre le nom de domaine" RESET "\n");
+      exit(-1);
     }
-
-
-
-
-
-
-    // INTITIALISATION sockaddr_in
-
-
-    //Creation de la socket d'ecoute (Primitive "socket")
-    // int p;
-    // int socket(int domaine, int type, int protocole);
-    // p = socket(AF_INET,SOCK_STREAM,0);
-    //On récupère l'adresse IP de l'host fournit
 
    }else
    {
-     printf("Il doit y avoir 2 argument : HOST, PORT\n");
+     fprintf(stderr, RED "Il doit y avoir 2 argument :"MAG" HOST" RED","MAG" PORT" RESET "\n");
+     exit(-1);
    }
    return 0;
 
@@ -114,14 +95,15 @@ int creationClient(char* adresse, int numeroPort)
     }
     else
     {
-        printf("Erreur lors de la connexion\n");
+        fprintf(stderr, RED "Erreur lors de la connexion" RESET "\n");
+        exit(-1);
     }
 
   }
   else
   {
-    printf("Erreur lors de la creation de la socket\n");
+    fprintf(stderr, RED "Erreur lors de la creation de la socket" RESET "\n");
+    exit(-1);
   }
-  return -1;
 
 }

@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 
 #include "../headers/main.h"
+#include "../headers/color.h"
 
 
 int main(int argc, char *argv[])
@@ -16,7 +17,8 @@ int main(int argc, char *argv[])
      ecouteServeur(creationServeur(atoi(argv[1])));
    }else
    {
-     printf("Il doit y avoir 1 argument : PORT\n");
+     fprintf(stderr, RED "Il doit y avoir 1 argument : "MAG"PORT "RESET "\n");
+     exit(-1);
    }
    return 0;
 
@@ -58,22 +60,25 @@ int creationServeur(int numeroPort)
       }
       else
       {
-        printf("Erreur lors du listen\n");
+        fprintf(stderr, RED "Erreur lors du listen" RESET "\n");
+        exit(-1);
       }
 
     }
     else
     {
       //Bind don't works
-      printf("Erreur lors du bind\n");
-      printf("Peut etre que le port %d est deja utilise?\n", numeroPort);
+      fprintf(stderr, RED "Erreur lors du listen" RESET "\n");
+      fprintf(stderr, "Peut etre que le port "YEL "%d" RESET " est deja utilise?\n", numeroPort);
+      exit(-1);
     }
   }
   else
   {
-    printf("Erreur lors de la creation de la socket\n");
+    fprintf(stderr, RED "Erreur lors de la creation de la socket" RESET "\n");
+    exit(-1);
   }
-  return -1;
+
 }
 
   void ecouteServeur(int descripteur)
@@ -99,7 +104,8 @@ int creationServeur(int numeroPort)
       }
       else
       {
-        printf("Erreur lors de accept\n");
+        fprintf(stderr, RED "Erreur lors du accept" RESET "\n");
+        exit(-1);
       }
 
     }
