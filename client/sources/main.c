@@ -5,11 +5,13 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #include "../headers/main.h"
 #include "../headers/color.h"
 
 #define INVALID_SOCKET -1
+#define SIZE_MSG 256
 
 
 int main(int argc, char *argv[])
@@ -24,7 +26,12 @@ int main(int argc, char *argv[])
     char* adresse = getHostName(host_name);
     if(adresse != NULL)
     {
-      creationClient(adresse, numeroPort);
+      char messageAEnvoyer[SIZE_MSG];
+      int descripteurClient = creationClient(adresse, numeroPort);
+      printf("Que voulez vous dire au serveur ? ");
+      scanf("%256[0-9a-zA-Z ]", &messageAEnvoyer);
+      printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
+      write(descripteurClient, messageAEnvoyer, SIZE_MSG);
     }
     else
     {
