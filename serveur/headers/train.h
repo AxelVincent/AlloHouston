@@ -13,4 +13,7 @@ struct Train
     int reduc;
 };
 
+void printTrain(Train* train);
+Train* trainFromCSV(char* csv);
+
 #endif

@@ -1,30 +1,47 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "./train.c"
 
-
+/**
+ * @brief Exemple d'usage de la structure train et des fonctions printTrain() et trainFromCSV()
+ * @see ./train.c
+ * @see ../headers/train.h
+ * @see ../headers/temps.h
+ */
 int main(int argc, char *argv[])
 {
-  //INIT TEMPS
-  struct Temps heureDepart;
-  heureDepart.heure = 6;
-  heureDepart.minute = 15;
-  struct Temps heureArrivee;
-  heureArrivee.heure = 7;
-  heureArrivee.minute = 31;
-
   //INIT TRAIN
-  struct Train trainTest;
-  trainTest.villeDepart = "Valence";
-  trainTest.villeArrivee = "Grenoble";
-  trainTest.heureDepart = heureDepart;
-  trainTest.heureArrivee = heureArrivee;
-  trainTest.prix = 17.60;
-  trainTest.reduc = 0;
+  struct Train* trainTest = malloc(sizeof(Train));
+  trainTest->villeDepart = "Grenoble";
+  trainTest->villeArrivee = "Valence";
+  trainTest->heureDepart.heure = 6;
+  trainTest->heureDepart.minute = 15;
+  trainTest->heureArrivee.heure = 7;
+  trainTest->heureArrivee.minute = 31;
+  trainTest->prix = 17.60;
+  trainTest->reduc = 0;
 
   printTrain(trainTest);
+  printf("\n");
+
+  char *csv = "Grenoble;Valence;16;55;17;55;17.60";
+  struct Train* testTrainCSV;
+  testTrainCSV = trainFromCSV(csv);
+  printTrain(testTrainCSV);
+
+
+  char *csv2 = "LYON;Paris;00;30;23;59;42.66";
+  struct Train* testTrainCSV2;
+  testTrainCSV2 = trainFromCSV(csv2);
+  printf("\n");
+  printTrain(testTrainCSV2);
+  printf("\n");
+  free(trainTest);
+  free(testTrainCSV);
+  free(testTrainCSV2);
 
   return 0;
 }
