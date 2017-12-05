@@ -16,10 +16,10 @@
   * @fn void printTrain(Train* train)
   * @brief Affiche les informations d'un train
   * @param train Le pointeur train pour lequel on souhaite afficher les informations.
-  * @TODO ajouter l'affichage de la réduc.
+  * @TODO ajuster l'affichage de la réduc.
   */
 void printTrain(Train* train){
-  printf("%s -> %s Départ %d:%d arrivée %d:%d Prix : %f", train->villeDepart, train->villeArrivee, train->heureDepart.heure, train->heureDepart.minute, train->heureArrivee.heure, train->heureArrivee.heure, train->prix);
+  printf("%s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->villeDepart, train->villeArrivee, train->heureDepart.heure, train->heureDepart.minute, train->heureArrivee.heure, train->heureArrivee.heure, train->prix, train->reduc);
 }
 
 /**
@@ -65,7 +65,18 @@ Train* trainFromCSV(char* csv){
   // reduc
   token = strsep(&str, ";");
   if(token != NULL){
-    train->reduc = atoi(token);
+    if (token == "REDUC")
+    {
+      train->reduc = 1;
+    }
+    else if (token == "SUPPL")
+    {
+      train->reduc = -1;
+    }
+    else
+    {
+      train->reduc = 0;
+    }
   }
 
   free(tofree); // We free the str we made
