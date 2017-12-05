@@ -43,5 +43,32 @@ int main(int argc, char *argv[])
   free(testTrainCSV);
   free(testTrainCSV2);
 
+  //LECTURE de train.txt
+  static const char filename[] = "../ressources/Trains.txt";
+   FILE *file = fopen ( filename, "r" );
+   int lineCount = 0;
+   if ( file != NULL )
+   {
+      char line [ 256 ]; /* or other suitable maximum line size */
+      int trainCount = 0;
+      while ( fgets ( line, sizeof line, file ) != NULL ) /* read a line */
+      {
+        lineCount ++;
+      }
+      printf("%d ligne dans le fichier Trains.txt\n", lineCount);
+      rewind(file); 
+      Train *listeTrain[lineCount];
+      while ( fgets ( line, sizeof line, file ) != NULL ) /* read a line */
+      {
+        listeTrain[trainCount] = trainFromCSV(line);
+        printTrain(listeTrain[trainCount]);
+        trainCount ++;
+      }
+      fclose ( file );
+   }
+   else
+   {
+      perror ( filename ); /* why didn't the file open? */
+   }
   return 0;
 }
