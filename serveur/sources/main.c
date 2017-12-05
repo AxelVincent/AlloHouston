@@ -28,7 +28,6 @@ int main(int argc, char *argv[])
 int creationServeur(int numeroPort)
 {
 	//Creation du serveur
-	// TODO Verifier si c'est bien le socket d'ecoute
 
 	struct sockaddr_in socketEcoute;
 
