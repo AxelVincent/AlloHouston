@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Iheaders
-SRCS =   ./sources/main.c
+SRCS =   ./sources/main.c ./sources/service.c
 OBJS = $(SRCS:.c=.o)
 EXEC = AlloHoustonServer
 
