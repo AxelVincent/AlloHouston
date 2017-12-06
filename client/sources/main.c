@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     if(adresse != NULL)
     {
 
-      interactionServeur(creationClient(adresse, numeroPort));
+      lectureEntreeClient(creationClient(adresse, numeroPort));
 
     }
     else
@@ -114,15 +114,10 @@ int creationClient(char* adresse, int numeroPort)
 
 
 
-void interactionServeur(int descripteurSocketClient){
-
-  // Recevoir la liste des villes
-  // Afficher la liste des villes
-
-  char messageAEnvoyer[SIZE_MSG];
-  printf("Que voulez vous dire au serveur ? ");
-  scanf("%256[0-9a-zA-Z ]", &messageAEnvoyer);
-  printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
-  write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
-
+char* lectureEntreeClient(int descripteurSocketClient)
+{
+  char entreeClient[SIZE_MSG];
+  //scanf("%256[0-9a-zA-Z ]", &messageAEnvoyer);
+  read(descripteurSocketClient, entreeClient, SIZE_MSG);
+  return entreeClient;
 }

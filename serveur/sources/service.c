@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "../headers/service.h"
 #define SIZE_MSG 256
@@ -29,12 +30,17 @@ void nouveauService(int descripteurSocketService)
 	//					- ville d'arrivée
 	//					- horaire de départ (train en question si l'heure est exacte, sinon le suivant)
 	//					- tranche horaire (départ, obtention d'une liste)
-	char commandeRecu[SIZE_MSG];
+	char commandeAEnvoyer[SIZE_MSG];
+	strcpy(commandeAEnvoyer, "Quelle commande voulez vous effectuer ? \n 1: Recherche du premier train a partir de l'heure de depart \n 2: Recherche de trains dans une tranche horaire\n 3: Recherche tous les trains pour une ville de depart et d'arrivee\n");
 	printf("nouveauService ok : %d\n",getpid());
-	read(descripteurSocketService, commandeRecu, SIZE_MSG);
-	printf("Commande reçu du client %s\n", commandeRecu);
+	write(descripteurSocketService, commandeAEnvoyer, SIZE_MSG);
+	// Réception de la fonction a executer
+	char commandeChar[SIZE_MSG];
+	read(descripteurSocketService,commandeChar, SIZE_MSG);
+
 	//TODO voir en fonction du protocole d'échange
-	int commande = 1;//(commandeRecu);
+	int commande = atoi(commandeChar);
+	printf("La commande que veux effectuer le client est %d", commande);
 	switch (commande) {
 		case 1:
 		//Fonction 1 : Ville de départ + ville d'arrivée +  horaire de départ TODO faire les fonctions par ici
