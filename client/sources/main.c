@@ -27,8 +27,26 @@ int main(int argc, char *argv[])
     char* adresse = getHostName(host_name);
     if(adresse != NULL)
     {
+      int continuer = 1;
 
-      interactionServeur(creationClient(adresse, numeroPort));
+      int descripteurClient = creationClient(adresse, numeroPort);
+      char* messageRecu;
+      char* messageEnvoye;
+
+      while(continuer)
+      {
+        messageRecu = receptionMessageServeur(descripteurClient);
+        if(strcmp(messageRecu,"stop") == 0)
+        {
+          continuer = 0;
+        }
+        else
+        {
+          messageEnvoye = lectureEntreeClient(descripteurClient);
+        }
+      }
+
+      close(descripteurClient);
 
     }
     else
@@ -115,19 +133,25 @@ int creationClient(char* adresse, int numeroPort)
 
 
 
-void interactionServeur(int descripteurSocketClient){
-
-  // Recevoir la liste des villes
-  // Afficher la liste des villes
-
+char* lectureEntreeClient(int descripteurSocketClient)
+{
   char messageAEnvoyer[SIZE_MSG];
   int resultWrite;
-  do{
-    printf("Que voulez vous dire au serveur ? ");
-    fgets(messageAEnvoyer, SIZE_MSG, stdin);
-    strtok(messageAEnvoyer, "\n");
-    //scanf("%"SIZE_MSG"s", &messageAEnvoyer);
-    printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
-    resultWrite = write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
-  } while (messageAEnvoyer != "QUIT");
+  printf("Que voulez vous dire au serveur ? ");
+  fgets(messageAEnvoyer, SIZE_MSG, stdin);
+  strtok(messageAEnvoyer, "\n");
+  printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
+  resultWrite = write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
+  return messageAEnvoyer;
+}
+
+char* receptionMessageServeur(int descripteurSocketClient){
+
+  //Reception des messages serveur
+
+  char* commandeRecu;
+  read(descripteurSocketClient, commandeRecu, SIZE_MSG);
+  printf("Message reçu du père : %s\n", commandeRecu);
+  return commandeRecu;
+
 }
