@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "../headers/testStructure.h"
