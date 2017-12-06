@@ -1,5 +1,7 @@
 #include "../headers/temps.h"
 #include "../headers/train.h"
+#include "../headers/outils.h"
+#include "./outils.c"
 #include <stdio.h>
 #include <string.h>
 
@@ -41,10 +43,12 @@ Train* trainFromCSV(char* csv)
 
   // villeDepart
   token = strsep(&str, ";");
+  strToUpper(token); // On met le nom de ville en majuscule
   train->villeDepart = strdup(token);
 
   // villeArrivee
   token = strsep(&str, ";");
+  strToUpper(token); // On met le nom de ville en majuscule
   train->villeArrivee = strdup(token);
 
   // heureDepart
@@ -67,6 +71,7 @@ Train* trainFromCSV(char* csv)
   token = strsep(&str, ";");
   if (token != NULL)
   {
+    strToUpper(token); // On met la reduc ou supp en majuscule
     int len = strlen(token);
     token[len-1] = '\0';
     if (strcmp(token, "REDUC") == 0)

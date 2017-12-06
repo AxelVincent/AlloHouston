@@ -28,7 +28,14 @@ int main(int argc, char *argv[])
    return 0;
 }
 
-int PetiteFonction() // Le nom des fonctions commence par une majuscule
+
+ /**
+  * @fn int PetiteFonction()
+  * @brief Fonction qui renvoie 42
+  * @return int Renvoie le sens de la vie
+  * @TODO Trouver le sens de la vie
+  */
+int petiteFonction() // Le nom des fonctions commence par une premiere lettre en minuscule puis le mot suivant par une majuscule
 {
    return 42;
 }
