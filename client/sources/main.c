@@ -6,6 +6,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "../headers/main.h"
 #include "../headers/color.h"
@@ -26,8 +27,25 @@ int main(int argc, char *argv[])
     char* adresse = getHostName(host_name);
     if(adresse != NULL)
     {
+      int continuer = 1;
 
-      interactionServeur(creationClient(adresse, numeroPort));
+      int descripteurClient = creationClient(adresse, numeroPort);
+      char* messageRecu;
+
+      while(continuer)
+      {
+        messageRecu = receptionMessageServeur(descripteurClient);
+        if(strcmp(messageRecu,"stop") == 0)
+        {
+          continuer = 0;
+        }
+        else
+        {
+          interactionServeur(descripteurClient);
+        }
+      }
+
+      close(descripteurClient);
 
     }
     else
@@ -124,5 +142,16 @@ void interactionServeur(int descripteurSocketClient){
   scanf("%256[0-9a-zA-Z ]", &messageAEnvoyer);
   printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
   write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
+
+}
+
+char* receptionMessageServeur(int descripteurSocketClient){
+
+  //Reception des messages serveur
+
+  char* commandeRecu;
+  read(descripteurSocketClient, commandeRecu, SIZE_MSG);
+  printf("Message reçu du père : %s\n", commandeRecu);
+  return commandeRecu;
 
 }
