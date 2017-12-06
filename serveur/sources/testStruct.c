@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "../headers/testStructure.h"
@@ -50,7 +50,9 @@ int main(int argc, char *argv[])
 	char * villeArrivee = "Valence";
 	char * heureDepart = "14:14";
 	char * heureDepartFin = "19:59";
-
+	//int idxToDel = 2;
+//	memmove(&heureDepart[idxToDel], &heureDepart[idxToDel + 1], strlen(heureDepart) - idxToDel);
+	printf("Heure de depart concatené: %s \n", heureDepart);
 	// Création de la structure en faisant appel au ficher train.txt
 	static const char nomFichier[] = "../ressources/Trains.txt";
 	FILE *fichier = fopen ( nomFichier, "r" );
@@ -110,8 +112,8 @@ void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart
 
 
 
-
-
+	printf("Heure de départ : %d\n", listeTrain[19]->heureDepart->heure);
+	tempsVersInt(listeTrain[19]->heureDepart);
 
 	printf("%s\n", listeTrain[20]->villeDepart);
 	printf("%s\n", listeTrain[1]->villeArrivee);
@@ -129,12 +131,33 @@ void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * v
 	for (int trainCourant = 0; trainCourant < tailleListe; trainCourant++)
 	{
 		//printf("ville de depart courant : %s\n arrivee : %s \n", listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee );
-		/*if (strcmp(villeDepart, listeTrain->villeDepart) == 0 && strcmp(villeDepart, listeTrain->villeDepart) == 0)
+		if (strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0 && strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0)
 		{
 			listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
 			printTrain(listeTrain[trainCourant]);
 			nombreTrainTries++;
-		}*/
+		}
 	}
 	printf("%d\n", nombreTrainTries );
+}
+
+int tempsVersInt(struct Temps* temp)
+{
+	printf("\nDonne moi l'heure bb  %d\n",temp->heure );
+
+	int test = temp->heure * 100 + temp->minute;
+	printf("%d\n", test );
+}
+
+int int_pow(int base, int exp)
+{
+    int result = 1;
+    while (exp)
+    {
+        if (exp & 1)
+           result *= base;
+        exp /= 2;
+        base *= base;
+    }
+    return result;
 }
