@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	if ( fichier != NULL )
 	{
 		char ligne [ 256 ]; /* or other suitable maximum ligne size */
-		int trainCount = 0;
+		int lineCount = 0;
 		while ( fgets ( ligne, sizeof ligne, fichier ) != NULL ) /* read a ligne */
 		{
 			compteLigne ++;
@@ -67,9 +67,9 @@ int main(int argc, char *argv[])
 		Train *listeTrain[compteLigne];
 		while ( fgets ( ligne, sizeof ligne, fichier ) != NULL ) /* read a ligne */
 		{
-			listeTrain[trainCount] = trainFromCSV(ligne);
-			//printTrain(listeTrain[trainCount]);
-			trainCount ++;
+			listeTrain[lineCount] = trainFromCSV(ligne);
+			//printTrain(listeTrain[compteLigne]);
+			lineCount ++;
 		}
 		fclose ( fichier );
 		// Une fois la structure établie, il est alors possible de commencer les traitements
@@ -94,13 +94,23 @@ int main(int argc, char *argv[])
 
 
 
-void trouverTrain(struct Train** listeTrain, char * villeDepart, char * villeArrivee, char * heureDepart)
+void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart)
 {
-	/**printTrain(listeTrain[1]);
-	printf("ville depart : %s \n", villeDepart);
-	printf("ville arrivee : %s \n", villeArrivee);
-	printf("heure depart : %s \n", heureDepart);
-	printTrain(listeTrain[2]);*/
+	char nouvelleListe[3][compteLigne];
+	for (int i = 0; i < compteLigne; i++) {
+		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0) {
+			if (strcmp (villeArrivee, listeTrain[i]->villeArrivee) == 0) {
+				printf("strings match\n");
+			}
+		}
+	}
+
+
+
+	printf("%s\n", listeTrain[20]->villeDepart);
+	printf("%s\n", listeTrain[1]->villeArrivee);
+
+
 }
 
 void trouverTrainParTranche(struct Train** listeTrain, char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin, int tailleListe)
