@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
   * @return int Renvoie le sens de la vie
   * @TODO Trouver le sens de la vie
   */
-int PetiteFonction() // Le nom des fonctions commence par une majuscule
+int petiteFonction() // Le nom des fonctions commence par une premiere lettre en minuscule puis le mot suivant par une majuscule
 {
    return 42;
 }
