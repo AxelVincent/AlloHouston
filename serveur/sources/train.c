@@ -65,11 +65,13 @@ Train* trainFromCSV(char* csv){
   // reduc
   token = strsep(&str, ";");
   if(token != NULL){
-    if (token == "REDUC")
+    int len = strlen(token);
+    token[len-1] = '\0';
+    if (strcmp(token, "REDUC") == 0)
     {
       train->reduc = 1;
     }
-    else if (token == "SUPPL")
+    else if (strcmp(token, "SUPPL") == 0)
     {
       train->reduc = -1;
     }
