@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
 
 
-void TrouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
+void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
 {
 	struct Train* nouvelleListe = malloc(sizeof(Train));
 	int j = 0;
