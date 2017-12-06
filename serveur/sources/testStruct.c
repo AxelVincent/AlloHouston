@@ -50,10 +50,11 @@ int main(int argc, char *argv[])
 	char * villeArrivee = "Valence";
 	char * heureDepart = "14";
 	char * minuteDepart = "14";
-	char * heureDepartFin = "19:59";
-	//int idxToDel = 2;
-//	memmove(&heureDepart[idxToDel], &heureDepart[idxToDel + 1], strlen(heureDepart) - idxToDel);
-	printf("Heure de depart concatené: %s \n", heureDepart);
+	char * heureDepartFin= "19:59";
+
+
+	int newHeure = charVersInt(heureDepartFin);
+	printf("Heure de depart concatené: %d \n", newHeure);
 	// Création de la structure en faisant appel au ficher train.txt
 	static const char nomFichier[] = "../ressources/Trains.txt";
 	FILE *fichier = fopen ( nomFichier, "r" );
@@ -77,26 +78,31 @@ int main(int argc, char *argv[])
 		}
 		fclose ( fichier );
 		// Une fois la structure établie, il est alors possible de commencer les traitements
-
 		trouverTrain(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
 		trouverTrainParTranche(listeTrain, compteLigne, villeDepart, villeArrivee, heureDepart, heureDepartFin);
-
-
-
-
 	}
 	else
 	{
 		perror ( nomFichier ); /* why didn't the fichier open? */
 	}
-
-
-
-
 	return 0;
 }
 
-
+int charVersInt(char *heure)
+{
+	int result;
+	char *token, *str, *tofree;
+	tofree = str = strdup(heure);
+	//heureDepart
+	token = strsep(&str, ":");
+	int heures = atoi(token);
+	//minutes
+	token = strsep(&str, ":");
+	int minutes = atoi(token);
+	result = heures*100 + minutes;
+	free(tofree);
+	return result;
+}
 
 void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
 {
@@ -154,13 +160,9 @@ void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * v
 		}
 	}
 	printf("%d\n", nombreTrainTries );
-		listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
-		printTrain(listeTrain[trainCourant]);
-		nombreTrainTries++;
-	}
-
-	printf("%d\n", nombreTrainTries );
 }
+
+
 
 int tempsVersInt(struct Temps* temp)
 {
