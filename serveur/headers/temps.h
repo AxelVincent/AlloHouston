@@ -8,4 +8,6 @@ struct Temps
     int minute;
 };
 
+Temps* tempsFromCSV(char* csv);
+
 #endif

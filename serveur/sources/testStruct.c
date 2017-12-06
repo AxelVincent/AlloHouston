@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "../headers/testStructure.h"
 #include "./train.c"
+#include "./temps.c"
 
 /**
 * @brief Exemple d'usage de la structure train et des fonctions printTrain() et trainFromCSV()
@@ -46,38 +47,39 @@ int main(int argc, char *argv[])
 
 	// Test des requetes
 	char * villeDepart = "Grenoble";
-	char * villeArrivee = "Lyon";
-	char * heureDepart = "14;14";
-
+	char * villeArrivee = "Valence";
+	char * heureDepart = "14";
+	char * minuteDepart = "14";
+	char * heureDepartFin = "19:59";
+	//int idxToDel = 2;
+//	memmove(&heureDepart[idxToDel], &heureDepart[idxToDel + 1], strlen(heureDepart) - idxToDel);
+	printf("Heure de depart concatené: %s \n", heureDepart);
 	// Création de la structure en faisant appel au ficher train.txt
 	static const char nomFichier[] = "../ressources/Trains.txt";
 	FILE *fichier = fopen ( nomFichier, "r" );
 	int compteLigne = 0;
-	if ( fichier != NULL )
+	if (fichier != NULL)
 	{
 		char ligne [ 256 ]; /* or other suitable maximum ligne size */
-		int trainCount = 0;
-		while ( fgets ( ligne, sizeof ligne, fichier ) != NULL ) /* read a ligne */
+		int lineCount = 0;
+		while (fgets(ligne, sizeof ligne, fichier) != NULL) /* read a ligne */
 		{
 			compteLigne ++;
 		}
 		printf("%d ligne dans le fichier Trains.txt\n", compteLigne);
 		rewind(fichier);
 		Train *listeTrain[compteLigne];
-		while ( fgets ( ligne, sizeof ligne, fichier ) != NULL ) /* read a ligne */
+		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
 		{
-			listeTrain[trainCount] = trainFromCSV(ligne);
-			//printTrain(listeTrain[trainCount]);
-			trainCount ++;
+			listeTrain[lineCount] = trainFromCSV(ligne);
+			//printTrain(listeTrain[lineCount]);
+			lineCount ++;
 		}
-		fclose ( fichier );
+		fclose (fichier);
 		// Une fois la structure établie, il est alors possible de commencer les traitements
 
-		trouverTrain(listeTrain,villeDepart,villeArrivee,heureDepart);
-
-
-
-
+		trouverTrain(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
+		trouverTrainParTranche(listeTrain, compteLigne, villeDepart, villeArrivee, heureDepart, heureDepartFin);
 
 	}
 	else
@@ -93,12 +95,68 @@ int main(int argc, char *argv[])
 
 
 
-void trouverTrain(struct Train** listeTrain, char * villeDepart, char * villeArrivee, char * heureDepart)
+void TrouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
 {
+	struct Train* nouvelleListe = malloc(sizeof(Train));
+	int j = 0;
+	for (int i = 0; i < compteLigne; i++) {
+		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0) {
+			if (strcmp (villeArrivee, listeTrain[i]->villeArrivee) == 0) {
+				nouvelleListe[j] = *listeTrain[i];
+				j++;
+			}
+		}
+	}
+	int difference[j];
+	int compteDifference = 0;
+	for (compteDifference; compteDifference < j; compteDifference++) {
+		difference[compteDifference] = abs(atoi(heureDepart) - listeTrain[compteDifference]->heureDepart->heure);
+		printf("heure de départ %d, heure de départ comparée %d\n", atoi(heureDepart), nouvelleListe[compteDifference].heureDepart->heure);
+	}
 
-	printTrain(listeTrain[1]);
+	printf("Difference : %d\n", difference[0]);
+	printf("Difference : %d\n", difference[1]);
+	printf("Difference : %d\n", difference[2]);
+	printf("Difference : %d\n", difference[3]);
+	printf("Difference : %d\n", difference[4]);
+	printf("Difference : %d\n", difference[5]);
+	printf("Taille nouvelleListe : %d\n", j);
+
+
+
+	printf("Heure de départ : %d\n", listeTrain[19]->heureDepart->heure);
+	tempsVersInt(listeTrain[19]->heureDepart);
+
+	printf("%s\n", listeTrain[20]->villeDepart);
+	printf("yo %s\n", listeTrain[4]->villeArrivee);
+
+
+}
+
+void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin)
+{
+	Train *listeTrainNouvelle[tailleListe];
+	int nombreTrainTries = 0;
 	printf("ville depart : %s \n", villeDepart);
 	printf("ville arrivee : %s \n", villeArrivee);
-	printf("heure depart : %s \n", heureDepart);
-	printTrain(listeTrain[2]);
+
+	for (int trainCourant = 0; trainCourant < tailleListe; trainCourant++)
+	{
+		//printf("ville de depart courant : %s\n arrivee : %s \n", listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee );
+		if (strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0 && strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0)
+		{
+			listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
+			printTrain(listeTrain[trainCourant]);
+			nombreTrainTries++;
+		}
+	}
+	printf("%d\n", nombreTrainTries );
+}
+
+int tempsVersInt(struct Temps* temp)
+{
+	printf("\nDonne moi l'heure bb  %d\n",temp->heure );
+
+	int test = temp->heure * 100 + temp->minute;
+	printf("%d\n", test );
 }

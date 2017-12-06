@@ -13,13 +13,14 @@
  */
 
  /**
-  * @fn void printTrain(Train* train)
+  * @fn void printfrintTrain(Train* train)
   * @brief Affiche les informations d'un train
   * @param train Le pointeur train pour lequel on souhaite afficher les informations.
   * @TODO ajuster l'affichage de la réduc.
   */
-void printTrain(Train* train){
-  printf("%s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->villeDepart, train->villeArrivee, train->heureDepart.heure, train->heureDepart.minute, train->heureArrivee.heure, train->heureArrivee.heure, train->prix, train->reduc);
+void printTrain(Train* train)
+{
+  printf("%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->id, train->villeDepart, train->villeArrivee, train->heureDepart->heure, train->heureDepart->minute, train->heureArrivee->heure, train->heureArrivee->minute, train->prix, train->reduc);
 }
 
 /**
@@ -27,13 +28,17 @@ void printTrain(Train* train){
  * @brief Crée un train correspondant au info de la chaine csv fournit
  * @param csv Une ligne csv sous la forme : "villeDepart;villeArrivee;heureDepart.heure;heureDepart.minute;heureDepart.heure;heureArrivee.minute;prix;reduc".
  * @return pointeur sur un train
- * Exemple de ligne csv reçu : "Grenoble;Valence;16;55;17;55;17.60;SUPPL"
+ * Exemple de ligne csv reçu : "Grenoble;Valence;16:55;17:55;17.60;SUPPL"
  */
-Train* trainFromCSV(char* csv){
-
+Train* trainFromCSV(char* csv)
+{
   struct Train* train = malloc(sizeof(Train));
   char *token, *str, *tofree;
   tofree = str = strdup(csv);  // We own str's memory now.
+  // id
+  token = strsep(&str, ";");
+  train->id = atoi(token);
+
   // villeDepart
   token = strsep(&str, ";");
   train->villeDepart = strdup(token);
@@ -42,21 +47,17 @@ Train* trainFromCSV(char* csv){
   token = strsep(&str, ";");
   train->villeArrivee = strdup(token);
 
-  // heureDepart.heure
+  // heureDepart
   token = strsep(&str, ";");
-  train->heureDepart.heure = atoi(token);
+  struct Temps* heureDepart = malloc(sizeof(Temps));
+  heureDepart = tempsFromCSV(token);
+  train->heureDepart = heureDepart;
 
-  // heureDepart.minute
+  // heureArrivee
   token = strsep(&str, ";");
-  train->heureDepart.minute = atoi(token);
-
-  // heureArrivee.heure
-  token = strsep(&str, ";");
-  train->heureArrivee.heure = atoi(token);
-
-  // heureArrivee.minute
-  token = strsep(&str, ";");
-  train->heureArrivee.minute = atoi(token);
+  struct Temps* heureArrivee = malloc(sizeof(Temps));
+  heureArrivee = tempsFromCSV(token);
+  train->heureArrivee = heureArrivee;
 
   // prix
   token = strsep(&str, ";");
@@ -64,12 +65,15 @@ Train* trainFromCSV(char* csv){
 
   // reduc
   token = strsep(&str, ";");
-  if(token != NULL){
-    if (token == "REDUC")
+  if (token != NULL)
+  {
+    int len = strlen(token);
+    token[len-1] = '\0';
+    if (strcmp(token, "REDUC") == 0)
     {
       train->reduc = 1;
     }
-    else if (token == "SUPPL")
+    else if (strcmp(token, "SUPPL") == 0)
     {
       train->reduc = -1;
     }
@@ -78,7 +82,6 @@ Train* trainFromCSV(char* csv){
       train->reduc = 0;
     }
   }
-
   free(tofree); // We free the str we made
   return train;
 }
