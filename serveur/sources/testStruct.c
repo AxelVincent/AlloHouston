@@ -5,6 +5,7 @@
 #include "../headers/train.h"
 #include "../headers/testStructure.h"
 #include "./train.c"
+#include "./temps.c"
 
 /**
 * @brief Exemple d'usage de la structure train et des fonctions printTrain() et trainFromCSV()
