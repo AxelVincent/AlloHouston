@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 		while ( fgets ( ligne, sizeof ligne, fichier ) != NULL ) /* read a ligne */
 		{
 			listeTrain[lineCount] = trainFromCSV(ligne);
-			//printTrain(listeTrain[compteLigne]);
+			//printTrain(listeTrain[lineCount]);
 			lineCount ++;
 		}
 		fclose ( fichier );
