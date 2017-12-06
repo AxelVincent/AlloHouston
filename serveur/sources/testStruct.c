@@ -74,8 +74,8 @@ int main(int argc, char *argv[])
 		fclose ( fichier );
 		// Une fois la structure établie, il est alors possible de commencer les traitements
 
-		trouverTrain(listeTrain,villeDepart,villeArrivee,heureDepart);
-		trouverTrainParTranche(listeTrain, villeDepart, villeArrivee, heureDepart, heureDepartFin, trainCount);
+		trouverTrain(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart);
+		trouverTrainParTranche(listeTrain, compteLigne, villeDepart, villeArrivee, heureDepart, heureDepartFin);
 
 
 
@@ -107,7 +107,7 @@ void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart
 		}
 	}
 
-	
+
 
 
 
@@ -118,7 +118,7 @@ void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart
 
 }
 
-void trouverTrainParTranche(struct Train** listeTrain, char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin, int tailleListe)
+void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin)
 {
 	Train *listeTrainNouvelle[tailleListe];
 	int nombreTrainTries = 0;
@@ -128,12 +128,12 @@ void trouverTrainParTranche(struct Train** listeTrain, char * villeDepart, char 
 	for (int trainCourant = 0; trainCourant < tailleListe; trainCourant++)
 	{
 		//printf("ville de depart courant : %s\n arrivee : %s \n", listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee );
-		if (strcmp(villeDepart, listeTrain->villeDepart) == 0 && strcmp(villeDepart, listeTrain->villeDepart) == 0)
+		/*if (strcmp(villeDepart, listeTrain->villeDepart) == 0 && strcmp(villeDepart, listeTrain->villeDepart) == 0)
 		{
 			listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
 			printTrain(listeTrain[trainCourant]);
 			nombreTrainTries++;
-		}
+		}*/
 	}
 	printf("%d\n", nombreTrainTries );
 }
