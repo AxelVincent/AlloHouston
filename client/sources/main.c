@@ -30,23 +30,30 @@ int main(int argc, char *argv[])
       int continuer = 1;
 
       int descripteurClient = creationClient(adresse, numeroPort);
-
+      char *prefixe, *str;
 
       char messageRecu[SIZE_MSG];
       char messageEnvoye[SIZE_MSG];
       while(continuer)
       {
         receptionMessageServeur(descripteurClient, messageRecu);
+
         if(strcmp(messageRecu,"stop") == 0)
         {
           continuer = 0;
         }
         else
         {
-          lectureEntreeClient(descripteurClient, messageEnvoye);
-          if(strcmp(messageEnvoye,"stop") == 0){
-            continuer = 0;
+          str = messageRecu;
+          prefixe = strsep(&str, ";");
+          if(strcmp(prefixe,"noread") != 0)
+          {
+            lectureEntreeClient(descripteurClient, messageEnvoye);
+            if(strcmp(messageEnvoye,"stop") == 0){
+              continuer = 0;
+            }
           }
+
         }
       }
 
@@ -141,10 +148,9 @@ void lectureEntreeClient(int descripteurSocketClient, char * messageAEnvoyer)
 {
   //char messageAEnvoyer[SIZE_MSG];
   int resultWrite;
-  printf("Que voulez vous dire au serveur ? ");
   fgets(messageAEnvoyer, SIZE_MSG, stdin);
   strtok(messageAEnvoyer, "\n");
-  printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
+  printf("Message envoye : %s \n",messageAEnvoyer );
   resultWrite = write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
   //return messageAEnvoyer;
 }
@@ -153,9 +159,28 @@ void receptionMessageServeur(int descripteurSocketClient, char *commandeRecu){
 
   //Reception des messages serveur
 
-  //char* commandeRecu;
+  //Declaration des variables
+  char *token1, *token2, *str;
+  //Reception du message
   read(descripteurSocketClient, commandeRecu, SIZE_MSG);
-  printf("Message reçu du père : %s\n", commandeRecu);
-  //return commandeRecu;
+  //Copie du message recu dans str
+  str = commandeRecu;
+
+  //Recuperation de la premiere partie de la chaine
+  token2 = strtok(str, ";");
+  //copie de la chaine recuperee
+  token1 = token2;
+  //Recuperation de la deuxieme partie de la chaine
+  token2 = strtok(NULL, ";");
+
+  //Si la deuxieme chaine est null on affiche la premiere, sinon on affiche la deuxieme
+  if(token2 == NULL)
+  {
+    printf("%s", token1);
+  }
+  else
+  {
+    printf("%s", token2);
+  }
 
 }
