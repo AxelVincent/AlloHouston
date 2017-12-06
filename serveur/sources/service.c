@@ -8,7 +8,7 @@
 
 #include "../headers/service.h"
 #include "../headers/color.h"
-#define SIZE_MSG 256
+#define SIZE_MSG 1024
 
 /**
  * @file service.c
@@ -38,7 +38,7 @@ void nouveauService(int descripteurSocketService)
 	int sizeRead;
 	do{
 		printf("%d "MAG"MENU"RESET"\n", pid);
-		strcpy(commandeAEnvoyer, "\n --- "CYN"MENU"RESET" ---\n 1: Recherche du premier train a partir de l'heure de depart \n 2: Recherche de trains dans une tranche horaire\n 3: Recherche tous les trains pour une ville de depart et d'arrivee\n Choix : ");
+		strcpy(commandeAEnvoyer, "___________________________________________________________________\n       /\\                    /\\															 \n   ____\\/____============____\\/___    ___==========================\n /__|     OOOOOOOOOOOOO    [_]   |    |  |[]|  [_]    [_]    [_] \n/             S N C F            |    |  |  |										 \n\\________________________________|_ii_|__|__|______________________\n   ()==()    === ++++ ===  ()==()       ()==()     +++   ++++++++\n===================================================================\n"CYN"MENU"RESET" ---\n 1: Recherche du premier train a partir de l'heure de depart \n 2: Recherche de trains dans une tranche horaire\n 3: Recherche tous les trains pour une ville de depart et d'arrivee\n Choix : ");
 		envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 		recevoirMessage(descripteurSocketService, commandeRecu);
 

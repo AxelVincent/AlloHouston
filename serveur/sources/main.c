@@ -5,9 +5,14 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
+#include "../headers/temps.h"
+#include "../headers/train.h"
 #include "../headers/main.h"
 #include "../headers/service.h"
 #include "../headers/color.h"
+#include "../headers/requetes.h"
+#include "./train.c"
+#include "./temps.c"
 
 int main(int argc, char *argv[])
 {
