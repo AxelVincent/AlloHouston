@@ -18,7 +18,7 @@
   * @param train Le pointeur train pour lequel on souhaite afficher les informations.
   * @TODO ajuster l'affichage de la réduc.
   */
-void printfrintTrain(Train* train)
+void printTrain(Train* train)
 {
   printf("%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->id, train->villeDepart, train->villeArrivee, train->heureDepart->heure, train->heureDepart->minute, train->heureArrivee->heure, train->heureArrivee->minute, train->prix, train->reduc);
 }

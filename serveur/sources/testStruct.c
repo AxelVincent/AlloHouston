@@ -58,31 +58,28 @@ int main(int argc, char *argv[])
 	static const char nomFichier[] = "../ressources/Trains.txt";
 	FILE *fichier = fopen ( nomFichier, "r" );
 	int compteLigne = 0;
-	if ( fichier != NULL )
+	if (fichier != NULL)
 	{
 		char ligne [ 256 ]; /* or other suitable maximum ligne size */
 		int lineCount = 0;
-		while ( fgets ( ligne, sizeof ligne, fichier ) != NULL ) /* read a ligne */
+		while (fgets(ligne, sizeof ligne, fichier) != NULL) /* read a ligne */
 		{
 			compteLigne ++;
 		}
 		printf("%d ligne dans le fichier Trains.txt\n", compteLigne);
 		rewind(fichier);
 		Train *listeTrain[compteLigne];
-		while ( fgets ( ligne, sizeof ligne, fichier ) != NULL ) /* read a ligne */
+		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
 		{
 			listeTrain[lineCount] = trainFromCSV(ligne);
 			//printTrain(listeTrain[lineCount]);
 			lineCount ++;
 		}
-		fclose ( fichier );
+		fclose (fichier);
 		// Une fois la structure établie, il est alors possible de commencer les traitements
 
 		trouverTrain(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
 		trouverTrainParTranche(listeTrain, compteLigne, villeDepart, villeArrivee, heureDepart, heureDepartFin);
-
-
-
 
 	}
 	else
@@ -98,7 +95,7 @@ int main(int argc, char *argv[])
 
 
 
-void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
+void TrouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
 {
 	struct Train* nouvelleListe = malloc(sizeof(Train));
 	int j = 0;
@@ -153,12 +150,6 @@ void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * v
 			nombreTrainTries++;
 		}
 	}
-	printf("%d\n", nombreTrainTries );
-		listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
-		printTrain(listeTrain[trainCourant]);
-		nombreTrainTries++;
-	}
-
 	printf("%d\n", nombreTrainTries );
 }
 
