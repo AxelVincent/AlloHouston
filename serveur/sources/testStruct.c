@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 		fclose (fichier);
 		// Une fois la structure établie, il est alors possible de commencer les traitements
 
-		trouverTrain(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
+		trouverTrainLePlusProche(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
 		trouverTrainParTranche(listeTrain, compteLigne, villeDepart, villeArrivee, heureDepart, heureDepartFin);
 
 	}
@@ -94,10 +94,24 @@ int main(int argc, char *argv[])
 }
 
 
-
-void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
+/**
+ * @fn void trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
+ * @brief Renvoie le train le plus proche
+ * @param struct Train** listeTrain L'ensemble des trains contenus dans trains.txt
+ * @param compteLigne le nombre de train contenus dans la base
+ * @param villeDepart la ville de départ souhaitée
+ * @param villeArrivee la ville d'arrivée souhaitée
+ * @param heureDepart l'heure de départ souhaitée
+ * @return pointeur sur un temps
+ * Exemple de ligne csv reçu : "16:55"
+ */
+void trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
 {
 	struct Train* nouvelleListe = malloc(sizeof(Train));
+
+	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
+	// avec la structure contenant l'ensemble des trains de la base de données
+	// Crée un nouveau tableau contenant les structures Trains compatible
 	int j = 0;
 	for (int i = 0; i < compteLigne; i++) {
 		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0) {
@@ -107,11 +121,19 @@ void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart
 			}
 		}
 	}
+
+	// Fait la différence entre l'heure de départ souhaité et l'heure de
+	// départ des trains compatible
 	int difference[j];
+	char concatenation[4];
+	strcat(concatenation,heureDepart);
+	strcat(concatenation,minuteDepart);
+	int heureConcat = atoi(concatenation);
 	int compteDifference = 0;
 	for (compteDifference; compteDifference < j; compteDifference++) {
-		difference[compteDifference] = abs(atoi(heureDepart) - listeTrain[compteDifference]->heureDepart->heure);
-		printf("heure de départ %d, heure de départ comparée %d\n", atoi(heureDepart), nouvelleListe[compteDifference].heureDepart->heure);
+		difference[compteDifference] = abs(atoi(heureDepart) - nouvelleListe[compteDifference].heureDepart->heure);
+		printf("heure de difference %d\n", difference[compteDifference]);
+		printf("heure d'entree :%d , heure dans la base :%d\n", atoi(heureDepart), nouvelleListe[compteDifference].heureDepart->heure);
 	}
 
 	printf("Difference : %d\n", difference[0]);
