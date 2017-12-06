@@ -13,24 +13,25 @@
  */
 
  /**
-  * @fn void printTrain(Train* train)
+  * @fn void PrintfrintTrain(Train* train)
   * @brief Affiche les informations d'un train
   * @param train Le pointeur train pour lequel on souhaite afficher les informations.
   * @TODO ajuster l'affichage de la réduc.
   */
-void printTrain(Train* train){
+void PrintfrintTrain(Train* train)
+{
   printf("%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->id, train->villeDepart, train->villeArrivee, train->heureDepart->heure, train->heureDepart->minute, train->heureArrivee->heure, train->heureArrivee->minute, train->prix, train->reduc);
 }
 
 /**
- * @fn Train* trainFromCSV(char* csv)
+ * @fn Train* TrainFromCSV(char* csv)
  * @brief Crée un train correspondant au info de la chaine csv fournit
  * @param csv Une ligne csv sous la forme : "villeDepart;villeArrivee;heureDepart.heure;heureDepart.minute;heureDepart.heure;heureArrivee.minute;prix;reduc".
  * @return pointeur sur un train
  * Exemple de ligne csv reçu : "Grenoble;Valence;16:55;17:55;17.60;SUPPL"
  */
-Train* trainFromCSV(char* csv){
-
+Train* TrainFromCSV(char* csv)
+{
   struct Train* train = malloc(sizeof(Train));
   char *token, *str, *tofree;
   tofree = str = strdup(csv);  // We own str's memory now.
@@ -64,7 +65,8 @@ Train* trainFromCSV(char* csv){
 
   // reduc
   token = strsep(&str, ";");
-  if(token != NULL){
+  if (token != NULL)
+  {
     int len = strlen(token);
     token[len-1] = '\0';
     if (strcmp(token, "REDUC") == 0)
