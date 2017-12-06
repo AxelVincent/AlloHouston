@@ -19,7 +19,7 @@
   * @TODO ajuster l'affichage de la réduc.
   */
 void printTrain(Train* train){
-  printf("%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->id, train->villeDepart, train->villeArrivee, train->heureDepart->heure, train->heureDepart->minute, train->heureArrivee->heure, train->heureArrivee->heure, train->prix, train->reduc);
+  printf("%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->id, train->villeDepart, train->villeArrivee, train->heureDepart->heure, train->heureDepart->minute, train->heureArrivee->heure, train->heureArrivee->minute, train->prix, train->reduc);
 }
 
 /**
