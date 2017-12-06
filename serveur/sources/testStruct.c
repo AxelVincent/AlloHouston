@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
 	free(testTrainCSV2);*/
 
 	// Test des requetes
-	char * villeDepart = "Grenoble";
-	char * villeArrivee = "Lyon";
+	char * villeDepart = "Valence";
+	char * villeArrivee = "Montelimar";
 	char * heureDepart = "14;14";
 
 	// Création de la structure en faisant appel au ficher train.txt
@@ -95,14 +95,19 @@ int main(int argc, char *argv[])
 
 void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart)
 {
-	char nouvelleListe[3][compteLigne];
+	struct Train* nouvelleListe = malloc(sizeof(Train));
+	int j = 0;
 	for (int i = 0; i < compteLigne; i++) {
 		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0) {
 			if (strcmp (villeArrivee, listeTrain[i]->villeArrivee) == 0) {
-				printf("strings match\n");
+				nouvelleListe[j] = *listeTrain[i];
+				j++;
 			}
 		}
 	}
+
+	
+
 
 
 
