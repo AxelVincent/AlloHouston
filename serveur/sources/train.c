@@ -13,24 +13,24 @@
  */
 
  /**
-  * @fn void PrintfrintTrain(Train* train)
+  * @fn void printfrintTrain(Train* train)
   * @brief Affiche les informations d'un train
   * @param train Le pointeur train pour lequel on souhaite afficher les informations.
   * @TODO ajuster l'affichage de la réduc.
   */
-void PrintfrintTrain(Train* train)
+void printfrintTrain(Train* train)
 {
   printf("%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->id, train->villeDepart, train->villeArrivee, train->heureDepart->heure, train->heureDepart->minute, train->heureArrivee->heure, train->heureArrivee->minute, train->prix, train->reduc);
 }
 
 /**
- * @fn Train* TrainFromCSV(char* csv)
+ * @fn Train* trainFromCSV(char* csv)
  * @brief Crée un train correspondant au info de la chaine csv fournit
  * @param csv Une ligne csv sous la forme : "villeDepart;villeArrivee;heureDepart.heure;heureDepart.minute;heureDepart.heure;heureArrivee.minute;prix;reduc".
  * @return pointeur sur un train
  * Exemple de ligne csv reçu : "Grenoble;Valence;16:55;17:55;17.60;SUPPL"
  */
-Train* TrainFromCSV(char* csv)
+Train* trainFromCSV(char* csv)
 {
   struct Train* train = malloc(sizeof(Train));
   char *token, *str, *tofree;

@@ -14,7 +14,7 @@ struct Train
     int reduc; //Si 1 reduc, si -1 suppl, si 0 prix normal; 4 octets
 };
 
-void PrintfrintTrain(Train* train);
-Train* TrainFromCSV(char* csv);
+void printTrain(Train* train);
+Train* trainFromCSV(char* csv);
 
 #endif
