@@ -45,9 +45,10 @@ int main(int argc, char *argv[])
 	free(testTrainCSV2);*/
 
 	// Test des requetes
-	char * villeDepart = "Valence";
-	char * villeArrivee = "Montelimar";
-	char * heureDepart = "14;14";
+	char * villeDepart = "Grenoble";
+	char * villeArrivee = "Valence";
+	char * heureDepart = "14:14";
+	char * heureDepartFin = "19:59";
 
 	// Création de la structure en faisant appel au ficher train.txt
 	static const char nomFichier[] = "../ressources/Trains.txt";
@@ -73,8 +74,8 @@ int main(int argc, char *argv[])
 		fclose ( fichier );
 		// Une fois la structure établie, il est alors possible de commencer les traitements
 
-		trouverTrain(listeTrain,lineCount,villeDepart,villeArrivee,heureDepart);
-
+		trouverTrain(listeTrain,villeDepart,villeArrivee,heureDepart);
+		trouverTrainParTranche(listeTrain, villeDepart, villeArrivee, heureDepart, heureDepartFin, trainCount);
 
 
 
@@ -114,8 +115,25 @@ void trouverTrain(struct Train** listeTrain, int compteLigne, char * villeDepart
 	printf("%s\n", listeTrain[20]->villeDepart);
 	printf("%s\n", listeTrain[1]->villeArrivee);
 
+
+}
+
+void trouverTrainParTranche(struct Train** listeTrain, char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin, int tailleListe)
+{
+	Train *listeTrainNouvelle[tailleListe];
+	int nombreTrainTries = 0;
 	printf("ville depart : %s \n", villeDepart);
 	printf("ville arrivee : %s \n", villeArrivee);
-	printf("heure depart : %s \n", heureDepart);
-	printTrain(listeTrain[2]);
+
+	for (int trainCourant = 0; trainCourant < tailleListe; trainCourant++)
+	{
+		//printf("ville de depart courant : %s\n arrivee : %s \n", listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee );
+		if (strcmp(villeDepart, listeTrain->villeDepart) == 0 && strcmp(villeDepart, listeTrain->villeDepart) == 0)
+		{
+			listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
+			printTrain(listeTrain[trainCourant]);
+			nombreTrainTries++;
+		}
+	}
+	printf("%d\n", nombreTrainTries );
 }
