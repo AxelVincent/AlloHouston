@@ -46,8 +46,9 @@ int main(int argc, char *argv[])
 
 	// Test des requetes
 	char * villeDepart = "Grenoble";
-	char * villeArrivee = "Lyon";
+	char * villeArrivee = "Valence";
 	char * heureDepart = "14;14";
+	char * heureDepartFin = "19;59";
 
 	// Création de la structure en faisant appel au ficher train.txt
 	static const char nomFichier[] = "../ressources/Trains.txt";
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
 		// Une fois la structure établie, il est alors possible de commencer les traitements
 
 		trouverTrain(listeTrain,villeDepart,villeArrivee,heureDepart);
-
+		trouverTrainParTranche(listeTrain, villeDepart, villeArrivee, heureDepart, heureDepartFin, trainCount);
 
 
 
@@ -95,10 +96,28 @@ int main(int argc, char *argv[])
 
 void trouverTrain(struct Train** listeTrain, char * villeDepart, char * villeArrivee, char * heureDepart)
 {
-
-	printTrain(listeTrain[1]);
+	/**printTrain(listeTrain[1]);
 	printf("ville depart : %s \n", villeDepart);
 	printf("ville arrivee : %s \n", villeArrivee);
 	printf("heure depart : %s \n", heureDepart);
-	printTrain(listeTrain[2]);
+	printTrain(listeTrain[2]);*/
+}
+
+void trouverTrainParTranche(struct Train** listeTrain, char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin, int tailleListe)
+{
+	Train *listeTrainNouvelle[tailleListe];
+	int nombreTrainTries = 0;
+	printf("ville depart : %s \n", villeDepart);
+	printf("ville arrivee : %s \n", villeArrivee);
+	for (int trainCourant = 0; trainCourant < tailleListe; trainCourant++)
+	{
+		//printf("ville de depart courant : %s\n arrivee : %s \n", listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee );
+		if (listeTrain[trainCourant]->villeDepart == villeDepart && listeTrain[trainCourant]->villeArrivee == villeArrivee)
+		{
+			listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
+			printTrain(listeTrain[trainCourant]);
+			nombreTrainTries++;
+		}
+	}
+	printf("%d\n", nombreTrainTries );
 }
