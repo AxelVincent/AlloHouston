@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
 	// Test des requetes
 	char * villeDepart = "Grenoble";
 	char * villeArrivee = "Valence";
-	char * heureDepart = "14;14";
-	char * heureDepartFin = "19;59";
+	char * heureDepart = "14:14";
+	char * heureDepartFin = "19:59";
 
 	// Création de la structure en faisant appel au ficher train.txt
 	static const char nomFichier[] = "../ressources/Trains.txt";
@@ -119,10 +119,11 @@ void trouverTrainParTranche(struct Train** listeTrain, char * villeDepart, char 
 	int nombreTrainTries = 0;
 	printf("ville depart : %s \n", villeDepart);
 	printf("ville arrivee : %s \n", villeArrivee);
+	
 	for (int trainCourant = 0; trainCourant < tailleListe; trainCourant++)
 	{
 		//printf("ville de depart courant : %s\n arrivee : %s \n", listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee );
-		if (listeTrain[trainCourant]->villeDepart == villeDepart && listeTrain[trainCourant]->villeArrivee == villeArrivee)
+		if (strcmp(villeDepart, listeTrain->villeDepart) == 0 && strcmp(villeDepart, listeTrain->villeDepart) == 0)
 		{
 			listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
 			printTrain(listeTrain[trainCourant]);
