@@ -6,6 +6,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "../headers/main.h"
 #include "../headers/color.h"
@@ -120,9 +121,13 @@ void interactionServeur(int descripteurSocketClient){
   // Afficher la liste des villes
 
   char messageAEnvoyer[SIZE_MSG];
-  printf("Que voulez vous dire au serveur ? ");
-  scanf("%256[0-9a-zA-Z ]", &messageAEnvoyer);
-  printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
-  write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
-
+  int resultWrite;
+  do{
+    printf("Que voulez vous dire au serveur ? ");
+    fgets(messageAEnvoyer, SIZE_MSG, stdin);
+    strtok(messageAEnvoyer, "\n");
+    //scanf("%"SIZE_MSG"s", &messageAEnvoyer);
+    printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
+    resultWrite = write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
+  } while (messageAEnvoyer != "QUIT");
 }
