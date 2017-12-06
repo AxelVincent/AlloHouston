@@ -53,7 +53,7 @@ void nouveauService(int descripteurSocketService)
 			//Fonction 3 : Ville de départ + arrivée = renvoi une liste TODO faire les fonctions par ici
 			break;
 	}
-	}while(commandeRecu != "QUIT" && sizeRead != 0); //Si sizeRead == 0 le client n'envoie plus rien, est-il mort ?
+}while(strcmp(commandeRecu,"stop") != 0 && sizeRead != 0); //Si sizeRead == 0 le client n'envoie plus rien, est-il mort ?
 	printf("Communication terminé\n");
 	//TODO suicider le fils pour éviter qu'il devienne une copie du serveur (en repartant dans le père)
 }

@@ -3,6 +3,6 @@
 
 int creationClient(char* adresse, int numeroPort);
 char* getHostName(char* host_name);
-char* lectureEntreeClient(int descripteurSocketClient);
-char* receptionMessageServeur(int descripteurSocketClient);
+void lectureEntreeClient(int descripteurSocketClient, char * messageAEnvoyer);
+void receptionMessageServeur(int descripteurSocketClient,char *commandeRecu);
 #endif

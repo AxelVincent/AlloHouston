@@ -30,19 +30,23 @@ int main(int argc, char *argv[])
       int continuer = 1;
 
       int descripteurClient = creationClient(adresse, numeroPort);
-      char* messageRecu;
-      char* messageEnvoye;
 
+
+      char messageRecu[SIZE_MSG];
+      char messageEnvoye[SIZE_MSG];
       while(continuer)
       {
-        messageRecu = receptionMessageServeur(descripteurClient);
+        receptionMessageServeur(descripteurClient, messageRecu);
         if(strcmp(messageRecu,"stop") == 0)
         {
           continuer = 0;
         }
         else
         {
-          messageEnvoye = lectureEntreeClient(descripteurClient);
+          lectureEntreeClient(descripteurClient, messageEnvoye);
+          if(strcmp(messageEnvoye,"stop") == 0){
+            continuer = 0;
+          }
         }
       }
 
@@ -133,25 +137,25 @@ int creationClient(char* adresse, int numeroPort)
 
 
 
-char* lectureEntreeClient(int descripteurSocketClient)
+void lectureEntreeClient(int descripteurSocketClient, char * messageAEnvoyer)
 {
-  char messageAEnvoyer[SIZE_MSG];
+  //char messageAEnvoyer[SIZE_MSG];
   int resultWrite;
   printf("Que voulez vous dire au serveur ? ");
   fgets(messageAEnvoyer, SIZE_MSG, stdin);
   strtok(messageAEnvoyer, "\n");
   printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
   resultWrite = write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
-  return messageAEnvoyer;
+  //return messageAEnvoyer;
 }
 
-char* receptionMessageServeur(int descripteurSocketClient){
+void receptionMessageServeur(int descripteurSocketClient, char *commandeRecu){
 
   //Reception des messages serveur
 
-  char* commandeRecu;
+  //char* commandeRecu;
   read(descripteurSocketClient, commandeRecu, SIZE_MSG);
   printf("Message reçu du père : %s\n", commandeRecu);
-  return commandeRecu;
+  //return commandeRecu;
 
 }
