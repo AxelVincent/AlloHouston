@@ -12,7 +12,7 @@
 #include "../headers/color.h"
 
 #define INVALID_SOCKET -1
-#define SIZE_MSG 256
+#define SIZE_MSG 1024
 
 
 int main(int argc, char *argv[])
