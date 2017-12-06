@@ -55,5 +55,5 @@ void nouveauService(int descripteurSocketService)
 	}
 }while(strcmp(commandeRecu,"stop") != 0 && sizeRead != 0); //Si sizeRead == 0 le client n'envoie plus rien, est-il mort ?
 	printf("Communication terminé\n");
-	//TODO suicider le fils pour éviter qu'il devienne une copie du serveur (en repartant dans le père)
+	exit(-1);
 }
