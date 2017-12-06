@@ -5,6 +5,7 @@
 typedef struct Train Train;
 struct Train
 {
+    int id;
     char* villeDepart;
     char* villeArrivee;
     Temps heureDepart;

@@ -19,7 +19,7 @@
   * @TODO ajuster l'affichage de la réduc.
   */
 void printTrain(Train* train){
-  printf("%s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->villeDepart, train->villeArrivee, train->heureDepart.heure, train->heureDepart.minute, train->heureArrivee.heure, train->heureArrivee.heure, train->prix, train->reduc);
+  printf("%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d", train->id, train->villeDepart, train->villeArrivee, train->heureDepart.heure, train->heureDepart.minute, train->heureArrivee.heure, train->heureArrivee.heure, train->prix, train->reduc);
 }
 
 /**
@@ -34,6 +34,10 @@ Train* trainFromCSV(char* csv){
   struct Train* train = malloc(sizeof(Train));
   char *token, *str, *tofree;
   tofree = str = strdup(csv);  // We own str's memory now.
+  // id
+  token = strsep(&str, ";");
+  train->id = atoi(token);
+
   // villeDepart
   token = strsep(&str, ";");
   train->villeDepart = strdup(token);
