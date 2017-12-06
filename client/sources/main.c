@@ -6,6 +6,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "../headers/main.h"
 #include "../headers/color.h"
@@ -26,8 +27,30 @@ int main(int argc, char *argv[])
     char* adresse = getHostName(host_name);
     if(adresse != NULL)
     {
+      int continuer = 1;
 
-      interactionServeur(creationClient(adresse, numeroPort));
+      int descripteurClient = creationClient(adresse, numeroPort);
+
+
+      char messageRecu[SIZE_MSG];
+      char messageEnvoye[SIZE_MSG];
+      while(continuer)
+      {
+        receptionMessageServeur(descripteurClient, messageRecu);
+        if(strcmp(messageRecu,"stop") == 0)
+        {
+          continuer = 0;
+        }
+        else
+        {
+          lectureEntreeClient(descripteurClient, messageEnvoye);
+          if(strcmp(messageEnvoye,"stop") == 0){
+            continuer = 0;
+          }
+        }
+      }
+
+      close(descripteurClient);
 
     }
     else
@@ -114,15 +137,25 @@ int creationClient(char* adresse, int numeroPort)
 
 
 
-void interactionServeur(int descripteurSocketClient){
-
-  // Recevoir la liste des villes
-  // Afficher la liste des villes
-
-  char messageAEnvoyer[SIZE_MSG];
+void lectureEntreeClient(int descripteurSocketClient, char * messageAEnvoyer)
+{
+  //char messageAEnvoyer[SIZE_MSG];
+  int resultWrite;
   printf("Que voulez vous dire au serveur ? ");
-  scanf("%256[0-9a-zA-Z ]", &messageAEnvoyer);
+  fgets(messageAEnvoyer, SIZE_MSG, stdin);
+  strtok(messageAEnvoyer, "\n");
   printf(" Le message a envoyer est bien : %s \n",messageAEnvoyer );
-  write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
+  resultWrite = write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
+  //return messageAEnvoyer;
+}
+
+void receptionMessageServeur(int descripteurSocketClient, char *commandeRecu){
+
+  //Reception des messages serveur
+
+  //char* commandeRecu;
+  read(descripteurSocketClient, commandeRecu, SIZE_MSG);
+  printf("Message reçu du père : %s\n", commandeRecu);
+  //return commandeRecu;
 
 }

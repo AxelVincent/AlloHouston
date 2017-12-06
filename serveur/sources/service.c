@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "../headers/service.h"
 #define SIZE_MSG 256
@@ -30,21 +31,29 @@ void nouveauService(int descripteurSocketService)
 	//					- horaire de départ (train en question si l'heure est exacte, sinon le suivant)
 	//					- tranche horaire (départ, obtention d'une liste)
 	char commandeRecu[SIZE_MSG];
+	char commandeAEnvoyer[SIZE_MSG];
 	printf("nouveauService ok : %d\n",getpid());
-	read(descripteurSocketService, commandeRecu, SIZE_MSG);
-	printf("Commande reçu du client %s\n", commandeRecu);
-	//TODO voir en fonction du protocole d'échange
-	int commande = 1;//(commandeRecu);
-	switch (commande) {
-		case 1:
-		//Fonction 1 : Ville de départ + ville d'arrivée +  horaire de départ TODO faire les fonctions par ici
-		break;
-		case 2:
-		//Fonction 2 : ville de départ + ville d'arrivée + tranche horaire pour le départ TODO faire les fonctions par ici
-		break;
-		case 3:
-		//Fonction 3 : Ville de départ + arrivée = renvoi une liste TODO faire les fonctions par ici
-		break;
-
+	int sizeRead;
+	do{
+		strcpy(commandeAEnvoyer, "Quelle commande voulez vous effectuer ? \n 1: Recherche du premier train a partir de l'heure de depart \n 2: Recherche de trains dans une tranche horaire\n 3: Recherche tous les trains pour une ville de depart et d'arrivee\n");
+ 		write(descripteurSocketService, commandeAEnvoyer, SIZE_MSG);
+		sizeRead = read(descripteurSocketService, &commandeRecu, SIZE_MSG);
+		printf("Commande reçu du client : %s (taille = %d)\n", commandeRecu, sizeRead);
+		//TODO voir en fonction du protocole d'échange
+		int commande = atoi(commandeRecu);
+		printf("La commande que veux effectuer le client est %d\n", commande);
+		switch (commande) {
+			case 1:
+			//Fonction 1 : Ville de départ + ville d'arrivée +  horaire de départ TODO faire les fonctions par ici
+			break;
+			case 2:
+			//Fonction 2 : ville de départ + ville d'arrivée + tranche horaire pour le départ TODO faire les fonctions par ici
+			break;
+			case 3:
+			//Fonction 3 : Ville de départ + arrivée = renvoi une liste TODO faire les fonctions par ici
+			break;
 	}
+}while(strcmp(commandeRecu,"stop") != 0 && sizeRead != 0); //Si sizeRead == 0 le client n'envoie plus rien, est-il mort ?
+	printf("Communication terminé\n");
+	//TODO suicider le fils pour éviter qu'il devienne une copie du serveur (en repartant dans le père)
 }
