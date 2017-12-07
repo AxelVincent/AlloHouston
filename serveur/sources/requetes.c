@@ -25,14 +25,16 @@
 * @return pointeur sur un temps
 * Exemple de ligne csv reçu : "16:55"
 */
-Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
+Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart)
 {
 	struct Train* trainFiltre = malloc(sizeof(Train));
-	// Concatenation de l'heure et minutes de départ souhaité
+	/*// Concatenation de l'heure et minutes de départ souhaité
 	char concatenation[8];
 	strcat(concatenation,heureDepart);
 	strcat(concatenation,minuteDepart);
-	int heureConcat = atoi(concatenation);
+	int heureConcat = atoi(concatenation);*/
+	heureDepart = heureDepart * 100;
+	int heureConcat = heureDepart + minuteDepart;
 	//printf("Heure de depart concatené: %d, %s, %s, %s \n", heureConcat, heureDepart, minuteDepart, concatenation);
 
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
