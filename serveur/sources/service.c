@@ -57,7 +57,7 @@ void nouveauService(int descripteurSocketService)
 	for (int i=0;  i <nbTrain; i++) {
 		ptrListeTrain[i] = (listeTrain + i);
 		printf("\n");
-		printTrain(ptrListeTrain[i]);
+		//printTrain(ptrListeTrain[i]);
 		printf("\n");
 	}
 
@@ -135,12 +135,14 @@ void nouveauService(int descripteurSocketService)
 				printf("Le client veut partir a partir de : %d:%d\n", h2,m2);
 
 				printf("Taille de la liste : %d \n", nbTrain);
-				Train** trainsLol = trouverTrainParTranche(listeTrain, &nbTrain, villeDepart, villeArrivee, h, m, h2, m2);
-
-				for(int i=0; i<nbTrain; i++)
+				// Train** trainsLol = trouverTrainParTranche(ptrListeTrain, &nbTrain, villeDepart, villeArrivee, h, m, h2, m2);
+        //
+				// printf("Trains : %d \n", nbTrain);
+				// printf("Train n 1 : %s ", trainsLol[0]->villeDepart);
+				/*for(int i=0; i<nbTrain; i++)
 				{
 					printTrain(trainsLol[i]);
-				}
+				}*/
 
 			break;
 			case 3:
