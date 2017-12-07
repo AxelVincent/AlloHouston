@@ -45,7 +45,8 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 
 	int j = 0;
 	for (int i = 0; i < compteLigne; i++) {
-		printf("axel %d\n",i);
+		printf("%s\n",villeDepart);
+		fprintf(stderr, "AXEL : %d\n", strcmp (villeDepart, listeTrain[i]->villeDepart));
 		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0)
 		// Si les villes de départs sont identiques
 		{
