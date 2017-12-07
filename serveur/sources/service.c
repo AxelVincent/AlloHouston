@@ -172,24 +172,44 @@ void nouveauService(int descripteurSocketService)
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
 				char* villeArriveeRequete3 = strdup(commandeRecu);
 
+				// Affichage de la liste de tous les trains satisfaisant les critères ville de départ et ville d'arrivée
 				strToUpper(villeDepartRequete3);
 				strToUpper(villeArriveeRequete3);
-
-
 				int compteLigne;
 				compteLigne = nbTrain;
 
 				fprintf(stderr,"Compte LIGNE :%d\n", compteLigne);
 				Train * lstTrainParVille = malloc(sizeof(Train));
-				lstTrainParVille = listeTrainParVille(listeTrain, &compteLigne, villeDepartRequete3, villeArriveeRequete3);
+				lstTrainParVille = listeTrainParVille(listeTrain, &compteLigne, villeDepartRequete3, villeArriveeRequete3, commandeAEnvoyer);
 				printf("P3\n");
 				printf("Compte LIGNE :%d\n", compteLigne);
-				for (int i = 0; i < compteLigne; i++) {
+				/*for (int i = 0; i < compteLigne; i++) {
 					printTrain(lstTrainParVille + i);
 					printf("\n");
+				}*/
+				//fprintf(stderr, "%s\n", commandeAEnvoyer);
+				//envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+
+				/* Affichage du train qui répond soit :
+					- Au trajet au meilleur prix (reduction comprise) critere = 0
+					- Au trajet de durée optimum critere = 1*/
+
+				printf("PASSAGE A\n");
+				int critere = 0;
+				Train * trainSelonCritere = malloc(sizeof(Train));
+				trainSelonCritere = trajetSelonCritere(lstTrainParVille, compteLigne, critere, commandeAEnvoyer);
+				fprintf(stderr, "%s\n", commandeAEnvoyer);
+				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+				printf("PASSAGE B\n");
+				printTrain(trainSelonCritere);
+				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
+				recevoirMessage(descripteurSocketService, commandeRecu);
+				if(atoi(commandeRecu)==2)
+				{
+					envoyerMessage(descripteurSocketService,"stop");
+					close(descripteurSocketService);
+					exit(0);
 				}
-
-
 
 			break;
 			default:
