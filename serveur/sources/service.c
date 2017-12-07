@@ -51,16 +51,6 @@ void nouveauService(int descripteurSocketService)
 	Train *listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
-	fprintf(stderr, "ON EST LA	\n");
-	Train *ptrListeTrain[nbTrain];
-
-	for (int i=0;  i <nbTrain; i++) {
-		ptrListeTrain[i] = (listeTrain + i);
-		printf("\n");
-		//printTrain(ptrListeTrain[i]);
-		printf("\n");
-	}
-
 	//Affichage d'un petit train et envoie du message au client
 	strcpy(commandeAEnvoyer, "noread;___________________________________________________________________\n       /\\                    /\\															 \n   ____\\/____============____\\/___    ___==========================\n /__|     OOOOOOOOOOOOO    [_]   |    |  |[]|  [_]    [_]    [_] \n/             S N C F            |    |  |  |										 \n\\________________________________|_ii_|__|__|______________________\n   ()==()    === ++++ ===  ()==()       ()==()     +++   ++++++++\n===================================================================\n\n");
 	envoyerMessage(descripteurSocketService, commandeAEnvoyer);
@@ -100,10 +90,30 @@ void nouveauService(int descripteurSocketService)
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 
+				strToUpper(villeDepart);
+				strToUpper(villeArrivee);
+
 				Train *t = malloc(sizeof(Train));
-				t = trouverTrainLePlusProche(ptrListeTrain, nbTrain, villeDepart, villeArrivee, h, m);
-				printTrain(t);
-				free(t);
+				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
+				if(t!=NULL)
+				{
+					printTrain(t);
+				}
+				else
+				{
+
+				}
+				fprintf(stderr, "%s\n", commandeAEnvoyer);
+				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
+				recevoirMessage(descripteurSocketService, commandeRecu);
+				if(atoi(commandeRecu)==2)
+				{
+					envoyerMessage(descripteurSocketService,"stop");
+					close(descripteurSocketService);
+					exit(0);
+				}
+				//free(t);
 				break;
 			case 2:
 			//Fonction 2 : ville de départ + ville d'arrivée + tranche horaire pour le départ

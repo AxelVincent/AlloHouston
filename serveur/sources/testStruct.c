@@ -56,82 +56,59 @@ int main(int argc, char *argv[])
 	int minuteDepart = 35;
 	int heureDepartFin = 19;
 	int minuteDepartFin = 59;
-	//int idxToDel = 2;
-	//	memmove(&heureDepart[idxToDel], &heureDepart[idxToDel + 1], strlen(heureDepart) - idxToDel);
-	// Création de la structure en faisant appel au ficher train.txt
-	/*char *nomFichier = "../ressources/Trains.txt";
-	Train **listeTrain;
+
+
+	char *nomFichier = "../ressources/Trains.txt";
+	Train *listeTrain;
 	int nbTrain;
-	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
-	printf("%d\n", (nbTrain));
-	//printTrain(*listeTrain);
-	//printTrain(*(listeTrain+1));*/
-	static const char nomFichier[] = "../ressources/Trains.txt";
-	FILE *fichier = fopen ( nomFichier, "r" );
-	int compteLigne = 0;
-	if (fichier != NULL)
-	{
-		char ligne [ 256 ]; /* or other suitable maximum ligne size */
-		int lineCount = 0;
-		while (fgets(ligne, sizeof ligne, fichier) != NULL) /* read a ligne */
-		{
-			compteLigne ++;
-		}
-		printf("%d ligne dans le fichier Trains.txt\n", compteLigne);
-		rewind(fichier);
-		Train *listeTrain[compteLigne];
-		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
-		{
-			listeTrain[lineCount] = trainFromCSV(ligne);
-			//printTrain(listeTrain[lineCount]);
-			lineCount ++;
-		}
-		fclose (fichier);
-		//Une fois la structure établie, il est alors possible de commencer les traitements
-		// struct Train* tchoutchou = malloc(sizeof(Train));
-		// tchoutchou = trouverTrainLePlusProche(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
-		// //fprintf(stderr, "tchoutchou%f\n", tchoutchou->prix);
-		// printTrain(tchoutchou);
+	listeTrain = trainFromFile(nomFichier, &nbTrain);
 
-
-
-
+	printf("P1\n");
+	Train * tchoutchou;
+	printf("P2\n");
+	printf("Nb Train :%d\n", nbTrain);
+	int compteLigne;
+	compteLigne = nbTrain;
+	printf("Compte LIGNE :%d\n", compteLigne);
+	tchoutchou = listeTrainParVille(listeTrain, &compteLigne, villeDepart, villeArrivee);
+	printf("P3\n");
+	printf("Compte LIGNE :%d\n", compteLigne);
+	for (int i = 0; i < compteLigne; i++) {
+		printTrain(tchoutchou + i);
+		printf("\n");
 	}
-	else
-	{
-		perror ( nomFichier ); /* why didn't the fichier open? */
-	}
-
 
 	return 0;
 }
 
-Train ** listeTrainParVille(struct Train** listeTrain, int* compteLigne,, char * villeDepart, char * villeArrivee)
+Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * villeDepart, char * villeArrivee)
 {
-	struct Train* trainFiltre = malloc(sizeof(Train));
-
+	int tab[*compteLigne];
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
 	int nbTrainFiltre = 0;
-	for (int i = 0; i < compteLigne; i++) {
-		printf("%s\n",villeDepart);
-		fprintf(stderr, "AXEL : %d\n", strcmp (villeDepart, listeTrain[i]->villeDepart));
-		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0)
+	for (int index = 0; index < *compteLigne; index++) {
+		if (strcmp (villeDepart, (listeTrain + index)->villeDepart) == 0)
 		// Si les villes de départs sont identiques
 		{
-			if (strcmp (villeArrivee, listeTrain[i]->villeArrivee) == 0)
+			if (strcmp (villeArrivee, (listeTrain + index)->villeArrivee) == 0)
 			// Si les villes d'arrivées sont identiques
 			{
-				trainFiltre[nbTrainFiltre] = *listeTrain[i];
-				j++;
+				tab[nbTrainFiltre] = index;
+				nbTrainFiltre++;
 			}
 		}
 	}
 
+	Train * trainFiltre = malloc(sizeof(Train)*nbTrainFiltre);
+	for (int inc = 0; inc < nbTrainFiltre; inc++) {
+		trainFiltre[inc] = listeTrain[tab[inc]];
+	}
+
+
 	*compteLigne = nbTrainFiltre;
-	Train ** listeTrainFiltre = trainFiltre;
-	return listeTrainFiltre;
+	return trainFiltre;
 
 }
 
@@ -155,7 +132,11 @@ trancheDebut = foisCent + minuteDepartDebut;
 printf("heure*100+minute : %d\n",trancheDebut );
 trancheFin = foisCent2  + minuteDepartFin;
 printf("heure*100 : %d\n",trancheFin );
-// printf("ville depart : %s, %d \n", villeDepart, trancheDebut);
+// printf("ville depart : %s, %d \n", villeDepart, t/usr/include/stdio.h:358:12: note: expected ‘FILE * restrict {aka struct _IO_FILE * restrict}’ but argument is of type ‘char *’
+extern int fprintf (FILE *__restrict __stream,
+^~~~~~~
+sources/requetes.c:129:72: warning: passing argument 2 of ‘fprintf’ makes pointer from integer without a cast [-Wint-conversion]
+train numero %d est  : villeDepart %s, villeArrivee %d ", 1,listeTrain[rancheDebut);
 // printf("ville arrivee : %s, %d \n", villeArrivee, trancheFin);
 // Pour chaque train on récupère ceux qui nous intéressent
 

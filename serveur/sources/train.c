@@ -123,7 +123,7 @@ Train * trainFromFile(char* nomFichier, int* nbTrain){
 		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
 		{
 			*(listeToutTrain + lineCount) = *trainFromCSV(ligne);
-			printTrain((listeToutTrain + lineCount));
+			//printTrain((listeToutTrain + lineCount));
 			lineCount ++;
 		}
 		fclose (fichier);
