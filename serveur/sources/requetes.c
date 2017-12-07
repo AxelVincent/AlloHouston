@@ -5,6 +5,7 @@
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "../headers/requetes.h"
+#include "../headers/outils.h"
 
 /**
 * @file requetes.c
@@ -27,7 +28,16 @@
 */
 Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart)
 {
+	char * VD = villeDepart;
+	char * VA = villeArrivee;
 
+	strToUpper(VD);
+	strToUpper(VA);
+
+	//printf("Compte ligne : %d, villeDepart : %s, ville arrivee : %s, heure depart : %d, minute depart : %d\n",compteLigne, VD, VA, heureDepart, minuteDepart );
+	for (int u = 0; u < compteLigne; u++) {
+		//printf("Ville depart : %s, ville arrivee : %s\n", listeTrain[u]->villeDepart, listeTrain[u]->villeDepart);
+	}
 	struct Train* trainFiltre = malloc(sizeof(Train));
 	/*// Concatenation de l'heure et minutes de départ souhaité
 	char concatenation[8];
@@ -37,26 +47,28 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 
 	heureDepart = heureDepart * 100;
 	int heureConcat = heureDepart + minuteDepart;
-	//printf("Heure de depart concatené: %d, %s, %s, %s \n", heureConcat, heureDepart, minuteDepart, concatenation);
+	////printf("Heure de depart concatené: %d, %s, %s, %s \n", heureConcat, heureDepart, minuteDepart, concatenation);
 
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
-
+//printf("PASSAGE 1\n");
 	int j = 0;
-	for (int i = 0; i < compteLigne; i++) {
-		printf("%s\n",villeDepart);
-		fprintf(stderr, "AXEL : %d\n", strcmp (villeDepart, listeTrain[i]->villeDepart));
-		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0)
+	for (int increment = 0; increment < compteLigne; increment++) {
+		//printf("PASSAGE boucle i \n");
+		if (strcmp (VD, listeTrain[increment]->villeDepart) == 0)
 		// Si les villes de départs sont identiques
 		{
-			if (strcmp (villeArrivee, listeTrain[i]->villeArrivee) == 0)
+			//printf("PASSAGE strcmp ville depart \n");
+			if (strcmp (VA, listeTrain[increment]->villeArrivee) == 0)
 			// Si les villes d'arrivées sont identiques
 			{
-				if (heureConcat < tempsVersInt(listeTrain[i]->heureDepart))
+				//printf("PASSAGE strcmp ville arrivee \n");
+				if (heureConcat < tempsVersInt(listeTrain[increment]->heureDepart))
 				//Si l'heure du train est après l'heure souhaitée
 				{
-					trainFiltre[j] = *listeTrain[i];
+					//printf("PASSAGE heure concat \n");
+					trainFiltre[j] = *listeTrain[increment];
 					j++;
 				}
 			}
@@ -67,15 +79,16 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	// départ des trains compatible (heure A - heure B)
 	int difference[j][2];
 	int compteDifference;
+	//printf("J = %d\n",j );
 	for (compteDifference = 0; compteDifference < j; compteDifference++)
 	{
 		// On récupère la valeur absolue de : heureConcat - heure du train
 		difference[compteDifference][0] = abs(heureConcat- tempsVersInt(trainFiltre[compteDifference].heureDepart));
 		// On associe l'index
 		difference[compteDifference][1] = compteDifference;
-
-		//printf("heure de difference %d, array %d\n", difference[compteDifference][1], difference[compteDifference][2]);
-		//printf("heure d'entree :%d , heure dans la base :%d\n", atoi(heureDepart), trainFiltre[compteDifference].heureDepart->heure);
+		//printf("PASSAGE 2\n");
+		////printf("heure de difference %d, array %d\n", difference[compteDifference][1], difference[compteDifference][2]);
+		////printf("heure d'entree :%d , heure dans la base :%d\n", atoi(heureDepart), trainFiltre[compteDifference].heureDepart->heure);
 
 	}
 	// Recherche du plus petit
@@ -88,12 +101,14 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	{
 		if (difference[compteDifference][0] < plusPetit) {
 			plusPetit = difference[compteDifference][0];
-			//printf("Arg 1 %d, plus petit que Arg2 %d\n", difference[compteDifference][1], plusPetit );
+			////printf("Arg 1 %d, plus petit que Arg2 %d\n", difference[compteDifference][1], plusPetit );
 			index = difference[compteDifference][1];
 		}
 	}
-	//printf("Le plus petit nombre est : %d, son index est : %d\n", plusPetit, index);
-	//printf("VIlle de depart %d\n", trainFiltre[index].heureDepart->minute );
+	//printf("PASSAGE 3\n");
+	////printf("Le plus petit nombre est : %d, son index est : %d\n", plusPetit, index);
+	////printf("VIlle de depart %d\n", trainFiltre[index].heureDepart->minute );
+	//printTrain(trainFiltre + index);
 	return trainFiltre + index;
 }
 

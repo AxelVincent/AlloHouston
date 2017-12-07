@@ -11,6 +11,7 @@
 #include "../headers/color.h"
 #include "../headers/requetes.h"
 #include "../headers/train.h"
+#include "../headers/outils.h"
 
 #define SIZE_MSG 1024
 
@@ -50,7 +51,12 @@ void nouveauService(int descripteurSocketService)
 	Train **listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
-	printf("%d\n", (nbTrain));
+
+	Train *ptrListeTrain[nbTrain];
+
+	for (int i=0;  i <nbTrain; i++) {
+		ptrListeTrain[i] = listeTrain[i];
+	}
 
 
 	//Affichage d'un petit train et envoie du message au client
@@ -91,13 +97,10 @@ void nouveauService(int descripteurSocketService)
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de depart (HH:MN) : ");
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
-				Train *t = malloc(sizeof(Train));
 
-				printf("%s\n", villeDepart);
-				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m);
-				printf("test3\n");
+				Train *t = malloc(sizeof(Train));
+				t = trouverTrainLePlusProche(ptrListeTrain, nbTrain, villeDepart, villeArrivee, h, m);
 				printTrain(t);
-				printf("test2\n");
 				free(t);
 				break;
 			case 2:
@@ -180,11 +183,15 @@ void recevoirMessage(int descripteurSocketService, char *commandeRecu)
 
 void choixHoraire(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, int *h,int *m,int pid)
 {
+	char *cmdAEnvoyer;
+	cmdAEnvoyer = strdup(commandeAEnvoyer);
+
 	int valide = 0;
 	do
 	{
+
 		//Envoie er reception des messages
-		envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+		envoyerMessage(descripteurSocketService, cmdAEnvoyer);
 		recevoirMessage(descripteurSocketService, commandeRecu);
 
 		//Declarations des pointeurs
@@ -194,9 +201,12 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 		//Split de la reponse
 		token1 = strsep(&str, ":");
 		token2 = strsep(&str, ":");
+
+
 		//Test du format de la repopnse (HH:MM)
 		if(token2 != NULL)
 		{
+
 			// Transformation en int des entrees client
 			*h = (int) strtol(token1, &texte1, 10);
 			*m = (int) strtol(token2, &texte2, 10);
@@ -210,7 +220,7 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 			{
 				//Mauvais entree utilisateur, on redemande l'horaire
 				printf("%d "RED"MAUVAIS ENTREE UTILISATEUR"RESET"\n", pid);
-				strcpy(commandeAEnvoyer, "noread;\n"RED"Mauvais choix des horaires : ex : 10:10"RESET"\n");
+				strcpy(commandeAEnvoyer, "noread;"RED"Mauvais choix des horaires : ex : 10:10"RESET"\n");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 			}
 		}
@@ -218,7 +228,7 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 		{
 			//Mauvais entree utilisateur, on redemande l'horaire
 			printf("%d "RED"MAUVAIS ENTREE UTILISATEUR"RESET"\n", pid);
-			strcpy(commandeAEnvoyer, "noread;\n"RED"Mauvais choix des horaires : ex : 10:10"RESET"\n");
+			strcpy(commandeAEnvoyer, "noread;"RED"Mauvais choix des horaires : ex : 10:10"RESET"\n");
 			envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 		}
 
