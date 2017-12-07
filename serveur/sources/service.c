@@ -76,7 +76,7 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
-				char* villeDepart = commandeRecu;
+				char* villeDepart = strdup(commandeRecu);
 
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
@@ -84,7 +84,7 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
-				char* villeArrivee = commandeRecu;
+				char* villeArrivee = strdup(commandeRecu);
 
 				// Envoie et reception des informations a propos de l'horaire
 				printf("%d "MAG"CHOIX HORAIRE"RESET"\n", pid);
@@ -92,7 +92,8 @@ void nouveauService(int descripteurSocketService)
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 				Train *t = malloc(sizeof(Train));
-				printf("test\n");
+
+				printf("%s\n", villeDepart);
 				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m);
 				printf("test3\n");
 				printTrain(t);
