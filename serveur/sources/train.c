@@ -1,9 +1,9 @@
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "../headers/outils.h"
-#include "./outils.c"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /**
  * @file train.c
@@ -89,4 +89,50 @@ Train* trainFromCSV(char* csv)
   }
   free(tofree); // We free the str we made
   return train;
+}
+
+
+/**
+ * @fn Train ** trainFromFile(char* nomFichier, int* nbTrain)
+ * @brief Crée un pointeur sur une liste de train depuis le fichier csv fournit
+ * @param nomFichier Nom du fichier csv que l'on souhaite parser en liste de Train.
+ * @param nbTrain Pointeur sur int qui contiendra le nombre de train trouvé dans le fichier csv.
+ * @return pointeur sur une liste de train
+ * @example :
+ *   char *nomFichier = "../ressources/Trains.txt";
+ *   Train **listeTrain;
+ *   int nbTrain;
+ *   listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
+ *
+ */
+Train ** trainFromFile(char* nomFichier, int* nbTrain){
+	Train ** listeToutTrain;
+	FILE *fichier = fopen ( nomFichier, "r" );
+	int compteLigne = 0;
+	if (fichier != NULL)
+	{
+		char ligne [ 256 ]; /* or other suitable maximum ligne size */
+		int lineCount = 0;
+		while (fgets(ligne, sizeof ligne, fichier) != NULL) /* read a ligne */
+		{
+			compteLigne ++;
+		}
+		printf("%d ligne dans le fichier Trains.txt\n", compteLigne);
+		rewind(fichier);
+		Train *listeTrain[compteLigne];
+		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
+		{
+			listeTrain[lineCount] = trainFromCSV(ligne);
+			//printTrain(listeTrain[lineCount]);
+			lineCount ++;
+		}
+		fclose (fichier);
+		listeToutTrain = listeTrain;
+	}
+	else
+	{
+		perror ( nomFichier ); /* why didn't the fichier open? */
+	}
+  *nbTrain = compteLigne;
+	return listeToutTrain;
 }
