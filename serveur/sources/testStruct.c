@@ -55,42 +55,13 @@ int main(int argc, char *argv[])
 	//int idxToDel = 2;
 	//	memmove(&heureDepart[idxToDel], &heureDepart[idxToDel + 1], strlen(heureDepart) - idxToDel);
 	// Création de la structure en faisant appel au ficher train.txt
-	static const char nomFichier[] = "../ressources/Trains.txt";
-	FILE *fichier = fopen ( nomFichier, "r" );
-	int compteLigne = 0;
-	if (fichier != NULL)
-	{
-		char ligne [ 256 ]; /* or other suitable maximum ligne size */
-		int lineCount = 0;
-		while (fgets(ligne, sizeof ligne, fichier) != NULL) /* read a ligne */
-		{
-			compteLigne ++;
-		}
-		printf("%d ligne dans le fichier Trains.txt\n", compteLigne);
-		rewind(fichier);
-		Train *listeTrain[compteLigne];
-		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
-		{
-			listeTrain[lineCount] = trainFromCSV(ligne);
-			//printTrain(listeTrain[lineCount]);
-			lineCount ++;
-		}
-		fclose (fichier);
-		// Une fois la structure établie, il est alors possible de commencer les traitements
-		struct Train* tchoutchou = malloc(sizeof(Train));
-		tchoutchou = trouverTrainLePlusProche(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
-    //fprintf(stderr, "tchoutchou%f\n", tchoutchou->prix);
-		printTrain(tchoutchou);
-
-
-
-		trouverTrainParTranche(listeTrain, compteLigne, villeDepart, villeArrivee, heureDepart, heureDepartFin);
-
-	}
-	else
-	{
-		perror ( nomFichier ); /* why didn't the fichier open? */
-	}
+	char *nomFichier = "../ressources/Trains.txt";
+	Train **listeTrain;
+	int nbTrain;
+	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
+	printf("%d\n", (nbTrain));
+	printTrain(*listeTrain);
+	printTrain(*(listeTrain+1));
 	return 0;
 }
 

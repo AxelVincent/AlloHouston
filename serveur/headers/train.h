@@ -16,5 +16,6 @@ struct Train
 
 void printTrain(Train* train);
 Train* trainFromCSV(char* csv);
+Train ** trainFromFile(char* nomFichier, int* nbTrain);
 
 #endif
