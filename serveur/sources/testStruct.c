@@ -7,7 +7,7 @@
 #include "../headers/testStructure.h"
 #include "./train.c"
 #include "./temps.c"
-
+#include "./outils.c"
 /**
 * @brief Exemple d'usage de la structure train et des fonctions printTrain() et trainFromCSV()
 * @see ./train.c
@@ -55,13 +55,51 @@ int main(int argc, char *argv[])
 	//int idxToDel = 2;
 	//	memmove(&heureDepart[idxToDel], &heureDepart[idxToDel + 1], strlen(heureDepart) - idxToDel);
 	// Création de la structure en faisant appel au ficher train.txt
-	char *nomFichier = "../ressources/Trains.txt";
+	/*char *nomFichier = "../ressources/Trains.txt";
 	Train **listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
 	printf("%d\n", (nbTrain));
-	printTrain(*listeTrain);
-	printTrain(*(listeTrain+1));
+	//printTrain(*listeTrain);
+	//printTrain(*(listeTrain+1));*/
+	static const char nomFichier[] = "../ressources/Trains.txt";
+	FILE *fichier = fopen ( nomFichier, "r" );
+	int compteLigne = 0;
+	if (fichier != NULL)
+	{
+		char ligne [ 256 ]; /* or other suitable maximum ligne size */
+		int lineCount = 0;
+		while (fgets(ligne, sizeof ligne, fichier) != NULL) /* read a ligne */
+		{
+			compteLigne ++;
+		}
+		printf("%d ligne dans le fichier Trains.txt\n", compteLigne);
+		rewind(fichier);
+		Train *listeTrain[compteLigne];
+		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
+		{
+			listeTrain[lineCount] = trainFromCSV(ligne);
+			//printTrain(listeTrain[lineCount]);
+			lineCount ++;
+		}
+		fclose (fichier);
+		// Une fois la structure établie, il est alors possible de commencer les traitements
+		struct Train* tchoutchou = malloc(sizeof(Train));
+		tchoutchou = trouverTrainLePlusProche(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
+		//fprintf(stderr, "tchoutchou%f\n", tchoutchou->prix);
+		printTrain(tchoutchou);
+
+
+
+		//trouverTrainParTranche(listeTrain, compteLigne, villeDepart, villeArrivee, heureDepart, heureDepartFin);
+
+	}
+	else
+	{
+		perror ( nomFichier ); /* why didn't the fichier open? */
+	}
+
+
 	return 0;
 }
 
@@ -95,6 +133,8 @@ int charVersInt(char *heure)
 */
 Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart)
 {
+	printf("TRAIN :\n");
+	//printTrain(listeTrain);
 	struct Train* trainFiltre = malloc(sizeof(Train));
 	/*// Concatenation de l'heure et minutes de départ souhaité
 	char concatenation[8];
@@ -108,7 +148,6 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
-	printf("Ville : %s\n", villeDepart);
 	int j = 0;
 	for (int i = 0; i < compteLigne; i++) {
 		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0)
@@ -161,7 +200,7 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	return trainFiltre + index;
 }
 
-void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin)
+/*void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin)
 {
 	Train *listeTrainNouvelle[tailleListe];
 	int nombreTrainTries = 0;
@@ -179,7 +218,7 @@ void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * v
 		}
 	}
 	printf("%d\n", nombreTrainTries );
-}
+}*/
 
 
 Train * trouverListeTrain( struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee)

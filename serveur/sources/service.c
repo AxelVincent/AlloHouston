@@ -11,6 +11,7 @@
 #include "../headers/color.h"
 #include "../headers/requetes.h"
 #include "../headers/train.h"
+#include "../headers/outils.h"
 
 #define SIZE_MSG 1024
 
@@ -50,7 +51,12 @@ void nouveauService(int descripteurSocketService)
 	Train **listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
-	printf("%d\n", (nbTrain));
+	
+	Train *ptrListeTrain[nbTrain];
+
+	for (int i=0;  i <nbTrain; i++) {
+		ptrListeTrain[i] = listeTrain[i];
+	}
 
 
 	//Affichage d'un petit train et envoie du message au client
@@ -91,13 +97,10 @@ void nouveauService(int descripteurSocketService)
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de depart (HH:MN) : ");
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
-				Train *t = malloc(sizeof(Train));
 
-				printf("%s\n", villeDepart);
-				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m);
-				printf("test3\n");
+				Train *t = malloc(sizeof(Train));
+				t = trouverTrainLePlusProche(ptrListeTrain, nbTrain, villeDepart, villeArrivee, h, m);
 				printTrain(t);
-				printf("test2\n");
 				free(t);
 				break;
 			case 2:
