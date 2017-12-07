@@ -90,6 +90,9 @@ void nouveauService(int descripteurSocketService)
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 
+				strToUpper(villeDepart);
+				strToUpper(villeArrivee);
+				
 				Train *t = malloc(sizeof(Train));
 				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m);
 				printTrain(t);

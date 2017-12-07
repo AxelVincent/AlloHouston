@@ -28,12 +28,6 @@
 */
 Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart)
 {
-	char * VD = villeDepart;
-	char * VA = villeArrivee;
-
-	strToUpper(VD);
-	strToUpper(VA);
-
 	//printf("Compte ligne : %d, villeDepart : %s, ville arrivee : %s, heure depart : %d, minute depart : %d\n",compteLigne, VD, VA, heureDepart, minuteDepart );
 	for (int u = 0; u < compteLigne; u++) {
 		//printf("Ville depart : %s, ville arrivee : %s\n", (listeTrain+u)->villeDepart, (listeTrain+u)->villeDepart);
@@ -56,11 +50,11 @@ Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char
 	int nbTrainFiltre = 0;
 	for (int increment = 0; increment < compteLigne; increment++) {
 		//printf("PASSAGE boucle i \n");
-		if (strcmp (VD, (listeTrain + increment)->villeDepart) == 0)
+		if (strcmp (villeDepart, (listeTrain + increment)->villeDepart) == 0)
 		// Si les villes de départs sont identiques
 		{
 			//printf("PASSAGE strcmp ville depart \n");
-			if (strcmp (VA, (listeTrain + increment)->villeArrivee) == 0)
+			if (strcmp (villeArrivee, (listeTrain + increment)->villeArrivee) == 0)
 			// Si les villes d'arrivées sont identiques
 			{
 				//printf("PASSAGE strcmp ville arrivee \n");
