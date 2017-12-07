@@ -92,11 +92,28 @@ void nouveauService(int descripteurSocketService)
 
 				strToUpper(villeDepart);
 				strToUpper(villeArrivee);
-				
+
 				Train *t = malloc(sizeof(Train));
-				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m);
-				printTrain(t);
-				free(t);
+				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, &commandeAEnvoyer);
+				if(t!=NULL)
+				{
+					printTrain(t);
+				}
+				else
+				{
+
+				}
+				fprintf(stderr, "%s\n", commandeAEnvoyer);
+				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
+				recevoirMessage(descripteurSocketService, commandeRecu);
+				if(atoi(commandeRecu)==2)
+				{
+					envoyerMessage(descripteurSocketService,"stop");
+					close(descripteurSocketService);
+					exit(0);
+				}
+				//free(t);
 				break;
 			case 2:
 			//Fonction 2 : ville de départ + ville d'arrivée + tranche horaire pour le départ

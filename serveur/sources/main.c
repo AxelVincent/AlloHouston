@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 		ecouteServeur(creationServeur(atoi(argv[1])));
 	}else
 	{
-		fprintf(stderr, RED "Il doit y avoir 1 argument : "MAG"PORT "RESET "\n");
+		fprintf(stderr, RED "ALLO HOUSTON : Il doit y avoir 1 argument : "MAG"PORT "RESET "\n");
 		exit(-1);
 	}
 	return 0;
@@ -63,7 +63,7 @@ int creationServeur(int numeroPort)
 			}
 			else
 			{
-				fprintf(stderr, RED "Erreur lors du listen" RESET "\n");
+				fprintf(stderr, RED "ALLO HOUSTON : Erreur lors du listen" RESET "\n");
 				exit(-1);
 			}
 
@@ -71,14 +71,14 @@ int creationServeur(int numeroPort)
 		else
 		{
 			//Bind don't works
-			fprintf(stderr, RED "Erreur lors du listen" RESET "\n");
+			fprintf(stderr, RED "ALLO HOUSTON : Erreur lors du listen" RESET "\n");
 			fprintf(stderr, "Peut etre que le port "YEL "%d" RESET " est deja utilise?\n", numeroPort);
 			exit(-1);
 		}
 	}
 	else
 	{
-		fprintf(stderr, RED "Erreur lors de la creation de la socket" RESET "\n");
+		fprintf(stderr, RED "ALLO HOUSTON : Erreur lors de la creation de la socket" RESET "\n");
 		exit(-1);
 	}
 
@@ -107,7 +107,7 @@ void ecouteServeur(int descripteur)
 			switch (fork()) {
 				case -1:
 				// Erreur dans la création d'un FILS
-				fprintf(stderr, RED "Erreur dans la création d'un fils" RESET "\n");
+				fprintf(stderr, RED "ALLO HOUSTON : Erreur dans la création d'un fils" RESET "\n");
 				exit(-1);
 
 				case 0:
@@ -122,7 +122,7 @@ void ecouteServeur(int descripteur)
 		}
 		else
 		{
-			fprintf(stderr, RED "Erreur lors du accept" RESET "\n");
+			fprintf(stderr, RED "ALLO HOUSTON : Erreur lors du accept" RESET "\n");
 			exit(-1);
 		}
 
