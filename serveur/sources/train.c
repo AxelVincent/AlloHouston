@@ -1,7 +1,6 @@
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "../headers/outils.h"
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -91,6 +90,7 @@ Train* trainFromCSV(char* csv)
   free(tofree); // We free the str we made
   return train;
 }
+
 
 /**
  * @fn Train ** trainFromFile(char* nomFichier, int* nbTrain)

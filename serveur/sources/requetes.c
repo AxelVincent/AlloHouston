@@ -112,7 +112,47 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	return trainFiltre + index;
 }
 
+Train ** trouverTrainParTranche(struct Train** listeTrain, int* tailleListe , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin)
+{
+	printf("%d\n",*tailleListe );
+	struct Train *listeTrainNouvelle[*tailleListe];
+	int nbTrains = 0;
+	int foisCent = heureDepartDebut * 100 ;
+	int foisCent2 = heureDepartFin * 100;
+	int trancheDebut;
+	int trancheFin;
+	trancheDebut = foisCent + minuteDepartDebut;
+	printf("heure*100+minute : %d\n",trancheDebut );
+	trancheFin = foisCent2  + minuteDepartFin;
+	printf("heure*100 : %d\n",trancheFin );
+	// printf("ville depart : %s, %d \n", villeDepart, trancheDebut);
+	// printf("ville arrivee : %s, %d \n", villeArrivee, trancheFin);
+	// Pour chaque train on récupère ceux qui nous intéressent
 
+	for (int trainCourant = 0; trainCourant < *tailleListe; trainCourant++)
+	{
+		// Tri en fonction de la ville de départ et d'arrivée
+		if (strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0)
+		{
+			if(strcmp(villeArrivee, listeTrain[trainCourant]->villeArrivee) == 0)
+			{
+				// Heure où le train doit partir
+				int heureDebut = tempsVersInt(listeTrain[trainCourant]->heureDepart);
+
+				if (heureDebut >= trancheDebut && heureDebut <= trancheFin)
+				{
+					// On ajoute ce train à la nouvelle liste
+					listeTrainNouvelle[nbTrains] = listeTrain[trainCourant];
+					printTrain(listeTrainNouvelle[nbTrains]);
+				  nbTrains++;
+				}
+			}
+		}
+	}
+	*tailleListe = nbTrains;
+
+	return listeTrainNouvelle;
+}
 
 int tempsVersInt(struct Temps* temp)
 {
