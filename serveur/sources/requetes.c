@@ -26,17 +26,11 @@
 * @return pointeur sur un temps
 * Exemple de ligne csv reçu : "16:55"
 */
-Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart)
+Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart)
 {
-	char * VD = villeDepart;
-	char * VA = villeArrivee;
-
-	strToUpper(VD);
-	strToUpper(VA);
-
 	//printf("Compte ligne : %d, villeDepart : %s, ville arrivee : %s, heure depart : %d, minute depart : %d\n",compteLigne, VD, VA, heureDepart, minuteDepart );
 	for (int u = 0; u < compteLigne; u++) {
-		//printf("Ville depart : %s, ville arrivee : %s\n", listeTrain[u]->villeDepart, listeTrain[u]->villeDepart);
+		//printf("Ville depart : %s, ville arrivee : %s\n", (listeTrain+u)->villeDepart, (listeTrain+u)->villeDepart);
 	}
 	struct Train* trainFiltre = malloc(sizeof(Train));
 	/*// Concatenation de l'heure et minutes de départ souhaité
@@ -56,19 +50,19 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	int nbTrainFiltre = 0;
 	for (int increment = 0; increment < compteLigne; increment++) {
 		//printf("PASSAGE boucle i \n");
-		if (strcmp (VD, listeTrain[increment]->villeDepart) == 0)
+		if (strcmp (villeDepart, (listeTrain + increment)->villeDepart) == 0)
 		// Si les villes de départs sont identiques
 		{
 			//printf("PASSAGE strcmp ville depart \n");
-			if (strcmp (VA, listeTrain[increment]->villeArrivee) == 0)
+			if (strcmp (villeArrivee, (listeTrain + increment)->villeArrivee) == 0)
 			// Si les villes d'arrivées sont identiques
 			{
 				//printf("PASSAGE strcmp ville arrivee \n");
-				if (heureConcat < tempsVersInt(listeTrain[increment]->heureDepart))
+				if (heureConcat < tempsVersInt((listeTrain + increment)->heureDepart))
 				//Si l'heure du train est après l'heure souhaitée
 				{
 					//printf("PASSAGE heure concat \n");
-					trainFiltre[nbTrainFiltre] = *listeTrain[increment];
+					trainFiltre[nbTrainFiltre] = *(listeTrain + increment);
 					nbTrainFiltre++;
 				}
 			}
