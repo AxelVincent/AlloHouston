@@ -94,7 +94,7 @@ void nouveauService(int descripteurSocketService)
 				strToUpper(villeArrivee);
 
 				Train *t = malloc(sizeof(Train));
-				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, &commandeAEnvoyer);
+				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
 				if(t!=NULL)
 				{
 					printTrain(t);
