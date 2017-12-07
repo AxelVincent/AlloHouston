@@ -126,10 +126,10 @@ Train ** trouverTrainParTranche(struct Train** listeTrain, int* tailleListe , ch
 	printf("ville depart : %s, %d \n", villeDepart, trancheDebut);
 	printf("ville arrivee : %s, %d \n", villeArrivee, trancheFin);
 	// Pour chaque train on récupère ceux qui nous intéressent
-	fprintf("Le train numero %d est  : villeDepart %s, villeArrivee %d ", 1,listeTrain[1]->villeDepart, listeTrain[1]->villeArrivee);
+	//fprintf("Le train numero %d est  : villeDepart %s, villeArrivee %d ", 1,listeTrain[1]->villeDepart, listeTrain[1]->villeArrivee);
 	for (int trainCourant = 0; trainCourant < *tailleListe; trainCourant++)
 	{
-		fprintf("Le train numero %d est  : villeDepart %s, villeArrivee %d ", trainCourant,listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee);
+		//fprintf("Le train numero %d est  : villeDepart %s, villeArrivee %d ", trainCourant,listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee);
 		// Tri en fonction de la ville de départ et d'arrivée
 		if (strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0)
 		{

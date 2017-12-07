@@ -92,8 +92,12 @@ int main(int argc, char *argv[])
 		// tchoutchou = trouverTrainLePlusProche(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
 		// //fprintf(stderr, "tchoutchou%f\n", tchoutchou->prix);
 		// printTrain(tchoutchou);
-
-
+		printf("P1\n");
+		Train ** tchoutchou;
+		printf("P2\n");
+		tchoutchou = listeTrainParVille(listeTrain, &compteLigne, villeDepart, villeArrivee);
+		printf("P3\n");
+		printf("Compte LIGNE :%d\n", compteLigne);
 
 
 	}
@@ -106,31 +110,39 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-Train ** listeTrainParVille(struct Train** listeTrain, int* compteLigne,, char * villeDepart, char * villeArrivee)
+Train ** listeTrainParVille(struct Train** listeTrain, int* compteLigne, char * villeDepart, char * villeArrivee)
 {
-	struct Train* trainFiltre = malloc(sizeof(Train));
+	char * VD = villeDepart;
+	char * VA = villeArrivee;
+
+	strToUpper(VD);
+	strToUpper(VA);
+
+	Train** trainFiltre;
 
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
 	int nbTrainFiltre = 0;
-	for (int i = 0; i < compteLigne; i++) {
-		printf("%s\n",villeDepart);
-		fprintf(stderr, "AXEL : %d\n", strcmp (villeDepart, listeTrain[i]->villeDepart));
-		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0)
+	for (int increment = 0; increment < *compteLigne; increment++) {
+		printf("PASSAGE boucle i \n");
+		if (strcmp (VD, listeTrain[increment]->villeDepart) == 0)
 		// Si les villes de départs sont identiques
 		{
-			if (strcmp (villeArrivee, listeTrain[i]->villeArrivee) == 0)
+			printf("PASSAGE strcmp ville depart \n");
+			if (strcmp (VA, listeTrain[increment]->villeArrivee) == 0)
 			// Si les villes d'arrivées sont identiques
 			{
-				trainFiltre[nbTrainFiltre] = *listeTrain[i];
-				j++;
+				printf("PASSAGE heure concat \n");
+				trainFiltre[nbTrainFiltre] = listeTrain[increment];
+				nbTrainFiltre++;
 			}
 		}
 	}
 
 	*compteLigne = nbTrainFiltre;
-	Train ** listeTrainFiltre = trainFiltre;
+	Train ** listeTrainFiltre;
+	listeTrainFiltre = trainFiltre;
 	return listeTrainFiltre;
 
 }
@@ -155,7 +167,11 @@ trancheDebut = foisCent + minuteDepartDebut;
 printf("heure*100+minute : %d\n",trancheDebut );
 trancheFin = foisCent2  + minuteDepartFin;
 printf("heure*100 : %d\n",trancheFin );
-// printf("ville depart : %s, %d \n", villeDepart, trancheDebut);
+// printf("ville depart : %s, %d \n", villeDepart, t/usr/include/stdio.h:358:12: note: expected ‘FILE * restrict {aka struct _IO_FILE * restrict}’ but argument is of type ‘char *’
+extern int fprintf (FILE *__restrict __stream,
+^~~~~~~
+sources/requetes.c:129:72: warning: passing argument 2 of ‘fprintf’ makes pointer from integer without a cast [-Wint-conversion]
+train numero %d est  : villeDepart %s, villeArrivee %d ", 1,listeTrain[rancheDebut);
 // printf("ville arrivee : %s, %d \n", villeArrivee, trancheFin);
 // Pour chaque train on récupère ceux qui nous intéressent
 
