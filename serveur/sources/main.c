@@ -11,8 +11,6 @@
 #include "../headers/service.h"
 #include "../headers/color.h"
 #include "../headers/requetes.h"
-#include "./train.c"
-#include "./temps.c"
 
 int main(int argc, char *argv[])
 {

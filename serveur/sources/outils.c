@@ -1,5 +1,5 @@
 #include <ctype.h>
-
+#include "../headers/outils.h"
 
 /**
  * @file outils.c

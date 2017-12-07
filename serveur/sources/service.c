@@ -6,10 +6,12 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "../headers/temps.h"
 #include "../headers/service.h"
 #include "../headers/color.h"
-#include "../headers/train.h"
 #include "../headers/requetes.h"
+#include "../headers/train.h"
+
 #define SIZE_MSG 1024
 
 /**
@@ -89,9 +91,13 @@ void nouveauService(int descripteurSocketService)
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de depart (HH:MN) : ");
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
-
-				Train *t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m);
+				Train *t = malloc(sizeof(Train));
+				printf("test\n");
+				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m);
+				printf("test3\n");
 				printTrain(t);
+				printf("test2\n");
+				free(t);
 				break;
 			case 2:
 			//Fonction 2 : ville de départ + ville d'arrivée + tranche horaire pour le départ

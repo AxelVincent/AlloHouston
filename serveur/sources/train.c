@@ -1,9 +1,10 @@
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "../headers/outils.h"
-#include "./outils.c"
+
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /**
  * @file train.c
