@@ -99,8 +99,9 @@ void nouveauService(int descripteurSocketService)
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 
 				Train *t = malloc(sizeof(Train));
-				t = trouverTrainLePlusProche(ptrListeTrain, nbTrain, villeDepart, villeArrivee, h, m);
+				t = trouverTrainLePlusProche(ptrListeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
 				printTrain(t);
+				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				free(t);
 				break;
 			case 2:

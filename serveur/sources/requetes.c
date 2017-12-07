@@ -6,6 +6,9 @@
 #include "../headers/train.h"
 #include "../headers/requetes.h"
 #include "../headers/outils.h"
+#include "../headers/color.h"
+
+#define SIZE_MSG 1024
 
 /**
 * @file requetes.c
@@ -26,7 +29,7 @@
 * @return pointeur sur un temps
 * Exemple de ligne csv reçu : "16:55"
 */
-Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart)
+Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart, char* commandeAEnvoyer)
 {
 	char * VD = villeDepart;
 	char * VA = villeArrivee;
@@ -109,7 +112,10 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	////printf("Le plus petit nombre est : %d, son index est : %d\n", plusPetit, index);
 	////printf("VIlle de depart %d\n", trainFiltre[index].heureDepart->minute );
 	//printTrain(trainFiltre + index);
-	return trainFiltre + index;
+	trainFiltre = trainFiltre + index;
+	snprintf(commandeAEnvoyer, SIZE_MSG, "noread;"MAG"Voici le train crrespondant a votre recherche :"RESET"\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n\n", trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc);
+
+	return trainFiltre;
 }
 
 Train ** trouverTrainParTranche(struct Train** listeTrain, int* tailleListe , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin)
