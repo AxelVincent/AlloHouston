@@ -1,6 +1,7 @@
 #include "../headers/temps.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /**
  * @file temps.c
