@@ -161,12 +161,32 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
+				char* villeDepartRequete3 = strdup(commandeRecu);
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
+				char* villeArriveeRequete3 = strdup(commandeRecu);
+
+				strToUpper(villeDepartRequete3);
+				strToUpper(villeArriveeRequete3);
+
+
+				int compteLigne;
+				compteLigne = nbTrain;
+
+				fprintf(stderr,"Compte LIGNE :%d\n", compteLigne);
+				Train * lstTrainParVille = malloc(sizeof(Train));
+				lstTrainParVille = listeTrainParVille(listeTrain, &compteLigne, villeDepartRequete3, villeArriveeRequete3);
+				printf("P3\n");
+				printf("Compte LIGNE :%d\n", compteLigne);
+				for (int i = 0; i < compteLigne; i++) {
+					printTrain(lstTrainParVille + i);
+					printf("\n");
+				}
+
 
 
 			break;
