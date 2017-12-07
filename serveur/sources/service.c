@@ -8,6 +8,8 @@
 
 #include "../headers/service.h"
 #include "../headers/color.h"
+#include "../headers/train.h"
+#include "../headers/requetes.h"
 #define SIZE_MSG 1024
 
 /**
@@ -38,6 +40,17 @@ void nouveauService(int descripteurSocketService)
 	int pid = getpid();
 	printf("nouveauService ok : %d\n",pid);
 	int sizeRead;
+
+	//Recuépration du fichier Trains.txt a chaque client
+	//Cela permet que chaque client ets le dernier fichier bien a jour
+
+	char *nomFichier = "./ressources/Trains.txt";
+	Train **listeTrain;
+	int nbTrain;
+	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
+	printf("%d\n", (nbTrain));
+
+
 	//Affichage d'un petit train et envoie du message au client
 	strcpy(commandeAEnvoyer, "noread;___________________________________________________________________\n       /\\                    /\\															 \n   ____\\/____============____\\/___    ___==========================\n /__|     OOOOOOOOOOOOO    [_]   |    |  |[]|  [_]    [_]    [_] \n/             S N C F            |    |  |  |										 \n\\________________________________|_ii_|__|__|______________________\n   ()==()    === ++++ ===  ()==()       ()==()     +++   ++++++++\n===================================================================\n\n");
 	envoyerMessage(descripteurSocketService, commandeAEnvoyer);
@@ -61,6 +74,7 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
+				char* villeDepart = commandeRecu;
 
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
@@ -68,6 +82,7 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
+				char* villeArrivee = commandeRecu;
 
 				// Envoie et reception des informations a propos de l'horaire
 				printf("%d "MAG"CHOIX HORAIRE"RESET"\n", pid);
@@ -75,6 +90,8 @@ void nouveauService(int descripteurSocketService)
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 
+				Train *t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m);
+				printTrain(t);
 				break;
 			case 2:
 			//Fonction 2 : ville de départ + ville d'arrivée + tranche horaire pour le départ
