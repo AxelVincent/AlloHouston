@@ -49,7 +49,9 @@ int main(int argc, char *argv[])
           if(strcmp(prefixe,"noread") != 0)
           {
             lectureEntreeClient(descripteurClient, messageEnvoye);
-            if(strcmp(messageEnvoye,"stop") == 0){
+            if(strcmp(messageEnvoye,"stop") == 0)
+            {
+              fprintf(stderr,"%sFin de transmission.%s\n",BLU,RESET);
               continuer = 0;
             }
           }

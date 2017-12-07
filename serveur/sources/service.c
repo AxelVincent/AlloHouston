@@ -101,10 +101,18 @@ void nouveauService(int descripteurSocketService)
 				}
 				else
 				{
-					fprintf(stderr, "T EST NULL\n");
+
 				}
 				fprintf(stderr, "%s\n", commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
+				recevoirMessage(descripteurSocketService, commandeRecu);
+				if(atoi(commandeRecu)==2)
+				{
+					envoyerMessage(descripteurSocketService,"stop");
+					close(descripteurSocketService);
+					exit(0);
+				}
 				//free(t);
 				break;
 			case 2:
