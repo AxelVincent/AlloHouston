@@ -122,15 +122,14 @@ Train ** trouverTrainParTranche(struct Train** listeTrain, int* tailleListe , ch
 	int trancheDebut;
 	int trancheFin;
 	trancheDebut = foisCent + minuteDepartDebut;
-	printf("heure*100+minute : %d\n",trancheDebut );
 	trancheFin = foisCent2  + minuteDepartFin;
-	printf("heure*100 : %d\n",trancheFin );
-	// printf("ville depart : %s, %d \n", villeDepart, trancheDebut);
-	// printf("ville arrivee : %s, %d \n", villeArrivee, trancheFin);
+	printf("ville depart : %s, %d \n", villeDepart, trancheDebut);
+	printf("ville arrivee : %s, %d \n", villeArrivee, trancheFin);
 	// Pour chaque train on récupère ceux qui nous intéressent
-
+	fprintf("Le train numero %d est  : villeDepart %s, villeArrivee %d ", 1,listeTrain[1]->villeDepart, listeTrain[1]->villeArrivee);
 	for (int trainCourant = 0; trainCourant < *tailleListe; trainCourant++)
 	{
+		fprintf("Le train numero %d est  : villeDepart %s, villeArrivee %d ", trainCourant,listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee);
 		// Tri en fonction de la ville de départ et d'arrivée
 		if (strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0)
 		{
@@ -150,8 +149,8 @@ Train ** trouverTrainParTranche(struct Train** listeTrain, int* tailleListe , ch
 		}
 	}
 	*tailleListe = nbTrains;
-
-	return listeTrainNouvelle;
+	Train ** listeToReturn = listeTrainNouvelle;
+	return listeToReturn;
 }
 
 int tempsVersInt(struct Temps* temp)
