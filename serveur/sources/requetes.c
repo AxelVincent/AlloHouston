@@ -50,7 +50,7 @@ Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
-//printf("PASSAGE 1\n");
+	//printf("PASSAGE 1\n");
 	int nbTrainFiltre = 0;
 	for (int increment = 0; increment < compteLigne; increment++) {
 		//printf("PASSAGE boucle i \n");
@@ -167,6 +167,36 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 	return trainFiltre;
 }
 
+Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * villeDepart, char * villeArrivee)
+{
+	int tab[*compteLigne];
+	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
+	// avec la structure contenant l'ensemble des trains de la base de données
+	// Crée un nouveau tableau contenant les structures Trains compatible
+	int nbTrainFiltre = 0;
+	for (int index = 0; index < *compteLigne; index++) {
+		if (strcmp (villeDepart, (listeTrain + index)->villeDepart) == 0)
+		// Si les villes de départs sont identiques
+		{
+			if (strcmp (villeArrivee, (listeTrain + index)->villeArrivee) == 0)
+			// Si les villes d'arrivées sont identiques
+			{
+				tab[nbTrainFiltre] = index;
+				nbTrainFiltre++;
+			}
+		}
+	}
+
+	Train * trainFiltre = malloc(sizeof(Train)*nbTrainFiltre);
+	for (int inc = 0; inc < nbTrainFiltre; inc++) {
+		trainFiltre[inc] = listeTrain[tab[inc]];
+	}
+
+
+	*compteLigne = nbTrainFiltre;
+	return trainFiltre;
+
+}
 int tempsVersInt(struct Temps* temp)
 {
 	int test = temp->heure * 100 + temp->minute;
