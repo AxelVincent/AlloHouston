@@ -80,7 +80,7 @@ void nouveauService(int descripteurSocketService)
 				printf("%d "MAG"CHOIX DEPART"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville de de depart : ");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-				recevoirMessage(descripteurSocketService, commandeRecu);
+				recevoirMessage(descripteurSocketService, &commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
 				char* villeDepart = strdup(commandeRecu);
 
@@ -88,7 +88,7 @@ void nouveauService(int descripteurSocketService)
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-				recevoirMessage(descripteurSocketService, commandeRecu);
+				recevoirMessage(descripteurSocketService, &commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
 				char* villeArrivee = strdup(commandeRecu);
 
@@ -99,10 +99,18 @@ void nouveauService(int descripteurSocketService)
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 
 				Train *t = malloc(sizeof(Train));
-				t = trouverTrainLePlusProche(ptrListeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
-				printTrain(t);
+				t = trouverTrainLePlusProche(ptrListeTrain, nbTrain, villeDepart, villeArrivee, h, m, &commandeAEnvoyer);
+				if(t!=NULL)
+				{
+					printTrain(t);
+				}
+				else
+				{
+					fprintf(stderr, "T EST NULL\n");
+				}
+				fprintf(stderr, "%s\n", commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-				free(t);
+				//free(t);
 				break;
 			case 2:
 			//Fonction 2 : ville de départ + ville d'arrivée + tranche horaire pour le départ
