@@ -105,8 +105,8 @@ Train* trainFromCSV(char* csv)
  *   listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
  *
  */
-Train ** trainFromFile(char* nomFichier, int* nbTrain){
-	Train ** listeToutTrain;
+Train * trainFromFile(char* nomFichier, int* nbTrain){
+	Train * listeToutTrain;
 	FILE *fichier = fopen ( nomFichier, "r" );
 	int compteLigne = 0;
 	if (fichier != NULL)
@@ -119,15 +119,14 @@ Train ** trainFromFile(char* nomFichier, int* nbTrain){
 		}
 		printf("%d ligne dans le fichier Trains.txt\n", compteLigne);
 		rewind(fichier);
-		Train *listeTrain[compteLigne];
+		listeToutTrain = malloc(compteLigne * sizeof(Train));
 		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
 		{
-			listeTrain[lineCount] = trainFromCSV(ligne);
-			//printTrain(listeTrain[lineCount]);
+			*(listeToutTrain + lineCount) = *trainFromCSV(ligne);
+			//printTrain((listeToutTrain + lineCount));
 			lineCount ++;
 		}
 		fclose (fichier);
-		listeToutTrain = listeTrain;
 	}
 	else
 	{

@@ -48,17 +48,9 @@ void nouveauService(int descripteurSocketService)
 	//Cela permet que chaque client ets le dernier fichier bien a jour
 
 	char *nomFichier = "./ressources/Trains.txt";
-	Train **listeTrain;
+	Train *listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
-
-	Train *ptrListeTrain[nbTrain];
-
-	for (int i=0;  i <nbTrain; i++) {
-		ptrListeTrain[i] = listeTrain[i];
-	}
-
-
 	//Affichage d'un petit train et envoie du message au client
 	strcpy(commandeAEnvoyer, "noread;___________________________________________________________________\n       /\\                    /\\															 \n   ____\\/____============____\\/___    ___==========================\n /__|     OOOOOOOOOOOOO    [_]   |    |  |[]|  [_]    [_]    [_] \n/             S N C F            |    |  |  |										 \n\\________________________________|_ii_|__|__|______________________\n   ()==()    === ++++ ===  ()==()       ()==()     +++   ++++++++\n===================================================================\n\n");
 	envoyerMessage(descripteurSocketService, commandeAEnvoyer);
@@ -97,6 +89,9 @@ void nouveauService(int descripteurSocketService)
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de depart (HH:MN) : ");
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
+
+				strToUpper(villeDepart);
+				strToUpper(villeArrivee);
 
 				Train *t = malloc(sizeof(Train));
 				t = trouverTrainLePlusProche(ptrListeTrain, nbTrain, villeDepart, villeArrivee, h, m, &commandeAEnvoyer);
