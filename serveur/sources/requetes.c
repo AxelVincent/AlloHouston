@@ -19,15 +19,16 @@
 */
 
 /**
-* @fn void trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
+* @fn void trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart, char* commandeAEnvoyer)
 * @brief Renvoie le train le plus proche
-* @param struct Train** listeTrain L'ensemble des trains contenus dans trains.txt
-* @param compteLigne le nombre de train contenus dans la base
-* @param villeDepart la ville de départ souhaitée
-* @param villeArrivee la ville d'arrivée souhaitée
-* @param heureDepart l'heure de départ souhaitée
-* @return pointeur sur un temps
-* Exemple de ligne csv reçu : "16:55"
+* @param ListeTrain L'ensemble des trains contenus dans trains.txt
+* @param compteLigne Nombre de train contenus dans la base
+* @param villeDepart Ville de départ souhaitée
+* @param villeArrivee Ville d'arrivée souhaitée
+* @param heureDepart Heure de départ souhaitée
+* @param minuteDepart Minute de départ souhaitée
+* @param commandeAEnvoyer Pointeur pour indiquer le message à envoyer au serveur
+* @return Train * Pointeur sur le Train le plus proche des paramètres fournit par le client
 */
 Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart, char* commandeAEnvoyer)
 {

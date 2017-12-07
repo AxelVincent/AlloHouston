@@ -64,13 +64,13 @@ int main(int argc, char *argv[])
     }
     else
     {
-      fprintf(stderr, RED "Probleme pour resoudre le nom de domaine" RESET "\n");
+      fprintf(stderr, RED "ALLO HOUSTON : Probleme pour resoudre le nom de domaine" RESET "\n");
       exit(-1);
     }
 
    }else
    {
-     fprintf(stderr, RED "Il doit y avoir 2 argument :"MAG" HOST" RED","MAG" PORT" RESET "\n");
+     fprintf(stderr, RED "ALLO HOUSTON : Il doit y avoir 2 argument :"MAG" HOST" RED","MAG" PORT" RESET "\n");
      exit(-1);
    }
    return 0;
@@ -131,14 +131,14 @@ int creationClient(char* adresse, int numeroPort)
     }
     else
     {
-        fprintf(stderr, RED "Erreur lors de la connexion" RESET "\n");
+        fprintf(stderr, RED "ALLO HOUSTON : Erreur lors de la connexion" RESET "\n");
         exit(-1);
     }
 
   }
   else
   {
-    fprintf(stderr, RED "Erreur lors de la creation de la socket" RESET "\n");
+    fprintf(stderr, RED "ALLO HOUSTON : Erreur lors de la creation de la socket" RESET "\n");
     exit(-1);
   }
 
