@@ -108,12 +108,14 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
+				villeDepart = strdup(commandeRecu);
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
+				villeArrivee = strdup(commandeRecu);
 
 				// Envoie et reception des informations a propos de l'horaire de debut
 				printf("%d "MAG"CHOIX HORAIRE 1/2"RESET"\n", pid);
@@ -124,8 +126,16 @@ void nouveauService(int descripteurSocketService)
 				// Envoie et reception des informations a propos de l'horaire de fin
 				printf("%d "MAG"CHOIX HORAIRE 2/2"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de fin (HH:MN) : ");
-				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
+				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h2,&m2, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h2,m2);
+
+				printf("Taille de la liste : %d \n", nbTrain);
+				Train** trainsLol = trouverTrainParTranche(listeTrain, &nbTrain, villeDepart, villeArrivee, h, m, h2, m2);
+
+				for(int i=0; i<nbTrain; i++)
+				{
+					printTrain(trainsLol[i]);
+				}
 
 			break;
 			case 3:
@@ -142,6 +152,8 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
+
+
 			break;
 			default:
 				//Erreur dans une entree client, on retourne au menu

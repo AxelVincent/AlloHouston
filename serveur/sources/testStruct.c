@@ -190,14 +190,10 @@ Train ** trouverTrainParTranche(struct Train** listeTrain, int* tailleListe , ch
 	printf("%d\n",*tailleListe );
 	struct Train *listeTrainNouvelle[*tailleListe];
 	int nbTrains = 0;
-	int foisCent = heureDepartDebut * 100 ;
-	int foisCent2 = heureDepartFin * 100;
 	int trancheDebut;
 	int trancheFin;
-	trancheDebut = foisCent + minuteDepartDebut;
-	printf("heure*100+minute : %d\n",trancheDebut );
-	trancheFin = foisCent2  + minuteDepartFin;
-	printf("heure*100 : %d\n",trancheFin );
+	trancheDebut = heureDepartDebut * 100 + minuteDepartDebut;
+	trancheFin =  heureDepartFin * 100  + minuteDepartFin;
 	// printf("ville depart : %s, %d \n", villeDepart, trancheDebut);
 	// printf("ville arrivee : %s, %d \n", villeArrivee, trancheFin);
 	// Pour chaque train on récupère ceux qui nous intéressent
@@ -223,8 +219,8 @@ Train ** trouverTrainParTranche(struct Train** listeTrain, int* tailleListe , ch
 		}
 	}
 	*tailleListe = nbTrains;
-
-	return listeTrainNouvelle;
+	Train ** listeToReturn = listeTrainNouvelle;
+	return listeToReturn;
 }
 
 
