@@ -138,7 +138,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 
 	for (int trainCourant = 0; trainCourant < *tailleListe; trainCourant++)
 	{
-		printf("train courant ville depart : %s, %s \n", listeTrain[trainCourant].villeDepart, listeTrain[trainCourant].villeArrivee);
+		//printf("train courant ville depart : %s, %s \n", listeTrain[trainCourant].villeDepart, listeTrain[trainCourant].villeArrivee);
 		// Tri en fonction de la ville de départ et d'arrivée
 		if (strcmp(villeDepart, listeTrain[trainCourant].villeDepart) == 0)
 		{
