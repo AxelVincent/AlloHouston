@@ -147,8 +147,22 @@ void nouveauService(int descripteurSocketService)
 				printf("Taille de la liste : %d \n", nbTrain);
 				 Train* trainsLol = trouverTrainParTranche(listeTrain, &nbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
 
-				printf("Trains : %d \n", nbTrain);
+				//printf("Trains : %d \n", nbTrain);
 			//printf("Train n 1 : %s ", trainsLol[0].villeDepart);
+				// for (int i=0; i< nbTrain; i++)
+				// {
+				// 	printTrain(trainsLol +i );
+				// }
+				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
+				fprintf(stderr, "Hein hein");
+				recevoirMessage(descripteurSocketService, commandeRecu);
+				if(atoi(commandeRecu)==2)
+				{
+					envoyerMessage(descripteurSocketService,"stop");
+					close(descripteurSocketService);
+					exit(0);
+				}
 
 
 			break;

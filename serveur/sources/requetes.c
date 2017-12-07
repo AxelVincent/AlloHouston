@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "../headers/temps.h"
 #include "../headers/train.h"
 #include "../headers/requetes.h"
@@ -145,7 +144,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 			if(strcmp(villeArrivee, listeTrain[trainCourant].villeArrivee) == 0)
 			{
 			// Heure où le train doit partir
-				int heureDebut = 			tempsVersInt(listeTrain[trainCourant].heureDepart);
+				int heureDebut = tempsVersInt(listeTrain[trainCourant].heureDepart);
 
 				if (heureDebut >= trancheDebut && heureDebut <= trancheFin)
 				{
@@ -163,8 +162,24 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 	}
 
 	*tailleListe = nbTrains;
-
-	return trainFiltre;
+	if (nbTrains > 0)
+	{
+		char * commande;
+		snprintf(commande, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s : ", MAG, RESET);
+		for (int i=0; i< nbTrains; i++)
+		{
+			char * trainString;
+			snprintf(trainString, SIZE_MSG, "\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n\n", (trainFiltre+i)->id, (trainFiltre+i)->villeDepart, (trainFiltre+i)->villeArrivee, (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute, (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute, (trainFiltre+i)->prix, (trainFiltre+i)->reduc);
+			strcat(commande, trainString);
+		}
+		return trainFiltre;
+	}
+	else
+	{
+		printf("Aucun train ne correspond à ces critères\n");
+		snprintf(commandeAEnvoyer, SIZE_MSG,"noread;%sAucun train ne correspond à ces critères.%s\n", MAG, RESET);
+		return NULL;
+	}
 }
 
 Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * villeDepart, char * villeArrivee)
