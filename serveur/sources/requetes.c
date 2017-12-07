@@ -125,19 +125,20 @@ Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char
 
 }
 
-Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin)
+Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin, char* commandeAEnvoyer)
 {
 	strToUpper(villeDepart);
 	strToUpper(villeArrivee);
 	printf("%d\n",*tailleListe );
 	int tab[*tailleListe];
-	int nbTrains;
+	int nbTrains = 0;
 	//struct Train *listeTrainNouvelle[*tailleListe];
 	int trancheDebut = heureDepartDebut * 100  + minuteDepartDebut;
 	int trancheFin = heureDepartFin * 100  + minuteDepartFin;
 
 	for (int trainCourant = 0; trainCourant < *tailleListe; trainCourant++)
 	{
+		printf("train courant ville depart : %s, %s \n", listeTrain[trainCourant].villeDepart, listeTrain[trainCourant].villeArrivee);
 		// Tri en fonction de la ville de départ et d'arrivée
 		if (strcmp(villeDepart, listeTrain[trainCourant].villeDepart) == 0)
 		{
