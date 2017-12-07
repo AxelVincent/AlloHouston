@@ -56,9 +56,10 @@ void nouveauService(int descripteurSocketService)
 
 	for (int i=0;  i <nbTrain; i++) {
 		ptrListeTrain[i] = (listeTrain + i);
+		/*
 		printf("\n");
 		printTrain(ptrListeTrain[i]);
-		printf("\n");
+		printf("\n");*/
 	}
 
 	//Affichage d'un petit train et envoie du message au client
