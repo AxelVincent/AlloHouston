@@ -49,9 +49,10 @@ int main(int argc, char *argv[])
 	// Test des requetes
 	char * villeDepart = "GRENOBLE";
 	char * villeArrivee = "VALENCE";
-	char * heureDepart = "16";
-	char * minuteDepart = "35";
-	char * heureDepartFin = "19:59";
+	int heureDepart = 13;
+	int minuteDepart = 35;
+	int heureDepartFin = 19;
+	int minuteDepartFin = 15;
 	//int idxToDel = 2;
 	//	memmove(&heureDepart[idxToDel], &heureDepart[idxToDel + 1], strlen(heureDepart) - idxToDel);
 	// Création de la structure en faisant appel au ficher train.txt
@@ -76,15 +77,16 @@ int main(int argc, char *argv[])
 			lineCount ++;
 		}
 		fclose (fichier);
-		// Une fois la structure établie, il est alors possible de commencer les traitements
-		struct Train* tchoutchou = malloc(sizeof(Train));
-		tchoutchou = trouverTrainLePlusProche(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
-    //fprintf(stderr, "tchoutchou%f\n", tchoutchou->prix);
-		printTrain(tchoutchou);
+		//Une fois la structure établie, il est alors possible de commencer les traitements
+		// struct Train* tchoutchou = malloc(sizeof(Train));
+		// tchoutchou = trouverTrainLePlusProche(listeTrain, compteLigne, villeDepart,villeArrivee,heureDepart, minuteDepart);
+    // //fprintf(stderr, "tchoutchou%f\n", tchoutchou->prix);
+		// printTrain(tchoutchou);
 
 
 
-		trouverTrainParTranche(listeTrain, compteLigne, villeDepart, villeArrivee, heureDepart, heureDepartFin);
+		trouverTrainParTranche(listeTrain, &compteLigne, villeDepart, villeArrivee, heureDepart, minuteDepart, heureDepartFin, minuteDepartFin);
+		printf("Nouvelle valeur de compteLigne : %d", compteLigne);
 
 	}
 	else
@@ -94,21 +96,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-int charVersInt(char *heure)
-{
-	int result;
-	char *token, *str, *tofree;
-	tofree = str = strdup(heure);
-	//heureDepart
-	token = strsep(&str, ":");
-	int heures = atoi(token);
-	//minutes
-	token = strsep(&str, ":");
-	int minutes = atoi(token);
-	result = heures*100 + minutes;
-	free(tofree);
-	return result;
-}
+
 
 
 /**
@@ -122,7 +110,7 @@ int charVersInt(char *heure)
 * @return pointeur sur un temps
 * Exemple de ligne csv reçu : "16:55"
 */
-Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart)
+Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart)
 {
 	struct Train* trainFiltre = malloc(sizeof(Train));
 	// Concatenation de l'heure et minutes de départ souhaité
@@ -130,12 +118,12 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	strcat(concatenation,heureDepart);
 	strcat(concatenation,minuteDepart);
 	int heureConcat = atoi(concatenation);
-	printf("Heure de depart concatené: %d, %s, %s, %s \n", heureConcat, heureDepart, minuteDepart, concatenation);
+	// printf("Heure de depart concatené: %d, %s, %s, %s \n", heureConcat, heureDepart, minuteDepart, concatenation);
 
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
-	printf("Ville : %s\n", villeDepart);
+	// printf("Ville : %s\n", villeDepart);
 	int j = 0;
 	for (int i = 0; i < compteLigne; i++) {
 		if (strcmp (villeDepart, listeTrain[i]->villeDepart) == 0)
@@ -165,8 +153,8 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 		// On associe l'index
 		difference[compteDifference][2] = compteDifference;
 
-		printf("heure de difference %d, array %d\n", difference[compteDifference][1], difference[compteDifference][2]);
-		printf("heure d'entree :%d , heure dans la base :%d\n", atoi(heureDepart), trainFiltre[compteDifference].heureDepart->heure);
+		// printf("heure de difference %d, array %d\n", difference[compteDifference][1], difference[compteDifference][2]);
+		// printf("heure d'entree :%d , heure dans la base :%d\n", atoi(heureDepart), trainFiltre[compteDifference].heureDepart->heure);
 
 	}
 	// Recherche du plus petit
@@ -179,39 +167,87 @@ Train * trouverTrainLePlusProche(struct Train** listeTrain, int compteLigne, cha
 	{
 		if (difference[compteDifference][1] < plusPetit) {
 			plusPetit = difference[compteDifference][1];
-			printf("Arg 1 %d, plus petit que Arg2 %d\n", difference[compteDifference][1], plusPetit );
+			// printf("Arg 1 %d, plus petit que Arg2 %d\n", difference[compteDifference][1], plusPetit );
 			index = difference[compteDifference][2];
 		}
 	}
-	printf("Le plus petit nombre est : %d, son index est : %d\n", plusPetit, index);
-	printf("VIlle de depart %d\n", trainFiltre[index].heureDepart->minute );
+	// printf("Le plus petit nombre est : %d, son index est : %d\n", plusPetit, index);
+	// printf("VIlle de depart %d\n", trainFiltre[index].heureDepart->minute );
 	return trainFiltre + index;
 }
 
-void trouverTrainParTranche(struct Train** listeTrain,int tailleListe , char * villeDepart, char * villeArrivee, char * heureDepartDebut, char * heureDepartFin)
+Train ** trouverTrainParTranche(struct Train** listeTrain, int* tailleListe , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin)
 {
-	Train *listeTrainNouvelle[tailleListe];
+	//printf("%d\n",*tailleListe );
+	Train *listeTrainNouvelle[*tailleListe];
 	int nombreTrainTries = 0;
+	int trancheDebut = heureDepartDebut * 100 + minuteDepartDebut;
+	int trancheFin = heureDepartFin * 100 + minuteDepartFin;
+	printf("Char Vers Int %d", charVersInt(heureDepartDebut));
 	printf("ville depart : %s \n", villeDepart);
-	printf("ville arrivee : %s \n", villeArrivee);
 
-	for (int trainCourant = 0; trainCourant < tailleListe; trainCourant++)
+	printf("ville arrivee : %s \n", villeArrivee);
+	//int taille = *tailleListe;
+	// Pour chaque train on récupère ceux qui nous intéressent
+	for (int trainCourant = 0; trainCourant < *tailleListe; trainCourant++)
 	{
-		//printf("ville de depart courant : %s\n arrivee : %s \n", listeTrain[trainCourant]->villeDepart, listeTrain[trainCourant]->villeArrivee );
-		if (strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0 && strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0)
+		// Tri en fonction de la ville de départ et d'arrivée
+		if (strcmp(villeDepart, listeTrain[trainCourant]->villeDepart) == 0 && strcmp(villeArrivee, listeTrain[trainCourant]->villeArrivee) == 0)
 		{
-			listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
-			//printTrain(listeTrain[trainCourant]);
-			nombreTrainTries++;
+			// Heure où le train doit partir
+			int heureDebut = tempsVersInt(listeTrain[trainCourant]->heureDepart);
+
+			if (heureDebut >= trancheDebut && heureDebut <= trancheFin)
+			{
+				// On ajoute ce train à la nouvelle liste
+				listeTrainNouvelle[nombreTrainTries] = listeTrain[trainCourant];
+				printTrain(listeTrain[trainCourant]);
+				nombreTrainTries++;
+			}
 		}
+
 	}
-	printf("%d\n", nombreTrainTries );
+	*tailleListe = nombreTrainTries;
+	Train** trains = fonctionTri(listeTrainNouvelle, nombreTrainTries);
+	return trains;
 }
 
 
+Train ** fonctionTri(struct Train** trains, int nbTrains)
+{
+	for(int trainCourant = 0; trainCourant < nbTrains; trainCourant++)
+	{
+		for(int j=trainCourant+1; j< nbTrains+1; j++)
+		{
+			if (tempsVersInt(trains[j]->heureDepart) < tempsVersInt(trains[trainCourant]->heureDepart))
+			{
+				struct Train* trainTemp = trains[trainCourant];
+				trains[trainCourant] = trains[j];
+				trains[j] = trainTemp;
+			}
+		}
+	}
+	return trains;
+}
 
 int tempsVersInt(struct Temps* temp)
 {
 	int test = temp->heure * 100 + temp->minute;
 	return test;
+}
+
+int charVersInt(char *heure)
+{
+	int result;
+	char *token, *str, *tofree;
+	tofree = str = strdup(heure);
+	//heureDepart
+	token = strsep(&str, ":");
+	int heures = atoi(token);
+	//minutes
+	token = strsep(&str, ":");
+	int minutes = atoi(token);
+	result = heures*100 + minutes;
+	free(tofree);
+	return result;
 }
