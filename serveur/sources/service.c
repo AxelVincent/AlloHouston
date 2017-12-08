@@ -52,11 +52,13 @@ void nouveauService(int descripteurSocketService)
 	Train *listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
-	const char *listeVilleDepart[nbTrain];
-	const char *listeVilleArrive[nbTrain];
+	char *listeVilleDepart[nbTrain];
+	char *listeVilleArrive[nbTrain];
 	for(int iterateurTrain = 0; iterateurTrain<nbTrain; iterateurTrain++){
 		listeVilleDepart[iterateurTrain] = (listeTrain + iterateurTrain)->villeDepart;
+		strToUpper(listeVilleDepart[iterateurTrain]);
 		listeVilleArrive[iterateurTrain] = (listeTrain + iterateurTrain)->villeArrivee;
+		strToUpper(listeVilleArrive[iterateurTrain]);
 	}
 
 	//Affichage d'un petit train et envoie du message au client
@@ -79,11 +81,9 @@ void nouveauService(int descripteurSocketService)
 			case 1:
 				//Fonction 1 : Ville de départ + ville d'arrivée +  horaire de départ
 				// Envoie et reception des informations a propos de la ville de depart
-				demanderVille(descripteurSocketService, commandeRecu, commandeAEnvoyer, &villeDepart,&villeArrivee, pid);
+				demanderVille(descripteurSocketService, commandeRecu, commandeAEnvoyer, &villeDepart,&villeArrivee, pid, nbTrain, *listeVilleDepart, *listeVilleArrive);
 
 				// Envoie et reception des informations a propos de la ville d'arrivee
-
-
 
 				if(strcmp(villeArrivee, villeDepart) == 0)
 				{
@@ -382,24 +382,68 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 
 }
 
-void demanderVille(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, char **villeDepart, char **villeArrivee, int pid)
+void demanderVille(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, char **villeDepart, char **villeArrivee, int pid, int nbTrain ,char *listeVilleDepart, char *listeVilleArrive)
 {
-	fprintf(stderr, "%d "MAG"CHOIX DEPART"RESET"\n", pid);
-	printf("%d "MAG"CHOIX DEPART"RESET"\n", pid);
-	strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville de de depart : ");
-	envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-	recevoirMessage(descripteurSocketService, commandeRecu);
-	*villeDepart = strdup(commandeRecu);
-	strToUpper(*villeDepart);
-	trimwhitespace(*villeDepart);
-	printf("Le client veut partir de : %s\n", *villeDepart);
-	printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
-	strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
-	envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-	recevoirMessage(descripteurSocketService, commandeRecu);
-	*villeArrivee = strdup(commandeRecu);
-	strToUpper(*villeArrivee);
-	trimwhitespace(*villeArrivee);
-	printf("Le client veut aller a : %s\n", *villeArrivee);
+	int depart = 0;
+	do
+	{
+		fprintf(stderr, "%d "MAG"CHOIX DEPART"RESET"\n", pid);
+		printf("%d "MAG"CHOIX DEPART"RESET"\n", pid);
+		strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville de de depart : ");
+		envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+		recevoirMessage(descripteurSocketService, commandeRecu);
+		*villeDepart = strdup(commandeRecu);
+		strToUpper(*villeDepart);
+		trimwhitespace(*villeDepart);
+		printf("Le client veut partir de : %s\n", *villeDepart);
+		//const char *listeVilleDepart[nbTrain];
+		int i;
+		int existe = 0;
+		for(i=0; i<nbTrain;i++)
+		{
+			if(strcmp(*villeDepart,(listeVilleDepart+i))==0)
+			{
+				existe = 1;
+				depart = 1;
+				break;
+			}
+		}
+
+		if(existe == 0)
+		{
+			envoyerMessage(descripteurSocketService, "noread;"RED"Ville inconnue"RESET"\n");
+		}
+	}while(depart == 0);
+
+	//const char *listeVilleArrive[nbTrain];
+	int arrivee =0;
+	do {
+		printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
+		strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
+		envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+		recevoirMessage(descripteurSocketService, commandeRecu);
+		*villeArrivee = strdup(commandeRecu);
+		strToUpper(*villeArrivee);
+		trimwhitespace(*villeArrivee);
+		printf("Le client veut aller a : %s\n", *villeArrivee);
+
+		int i;
+		int existe = 0;
+		for(i=0; i<nbTrain;i++)
+		{
+			if(strcmp(*villeArrivee,(listeVilleArrive+i))==0)
+			{
+				existe = 1;
+				arrivee = 1;
+				break;
+			}
+		}
+
+		if(existe == 0)
+		{
+			envoyerMessage(descripteurSocketService, "noread;"RED"Ville inconnue"RESET"\n");
+		}
+	} while(arrivee == 0);
+
 
 }
