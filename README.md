@@ -1,10 +1,8 @@
 # AlloHouston
 
----
 ## Installation
 Pour compiler le client et le serveur, utiliser la commande "make".
 
----
 ## Utilisation
 Le serveur est à lancer avant le client, sinon le client attendra le serveur jusqu'au timeout et renverra une erreur.
 ### Serveur
@@ -21,7 +19,6 @@ Différentes requêtes sont disponibles :
 3. Recherche tous les trains pour une ville de départ et d'arrivée
 4. Connexion en administrateur
 
----
 ## Convention de nommages
 
 ```c
