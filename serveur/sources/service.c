@@ -320,13 +320,15 @@ void recevoirMessage(int descripteurSocketService, char *commandeRecu)
 
 void choixHoraire(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, int *h,int *m,int pid)
 {
+	char *cmdAEnvoyer;
+	cmdAEnvoyer = strdup(commandeAEnvoyer);
 	fprintf(stderr, "choixHoraire\n");
 	int valide = 0;
 	do
 	{
 
 		//Envoie er reception des messages
-		envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+		envoyerMessage(descripteurSocketService, cmdAEnvoyer);
 		recevoirMessage(descripteurSocketService, commandeRecu);
 
 		//Declarations des pointeurs
@@ -336,7 +338,6 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 		//Split de la reponse
 		token1 = strsep(&str, ":");
 		token2 = strsep(&str, ":");
-
 
 		//Test du format de la repopnse (HH:MM)
 		if(token2 != NULL)
@@ -349,10 +350,11 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 			printf("%s\n",texte1);
 			if(strcmp(texte1,"") == 0 && strcmp(texte2,"") == 0 && *h>=0 && *h<24 && *m>=0 && *m<60){
 				//Tout c'est bien passe, sortie de la boucle
-				valide =1;
+				valide = 1;
 			}
 			else
 			{
+
 				//Mauvais entree utilisateur, on redemande l'horaire
 				printf("%d "RED"MAUVAIS ENTREE UTILISATEUR"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "noread;"RED"Mauvais choix des horaires : ex : 10:10"RESET"\n");
@@ -361,10 +363,12 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 		}
 		else
 		{
+
 			//Mauvais entree utilisateur, on redemande l'horaire
 			printf("%d "RED"MAUVAIS ENTREE UTILISATEUR"RESET"\n", pid);
 			strcpy(commandeAEnvoyer, "noread;"RED"Mauvais choix des horaires : ex : 10:10"RESET"\n");
 			envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+
 		}
 
 	}
