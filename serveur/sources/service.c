@@ -283,6 +283,10 @@ void recevoirMessage(int descripteurSocketService, char *commandeRecu)
 {
 	int sizeRead;
 	sizeRead = read(descripteurSocketService, commandeRecu, SIZE_MSG);
+	if(sizeRead == -1 || sizeRead == 0){
+		fprintf(stderr, RED"Erreur lecture socket!\n"RESET);
+		exit(-1);
+	}
 	printf("Commande reçu du client : %s (taille = %d)\n", commandeRecu, sizeRead);
 }
 
