@@ -90,11 +90,10 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 				index = difference[compteDifference][1];
 			}
 		}
-		trainFiltre[index].heureDepart->minute );
 		printTrain(trainFiltre + index);
 		trainFiltre = trainFiltre + index;
 
-		// Envoi du message au client
+
 		snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %.2f Reduc : %d\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc);
 		return 1;
 	}
