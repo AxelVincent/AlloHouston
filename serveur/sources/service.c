@@ -81,7 +81,7 @@ void nouveauService(int descripteurSocketService)
 			case 1:
 				//Fonction 1 : Ville de départ + ville d'arrivée +  horaire de départ
 				// Envoie et reception des informations a propos de la ville de depart
-				demanderVille(descripteurSocketService, commandeRecu, commandeAEnvoyer, &villeDepart,&villeArrivee, pid, nbTrain, *listeVilleDepart, *listeVilleArrive);
+				demanderVille(descripteurSocketService, commandeRecu, commandeAEnvoyer, &villeDepart,&villeArrivee, pid, nbTrain, listeVilleDepart, listeVilleArrive);
 
 				// Envoie et reception des informations a propos de la ville d'arrivee
 
@@ -374,7 +374,7 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 
 }
 
-void demanderVille(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, char **villeDepart, char **villeArrivee, int pid, int nbTrain ,char *listeVilleDepart, char *listeVilleArrive)
+void demanderVille(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, char **villeDepart, char **villeArrivee, int pid, int nbTrain ,char **listeVilleDepart, char **listeVilleArrive)
 {
 	int depart = 0;
 	do
@@ -393,7 +393,7 @@ void demanderVille(int descripteurSocketService, char *commandeRecu, char *comma
 		int existe = 0;
 		for(i=0; i<nbTrain;i++)
 		{
-			if(strcmp(*villeDepart,(listeVilleDepart+i))==0)
+			if(strcmp(*villeDepart, listeVilleDepart[i])==0)
 			{
 				existe = 1;
 				depart = 1;
@@ -423,7 +423,7 @@ void demanderVille(int descripteurSocketService, char *commandeRecu, char *comma
 		int existe = 0;
 		for(i=0; i<nbTrain;i++)
 		{
-			if(strcmp(*villeArrivee,(listeVilleArrive+i))==0)
+			if(strcmp(*villeArrivee, listeVilleDepart[i])==0)
 			{
 				existe = 1;
 				arrivee = 1;
