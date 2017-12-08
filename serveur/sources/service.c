@@ -27,7 +27,6 @@
   * @fn void nouveauService(int descripteurSocketService)
   * @brief Crée un nouveau service
   * @param descripteurSocketService descripteur de fichier associé au nouveau service, il est créé lorsque le serveur reçoit une nouvelle connexion
-  * @TODO créer la communication read write pour effectuer des actions sur le serveur
   */
 void nouveauService(int descripteurSocketService)
 {
@@ -262,11 +261,25 @@ void nouveauService(int descripteurSocketService)
 	exit(-1);
 }
 
+
+/**
+ * @fn void envoyerMessage(int descripteurSocketService, char *commandeAEnvoyer)
+ * @brief Envoie un message au client
+ * @param descripteurSocketService descripteur de fichier associé au nouveau service, il est créé lorsque le serveur reçoit une nouvelle connexion
+ * @param commandeAEnvoyer la chaine de caractère a transmettre
+ */
 void envoyerMessage(int descripteurSocketService, char *commandeAEnvoyer)
 {
 	write(descripteurSocketService, commandeAEnvoyer, SIZE_MSG);
 }
 
+
+/**
+ * @fn void recevoirMessage(int descripteurSocketService, char *commandeRecu)
+ * @brief Recoit un messsage venant du client
+ * @param descripteurSocketService descripteur de fichier associé au nouveau service, il est créé lorsque le serveur reçoit une nouvelle connexion
+ * @param commandeRecu la chaine de caractère a emettre
+ */
 void recevoirMessage(int descripteurSocketService, char *commandeRecu)
 {
 	int sizeRead;
@@ -279,6 +292,16 @@ void recevoirMessage(int descripteurSocketService, char *commandeRecu)
 	printf("Commande reçu du client : %s (taille = %d)\n", commandeRecu, sizeRead);
 }
 
+/**
+ * @fn void choixHoraire(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, int *h,int *m,int pid)
+ * @brief Verifie la saisie de l'horaire
+ * @param descripteurSocketService descripteur de fichier associé au nouveau service, il est créé lorsque le serveur reçoit une nouvelle connexion
+ * @param commandeRecu la chaine de caractère a emettre
+ * @param commandeAEnvoyer la commande qui s'envoie
+ * @param h l'heure
+ * @param m les minutes
+ * @param pid le pid a afficher
+ */
 void choixHoraire(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, int *h,int *m,int pid)
 {
 	char *cmdAEnvoyer;
@@ -337,6 +360,18 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 
 }
 
+/**
+ * @fn void demanderVille(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, char **villeDepart, char **villeArrivee, int pid, int nbTrain ,char **listeVilleDepart, char **listeVilleArrive)
+ * @brief Verifie la saisie de la ville
+ * @param descripteurSocketService descripteur de fichier associé au nouveau service, il est créé lorsque le serveur reçoit une nouvelle connexion
+ * @param commandeRecu la chaine de caractère a emettre
+ * @param commandeAEnvoyer la commande qui s'envoie
+ * @param villeDepart la ville de départ
+ * @param villeArrivee la ville d'arrivée
+ * @param pid le pid a afficher
+ * @param listeVilleDepart la liste de toutes les villes de départ des trains
+ * @param listeVilleArrive la liste de toutes les villes d'arrivée des trains
+ */
 void demanderVille(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, char **villeDepart, char **villeArrivee, int pid, int nbTrain ,char **listeVilleDepart, char **listeVilleArrive)
 {
 	int depart = 0;
