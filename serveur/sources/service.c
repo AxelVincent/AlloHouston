@@ -155,14 +155,6 @@ void nouveauService(int descripteurSocketService)
 				strToUpper(villeArriveeRequete2);
 				trouverTrainParTranche(listeTrain, &compteLigneRequete2, villeDepartRequete2, villeArriveeRequete2, h, m, h2, m2, commandeAEnvoyer);
 
-				int tempNbTrain = nbTrain;
-
-				trouverTrainParTranche(listeTrain, &tempNbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
-
-				//printf("Trains : %d \n", nbTrain);
-				//printf("Train n 1 : %s ", trainsTrouves.villeDepart);
-
-
 				printf("\n");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");

@@ -121,12 +121,11 @@ int trouverTrainParTranche(struct Train * listeTrain, int * compteLigne , char *
 			{
 				// Heure où le train doit partir
 				int heureDebut = tempsVersInt((listeTrain + index)->heureDepart);
-				printf("heureDebut : %d\n",heureDebut );
 				if (heureDebut >= trancheDebut && heureDebut <= trancheFin)
 				{
-					printf("P\n");
 					// On ajoute ce train à la nouvelle liste
 					*(trainFiltre + nbTrainFiltre) = *(listeTrain + index);
+					//printTrain((trainFiltre + nbTrainFiltre));
 					nbTrainFiltre++;
 				}
 			}
@@ -137,15 +136,37 @@ int trouverTrainParTranche(struct Train * listeTrain, int * compteLigne , char *
 
 	if (nbTrainFiltre > 0)
 	{
-		char * test;
-
-		snprintf(commandeAEnvoyer, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s :\n", MAG, RESET);
-		fprintf(stderr, "AALLA\n");
-		for (int i=0; i< nbTrainFiltre; i++)
+		snprintf(commandeAEnvoyer, SIZE_MSG,"noread;%sVoici le(s) %d train(s) correspondant a votre recherche%s :\n", MAG, nbTrainFiltre, RESET);
+		for (int i=0; i<nbTrainFiltre; i++)
 		{
-			printf("%d\n", nbTrainFiltre);
-
-			snprintf(commandeAEnvoyer, SIZE_MSG, "%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %.2f Reduc : %d\n", (trainFiltre+i)->id, (trainFiltre+i)->villeDepart, (trainFiltre+i)->villeArrivee, (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute, (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute, (trainFiltre+i)->prix, (trainFiltre+i)->reduc);
+			// NE RIEN SUPPRIMER MEME SI CA A L AIR INUTILE, SI LE FPRINTF N EST PAS LA NE MARCHE PLUS
+			fprintf(stderr, "LA %d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %.2f Reduc : %d\n", (trainFiltre+i)->id, (trainFiltre+i)->villeDepart, (trainFiltre+i)->villeArrivee, (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute, (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute, (trainFiltre+i)->prix, (trainFiltre+i)->reduc);
+			strcat(commandeAEnvoyer, "");
+			int someInt;
+			char str[12];
+			// ID
+			someInt = (trainFiltre+i)->id;
+			sprintf(str, "%d : ", someInt);
+			strcat(commandeAEnvoyer, str);
+			// villeDepart
+			strcat(commandeAEnvoyer, (trainFiltre+i)->villeDepart);
+			// villeArrivee
+			strcat(commandeAEnvoyer, " -> ");
+			strcat(commandeAEnvoyer, (trainFiltre+i)->villeArrivee);
+			// heureDepart->heure
+			sprintf(str, "%d:%d", (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute);
+			strcat(commandeAEnvoyer, " Départ ");
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " arrivée ");
+			sprintf(str, "%d:%d", (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Prix : ");
+			sprintf(str, "%.2f", (trainFiltre+i)->prix);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Reduc : ");
+			sprintf(str, "%d", (trainFiltre+i)->reduc);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, "\n");
 		}
 
 		//snprintf(commandeAEnvoyer, "\n");
