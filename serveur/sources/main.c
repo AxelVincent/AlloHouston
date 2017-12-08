@@ -19,7 +19,8 @@ int main(int argc, char *argv[])
 		// On a bien 1 argument qui doit etre le numero de PORT
 
 		ecouteServeur(creationServeur(atoi(argv[1])));
-	}else
+	}
+	else
 	{
 		fprintf(stderr, RED "ALLO HOUSTON : Il doit y avoir 1 argument : "MAG"PORT "RESET "\n");
 		exit(-1);
@@ -45,14 +46,12 @@ int creationServeur(int numeroPort)
 
 	//Attachement de la socket (Primitive "bind")
 
-	// int bind(int descripteur, const struct sockaddr *p, int len);
 	if(descripteur>=3)
 	{
 		printf("socket fonctionne\n");
 		if(bind(descripteur,(struct sockaddr *) &socketEcoute,sizeof(socketEcoute)) == 0)
 		{
-			// Bind works
-			// int listen(int descripteur, int nb);
+			// Bind marche
 			printf("bind fonctionne\n");
 
 			if(listen(descripteur, 100) == 0)
@@ -70,7 +69,7 @@ int creationServeur(int numeroPort)
 		}
 		else
 		{
-			//Bind don't works
+			//Bind ne marche pas
 			fprintf(stderr, RED "ALLO HOUSTON : Erreur lors du listen" RESET "\n");
 			fprintf(stderr, "Peut etre que le port "YEL "%d" RESET " est deja utilise?\n", numeroPort);
 			exit(-1);
@@ -88,14 +87,9 @@ void ecouteServeur(int descripteur)
 {
 
 	struct sockaddr_in socketService;
-	// TODO Peut etre besoin de ça ?
-	// socketService.sin_family = AF_INET;
-	// socketService.sin_port = htons(numeroPort);
-	// (socketService.sin_addr).s_addr = htonl(INADDR_ANY);
 
 	while(1)
 	{
-		//int accept(int descripteur, struct sockaddr *p, int *len);
 		//Attente d'acceptation client
 		printf("En attente de connexion...\n");
 		unsigned int tailleSocketService = sizeof(struct sockaddr_in);
@@ -106,19 +100,19 @@ void ecouteServeur(int descripteur)
 			printf("accept fonctionne\n");
 			switch (fork()) {
 				case -1:
-				// Erreur dans la création d'un FILS
-				fprintf(stderr, RED "ALLO HOUSTON : Erreur dans la création d'un fils" RESET "\n");
-				exit(-1);
+					// Erreur dans la création d'un FILS
+					fprintf(stderr, RED "ALLO HOUSTON : Erreur dans la création d'un fils" RESET "\n");
+					exit(-1);
 
 				case 0:
 				// FILS
-				printf("Création du fils ayant pour numero de PID : %d\n",getpid());
-				nouveauService(descripteurSocketService);
-				// TODO intercepter la mort du fils
-				break;
+					printf("Création du fils ayant pour numero de PID : %d\n",getpid());
+					nouveauService(descripteurSocketService);
+					break;
+
 				default:
 				// PERE
-				printf("Pere se remet en écoute : %d\n",getpid() );
+					printf("Pere se remet en écoute : %d\n",getpid() );
 			}
 		}
 		else

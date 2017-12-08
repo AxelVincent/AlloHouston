@@ -106,6 +106,20 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 }
 
 // REQUETE 2
+/**
+* @fn int trouverTrainParTranche(struct Train * listeTrain, int * compteLigne , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin, char * commandeAEnvoyer)
+* @brief Renvoie les trains selon les critères
+* @param ListeTrain L'ensemble des trains contenus dans trains.txt
+* @param compteLigne Nombre de trains contenus dans la base
+* @param villeDepart Ville de départ souhaitée
+* @param villeArrivee Ville d'arrivée souhaitée
+* @param heureDepartDebut Heure de départ souhaitée premier créneau
+* @param minuteDepartDebut Minute de départ souhaitée premier créneau
+* @param heureDepartFin Heure de départ souhaitée deuxieme créneau
+* @param minuteDepartFin Minute de départ souhaitée deuxieme créneau
+* @param commandeAEnvoyer Pointeur pour indiquer le message à envoyer au serveur
+* @return 1 si reussite, 0 sinon
+*/
 int trouverTrainParTranche(struct Train * listeTrain, int * compteLigne , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin, char * commandeAEnvoyer)
 {
 	Train * trainFiltre;
@@ -433,6 +447,12 @@ int trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, c
 }
 
 
+/**
+* @fn int tempsVersInt(struct Temps* temp)
+* @brief Renvoie la concatenation des heures et des minutes
+* @param struct Temps* temp Une struct Temps em paramètre
+* @return la concatenation des heures et des minutes en int
+*/
 int tempsVersInt(struct Temps* temp)
 {
 	int test = temp->heure * 100 + temp->minute;
