@@ -131,7 +131,7 @@ void nouveauService(int descripteurSocketService)
 				printf("Le client veut aller a : %s\n", villeArriveeRequete2);
 
 
-				if(strcmp(villeArrivee, villeDepart) == 0)
+				if(strcmp(villeArriveeRequete2, villeDepartRequete2) == 0)
 				{
 					printf("%d "RED"MAUVAIS ENTREE UTILISATEUR "MAG"VILLES IDENTIQUES"RESET"\n", pid);
 					envoyerMessage(descripteurSocketService, "noread;"RED"Les villes sont identiques."RESET"\n");
