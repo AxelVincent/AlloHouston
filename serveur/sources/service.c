@@ -95,9 +95,9 @@ void nouveauService(int descripteurSocketService)
 				strToUpper(villeDepart);
 				strToUpper(villeArrivee);
 
-			
+
 				trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
-				
+				printf("Test de relancement \n");
 				fprintf(stderr, "%s\n", commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
@@ -142,7 +142,7 @@ void nouveauService(int descripteurSocketService)
 
 				int tempNbTrain = nbTrain;
 
-				 Train* trainsTrouves = trouverTrainParTranche(listeTrain, &tempNbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
+				 trouverTrainParTranche(listeTrain, &tempNbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
 
 				//printf("Trains : %d \n", nbTrain);
 				//printf("Train n 1 : %s ", trainsTrouves.villeDepart);
@@ -216,12 +216,9 @@ void nouveauService(int descripteurSocketService)
 				if(critere !=0)
 				{
 					printf("Critere : %d\n", critere);
-					Train * trainSelonCritere = malloc(sizeof(Train));
-					trainSelonCritere = trajetSelonCritere(lstTrainParVille, compteLigne, critere, commandeAEnvoyer);
+					trajetSelonCritere(lstTrainParVille, compteLigne, critere, commandeAEnvoyer);
 					fprintf(stderr, "%s\n", commandeAEnvoyer);
 					envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-					printf("PASSAGE B\n");
-					printTrain(trainSelonCritere);
 				}
 				else
 				{
