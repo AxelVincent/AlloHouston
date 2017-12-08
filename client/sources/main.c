@@ -89,11 +89,8 @@ char* getHostName(char* host_name){
   if (host_info->h_addrtype == AF_INET)
   {
       struct in_addr **address_list = (struct in_addr **)host_info->h_addr_list;
-      for(int i = 0; address_list[i] != NULL; i++)
-      {
-          printf("Adresse ipv4 : %s\n", inet_ntoa(*address_list[i]));
-          return inet_ntoa(*address_list[i]);
-      }
+      printf("Adresse ipv4 : %s\n", inet_ntoa(*address_list[0]));
+      return inet_ntoa(*address_list[0]);
   }
   else if (host_info->h_addrtype == AF_INET6)
   {
