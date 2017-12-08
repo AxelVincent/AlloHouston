@@ -48,7 +48,7 @@ void nouveauService(int descripteurSocketService)
 	//Recuépration du fichier Trains.txt a chaque client
 	//Cela permet que chaque client ets le dernier fichier bien a jour
 
-	char *nomFichier = "./ressources/Trains.txt";
+	char *nomFichier = "../ressources/Trains.txt";
 	Train *listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
