@@ -144,17 +144,18 @@ void nouveauService(int descripteurSocketService)
 				printf("%d "MAG"CHOIX HORAIRE 2/2"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de fin (HH:MN) : ");
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h2,&m2, pid);
-				printf("Le client veut partir a partir de : %d:%d\n", h2,m2);
+
+				printf("Le client veut par a partir de : %d:%d\n", h2,m2);
+
 				int tempNbTrain = nbTrain;
+
 				 Train* trainsTrouves = trouverTrainParTranche(listeTrain, &tempNbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
 
 				//printf("Trains : %d \n", nbTrain);
 				//printf("Train n 1 : %s ", trainsTrouves.villeDepart);
-					for (int i=0; i< tempNbTrain; i++)
-					{
-						printTrain(trainsTrouves +i );
-					}
-					printf("\n");
+
+
+				printf("\n");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
 				recevoirMessage(descripteurSocketService, commandeRecu);

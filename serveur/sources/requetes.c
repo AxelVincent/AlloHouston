@@ -129,6 +129,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 	strToUpper(villeDepart);
 	strToUpper(villeArrivee);
 	printf("%d\n",*tailleListe );
+
 	int tab[*tailleListe];
 	int nbTrains = 0;
 	//struct Train *listeTrainNouvelle[*tailleListe];
@@ -155,6 +156,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 			}
 		}
 	}
+
 	Train * trainFiltre = malloc(sizeof(Train) * nbTrains);
 	for(int inc=0; inc< nbTrains; inc++)
 	{
@@ -162,18 +164,20 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 	}
 
 	*tailleListe = nbTrains;
+
 	if (nbTrains > 0)
 	{
-		char * commande;
-		snprintf(commande, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s :\n", MAG, RESET);
+
+		snprintf(commandeAEnvoyer, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s :\n", MAG, RESET);
+		fprintf(stderr, "AALLA\n");
 		for (int i=0; i< nbTrains; i++)
 		{
-			char * trainString;
-			snprintf(trainString, SIZE_MSG, "%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %.2f Reduc : %d\n", (trainFiltre+i)->id, (trainFiltre+i)->villeDepart, (trainFiltre+i)->villeArrivee, (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute, (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute, (trainFiltre+i)->prix, (trainFiltre+i)->reduc);
-			strcat(commande, trainString);
+			printf("%d\n", nbTrains);
+
+			snprintf(commandeAEnvoyer, SIZE_MSG, "%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %.2f Reduc : %d\n", (trainFiltre+i)->id, (trainFiltre+i)->villeDepart, (trainFiltre+i)->villeArrivee, (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute, (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute, (trainFiltre+i)->prix, (trainFiltre+i)->reduc);
 		}
-		strcat(commande, "\n");
-		commandeAEnvoyer = commande;
+		//snprintf(commandeAEnvoyer, "\n");
+
 		return trainFiltre;
 	}
 	else
