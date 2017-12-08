@@ -120,15 +120,15 @@ void nouveauService(int descripteurSocketService)
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville de de depart : ");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
-				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
 				char * villeDepartRequete2 = strdup(commandeRecu);
+				printf("Le client veut partir de : %s\n", villeDepartRequete2);
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
-				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
 				char * villeArriveeRequete2 = strdup(commandeRecu);
+				printf("Le client veut aller a : %s\n", villeArriveeRequete2);
 
 
 				if(strcmp(villeArrivee, villeDepart) == 0)
