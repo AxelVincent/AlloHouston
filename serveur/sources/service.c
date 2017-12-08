@@ -51,6 +51,7 @@ void nouveauService(int descripteurSocketService)
 	Train *listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
+
 	//Affichage d'un petit train et envoie du message au client
 	strcpy(commandeAEnvoyer, "noread;___________________________________________________________________\n       /\\                    /\\															 \n   ____\\/____============____\\/___    ___==========================\n /__|     OOOOOOOOOOOOO    [_]   |    |  |[]|  [_]    [_]    [_] \n/             S N C F            |    |  |  |										 \n\\________________________________|_ii_|__|__|______________________\n   ()==()    === ++++ ===  ()==()       ()==()     +++   ++++++++\n===================================================================\n\n");
 	envoyerMessage(descripteurSocketService, commandeAEnvoyer);
@@ -143,19 +144,18 @@ void nouveauService(int descripteurSocketService)
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de fin (HH:MN) : ");
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h2,&m2, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h2,m2);
-
-				printf("Taille de la liste : %d \n", nbTrain);
-				 Train* trainsLol = trouverTrainParTranche(listeTrain, &nbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
+				int tempNbTrain = nbTrain;
+				 Train* trainsTrouves = trouverTrainParTranche(listeTrain, &tempNbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
 
 				//printf("Trains : %d \n", nbTrain);
-			//printf("Train n 1 : %s ", trainsLol[0].villeDepart);
-				// for (int i=0; i< nbTrain; i++)
-				// {
-				// 	printTrain(trainsLol +i );
-				// }
+				//printf("Train n 1 : %s ", trainsTrouves.villeDepart);
+					for (int i=0; i< tempNbTrain; i++)
+					{
+						printTrain(trainsTrouves +i );
+					}
+					printf("\n");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
-				fprintf(stderr, "Hein hein");
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				if(atoi(commandeRecu)==2)
 				{

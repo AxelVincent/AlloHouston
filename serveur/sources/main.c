@@ -114,6 +114,7 @@ void ecouteServeur(int descripteur)
 				// FILS
 				printf("Création du fils ayant pour numero de PID : %d\n",getpid());
 				nouveauService(descripteurSocketService);
+				// TODO intercepter la mort du fils
 				break;
 				default:
 				// PERE
