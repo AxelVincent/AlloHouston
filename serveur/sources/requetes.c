@@ -29,13 +29,13 @@
 * @param commandeAEnvoyer Pointeur pour indiquer le message à envoyer au serveur
 * @return Train * Pointeur sur le Train le plus proche des paramètres fournit par le client
 */
-Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart, char* commandeAEnvoyer)
+void trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart, char* commandeAEnvoyer)
 {
 	//printf("Compte ligne : %d, villeDepart : %s, ville arrivee : %s, heure depart : %d, minute depart : %d\n",compteLigne, VD, VA, heureDepart, minuteDepart );
 	for (int u = 0; u < compteLigne; u++) {
 		//printf("Ville depart : %s, ville arrivee : %s\n", (listeTrain+u)->villeDepart, (listeTrain+u)->villeDepart);
 	}
-	struct Train* trainFiltre = malloc(sizeof(Train));
+	struct Train* trainFiltre;
 	/*// Concatenation de l'heure et minutes de départ souhaité
 	char concatenation[8];
 	strcat(concatenation,heureDepart);
@@ -111,15 +111,16 @@ Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char
 	{
 
 		snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %.2f Reduc : %d\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc);
-		return trainFiltre;
+		
 	}
 	else
 	{
 
 		printf("Aucun train ne correspond à ces critères\n");
 		snprintf(commandeAEnvoyer, SIZE_MSG,"noread;%sAucun train ne correspond à ces critères.%s\n", MAG, RESET);
-		return NULL;
+		
 	}
+	
 
 
 }
@@ -167,6 +168,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 
 	if (nbTrains > 0)
 	{
+		char * test;
 
 		snprintf(commandeAEnvoyer, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s :\n", MAG, RESET);
 		fprintf(stderr, "AALLA\n");
@@ -176,6 +178,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 
 			snprintf(commandeAEnvoyer, SIZE_MSG, "%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %.2f Reduc : %d\n", (trainFiltre+i)->id, (trainFiltre+i)->villeDepart, (trainFiltre+i)->villeArrivee, (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute, (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute, (trainFiltre+i)->prix, (trainFiltre+i)->reduc);
 		}
+		
 		//snprintf(commandeAEnvoyer, "\n");
 
 		return trainFiltre;

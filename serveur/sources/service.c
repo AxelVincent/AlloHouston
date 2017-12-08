@@ -95,16 +95,9 @@ void nouveauService(int descripteurSocketService)
 				strToUpper(villeDepart);
 				strToUpper(villeArrivee);
 
-				Train *t = malloc(sizeof(Train));
-				t = trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
-				if(t!=NULL)
-				{
-					printTrain(t);
-				}
-				else
-				{
-
-				}
+			
+				trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
+				
 				fprintf(stderr, "%s\n", commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
@@ -276,8 +269,9 @@ void nouveauService(int descripteurSocketService)
 				strcpy(commandeAEnvoyer, "noread;\n"RED"Mauvais choix dans le menu, veuillez reessayer"RESET"\n");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 	}
-}while(strcmp(commandeRecu,"stop") != 0 && sizeRead != 0); //Si sizeRead == 0 le client n'envoie plus rien, est-il mort ?
+}while(strcmp(commandeRecu,"stop") != 0); //Si sizeRead == 0 le client n'envoie plus rien, est-il mort ?
 	printf("Communication terminé\n");
+	printf("%d\n",sizeRead);
 	exit(-1);
 }
 
