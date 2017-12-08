@@ -1,5 +1,5 @@
 # file: ~/.gitignore_global
 .DS_Store
 .idea
-*/AlloHoustonServer
-*/AlloHoustonClient
+.serveur/bin/AlloHoustonServer
+.client/bin/AlloHoustonClient
