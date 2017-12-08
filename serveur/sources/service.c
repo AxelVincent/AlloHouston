@@ -76,7 +76,7 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
-				char* villeDepart = strdup(commandeRecu);
+				char * villeDepartRequete1 = strdup(commandeRecu);
 
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
@@ -84,7 +84,7 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
-				char* villeArrivee = strdup(commandeRecu);
+				char * villeArriveeRequete1 = strdup(commandeRecu);
 
 				// Envoie et reception des informations a propos de l'horaire
 				printf("%d "MAG"CHOIX HORAIRE"RESET"\n", pid);
@@ -92,13 +92,13 @@ void nouveauService(int descripteurSocketService)
 				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
 				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 
-				strToUpper(villeDepart);
-				strToUpper(villeArrivee);
+				strToUpper(villeDepartRequete1);
+				strToUpper(villeArriveeRequete1);
 
 
-				trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
+				trouverTrainLePlusProche(listeTrain, nbTrain, villeDepartRequete1, villeArriveeRequete1, h, m, commandeAEnvoyer);
 				printf("Test de relancement \n");
-				fprintf(stderr, "%s\n", commandeAEnvoyer);
+				//fprintf(stderr, "%s\n", commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
 				recevoirMessage(descripteurSocketService, commandeRecu);
@@ -118,14 +118,14 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
-				villeDepart = strdup(commandeRecu);
+				char * villeDepartRequete2 = strdup(commandeRecu);
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
-				villeArrivee = strdup(commandeRecu);
+				char * villeArriveeRequete2 = strdup(commandeRecu);
 
 				// Envoie et reception des informations a propos de l'horaire de debut
 				printf("%d "MAG"CHOIX HORAIRE 1/2"RESET"\n", pid);
@@ -140,16 +140,18 @@ void nouveauService(int descripteurSocketService)
 
 				printf("Le client veut par a partir de : %d:%d\n", h2,m2);
 
-				int tempNbTrain = nbTrain;
-
-				 trouverTrainParTranche(listeTrain, &tempNbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
+				int compteLigneRequete2;
+				compteLigneRequete2 = nbTrain;
+				strToUpper(villeDepartRequete2);
+				strToUpper(villeArriveeRequete2);
+				trouverTrainParTranche(listeTrain, &compteLigneRequete2, villeDepartRequete2, villeArriveeRequete2, h, m, h2, m2, commandeAEnvoyer);
 
 				//printf("Trains : %d \n", nbTrain);
 				//printf("Train n 1 : %s ", trainsTrouves.villeDepart);
 
 
-				printf("\n");
-				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+				//printf("\n");
+				//envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				if(atoi(commandeRecu)==2)
@@ -169,24 +171,24 @@ void nouveauService(int descripteurSocketService)
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
-				char* villeDepartRequete3 = strdup(commandeRecu);
+				char * villeDepartRequete3 = strdup(commandeRecu);
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
 				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
 				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
-				char* villeArriveeRequete3 = strdup(commandeRecu);
+				char * villeArriveeRequete3 = strdup(commandeRecu);
 
 				// Affichage de la liste de tous les trains satisfaisant les critères ville de départ et ville d'arrivée
 				strToUpper(villeDepartRequete3);
 				strToUpper(villeArriveeRequete3);
-				int compteLigne;
-				compteLigne = nbTrain;
+				int compteLigneRequete3;
+				compteLigneRequete3 = nbTrain;
 
-				fprintf(stderr,"Compte LIGNE :%d\n", compteLigne);
+				fprintf(stderr,"Compte LIGNE :%d\n", compteLigneRequete3);
 				Train * lstTrainParVille = malloc(sizeof(Train));
-				lstTrainParVille = listeTrainParVille(listeTrain, &compteLigne, villeDepartRequete3, villeArriveeRequete3, commandeAEnvoyer);
+				lstTrainParVille = listeTrainParVille(listeTrain, &compteLigneRequete3, villeDepartRequete3, villeArriveeRequete3, commandeAEnvoyer);
 				//fprintf(stderr, "TEEEST : %s\n", commandeAEnvoyer);
 				//envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 
@@ -216,7 +218,7 @@ void nouveauService(int descripteurSocketService)
 				if(critere !=0)
 				{
 					printf("Critere : %d\n", critere);
-					trajetSelonCritere(lstTrainParVille, compteLigne, critere, commandeAEnvoyer);
+					trajetSelonCritere(lstTrainParVille, compteLigneRequete3, critere, commandeAEnvoyer);
 					fprintf(stderr, "%s\n", commandeAEnvoyer);
 					envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				}
