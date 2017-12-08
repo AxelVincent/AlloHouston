@@ -17,17 +17,18 @@
 * @see ../headers/requetes.h
 */
 
+// REQUETE 1
 /**
 * @fn void trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, char * heureDepart, char * minuteDepart, char* commandeAEnvoyer)
 * @brief Renvoie le train le plus proche
 * @param ListeTrain L'ensemble des trains contenus dans trains.txt
-* @param compteLigne Nombre de train contenus dans la base
+* @param compteLigne Nombre de trains contenus dans la base
 * @param villeDepart Ville de départ souhaitée
 * @param villeArrivee Ville d'arrivée souhaitée
 * @param heureDepart Heure de départ souhaitée
 * @param minuteDepart Minute de départ souhaitée
 * @param commandeAEnvoyer Pointeur pour indiquer le message à envoyer au serveur
-* @return Train * Pointeur sur le Train le plus proche des paramètres fournit par le client
+* @return 1 si reussite, 0 sinon
 */
 int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart, char* commandeAEnvoyer)
 {
@@ -44,30 +45,27 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 
 	heureDepart = heureDepart * 100;
 	int heureConcat = heureDepart + minuteDepart;
-	printf("Heure concat : %d\n", heureConcat);
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
 	//printf("PASSAGE 1\n");
 	fprintf(stderr, "%s %s\n", villeArrivee, villeDepart);
 	int nbTrainFiltre = 0;
-	for (int increment = 0; increment < compteLigne; increment++) {
-		
+	for (int index = 0; index < compteLigne; index++) {
 		//printf("PASSAGE boucle i \n");
-		if (strcmp (villeDepart, (listeTrain + increment)->villeDepart) == 0)
+		if (strcmp (villeDepart, (listeTrain + index)->villeDepart) == 0)
 		// Si les villes de départs sont identiques
 		{
 			//printf("PASSAGE strcmp ville depart \n");
-			if (strcmp (villeArrivee, (listeTrain + increment)->villeArrivee) == 0)
+			if (strcmp (villeArrivee, (listeTrain + index)->villeArrivee) == 0)
 			// Si les villes d'arrivées sont identiques
 			{
 				//printf("PASSAGE strcmp ville arrivee \n");
-				if (heureConcat < tempsVersInt((listeTrain + increment)->heureDepart))
+				if (heureConcat < tempsVersInt((listeTrain + index)->heureDepart))
 				//Si l'heure du train est après l'heure souhaitée
 				{
 					//printf("PASSAGE heure concat \n");
-					*(trainFiltre + nbTrainFiltre) = *(listeTrain + increment);
-							printf("Heure depart A : %d\n", (trainFiltre+nbTrainFiltre)->heureDepart->minute);
+					*(trainFiltre + nbTrainFiltre) = *(listeTrain + index);
 					nbTrainFiltre++;
 				}
 			}
@@ -124,7 +122,7 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 }
 
 // REQUETE 2
-int trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin, char* commandeAEnvoyer)
+int trouverTrainParTranche(struct Train * listeTrain, int * tailleListe , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin, char* commandeAEnvoyer)
 {
 	strToUpper(villeDepart);
 	strToUpper(villeArrivee);
@@ -190,9 +188,19 @@ int trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char * v
 	}
 }
 // REQUETE 3
-Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * villeDepart, char * villeArrivee, char* commandeAEnvoyer)
+/**
+* @fn Train * listeTrainParVille(struct Train * listeTrain, int * compteLigne, char * villeDepart, char * villeArrivee, char* commandeAEnvoyer)
+* @brief Crée la liste des trains selon les critères ville de depart et ville d'arrivee
+* @param ListeTrain L'ensemble des trains contenus dans trains.txt
+* @param compteLigne Nombre de trains contenus dans la base
+* @param villeDepart Ville de départ souhaitée
+* @param villeArrivee Ville d'arrivée souhaitée
+* @param commandeAEnvoyer Pointeur pour indiquer le message à envoyer au serveur
+* @return Train * Pointeur sur la liste de trains répondants aux critères
+*/
+Train * listeTrainParVille(struct Train * listeTrain, int * compteLigne, char * villeDepart, char * villeArrivee, char* commandeAEnvoyer)
 {
-	int tab[*compteLigne];
+	int tableauProvisoire[*compteLigne];
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
@@ -204,16 +212,11 @@ Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * vi
 			if (strcmp (villeArrivee, (listeTrain + index)->villeArrivee) == 0)
 			// Si les villes d'arrivées sont identiques
 			{
-				tab[nbTrainFiltre] = index;
+				tableauProvisoire[nbTrainFiltre] = index;
 				nbTrainFiltre++;
 			}
 		}
 	}
-
-
-	/*Train * trainFiltre = malloc(sizeof(Train)*nbTrainFiltre);
-	for (int inc = 0; inc < nbTrainFiltre; inc++) {
-	trainFiltre[inc] = listeTrain[tab[inc]];}*/
 
 	if(nbTrainFiltre > 0)
 	{
@@ -221,7 +224,7 @@ Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * vi
 		/*char * commande;
 		snprintf(commande, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s : ", MAG, RESET);*/
 		for (int inc = 0; inc < nbTrainFiltre; inc++) {
-			trainFiltre[inc] = listeTrain[tab[inc]];
+			trainFiltre[inc] = listeTrain[tableauProvisoire[inc]];
 
 			char * trainString;
 			/*snprintf(trainString, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n\n", MAG, RESET, trainFiltre[inc].id, trainFiltre[inc].villeDepart, trainFiltre[inc].villeArrivee, trainFiltre[inc].heureDepart->heure, trainFiltre[inc].heureDepart->minute, trainFiltre[inc].heureArrivee->heure, trainFiltre[inc].heureArrivee->minute, trainFiltre[inc].prix, trainFiltre[inc].reduc);
@@ -230,11 +233,9 @@ Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * vi
 
 		*compteLigne = nbTrainFiltre;
 		return trainFiltre;
-
 	}
 	else
 	{
-
 		printf("Aucun train ne correspond à ces critères\n");
 		snprintf(commandeAEnvoyer, SIZE_MSG,"noread;%sAucun train ne correspond à ces critères.%s\n", MAG, RESET);
 
@@ -244,12 +245,23 @@ Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * vi
 
 }
 
+// REQUETE 3 BIS
+/**
+* @fn int trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, char * commandeAEnvoyer)
+* @brief Renvoie le train ayant le plus court trajet ou bien le train le moins cher
+* @param ListeTrain L'ensemble des trains contenus dans trains.txt
+* @param compteLigne Nombre de trains contenus dans la base
+* @param critere :	- 1 pour le trajet le moins cher
+*					- 2 pour le trajet le plus court
+* @param commandeAEnvoyer Pointeur pour indiquer le message à envoyer au serveur
+* @return 1 si reussite, 0 sinon
+*/
 int trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, char * commandeAEnvoyer)
 {
 
-	struct Train* trainFiltre = malloc(sizeof(Train));
-	printf("Compte ligne : %d, critere : %d\n",compteLigne,critere );
-	printf("villeDepart : %s\n",(listeTrain + 0)->villeDepart );
+	struct Train* trainFiltre;
+	/*printf("Compte ligne : %d, critere : %d\n",compteLigne,critere );
+	printf("villeDepart : %s\n",(listeTrain + 0)->villeDepart );*/
 	if (compteLigne > 0) {
 		double tableauProvisoire[compteLigne][4];
 		int incrementTableau;
@@ -259,27 +271,28 @@ int trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, c
 			// Prise en compte de la reduction pour trouver le prix le plus faible
 			if (listeTrain[incrementTableau].reduc == 0)
 			{
-				tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix);
+				tableauProvisoire[incrementTableau][1] = (listeTrain+incrementTableau)->prix;
 			}
 			if (listeTrain[incrementTableau].reduc == 1)
 			{
-				tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix * 0.8);
+				tableauProvisoire[incrementTableau][1] = (listeTrain+incrementTableau)->prix * 0.8;
 			}
 			if (listeTrain[incrementTableau].reduc == -1)
 			{
-				tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix * 1.1);
+				tableauProvisoire[incrementTableau][1] = (listeTrain+incrementTableau)->prix * 1.1;
 			}
 
 			// Calcul de la difference de temps pour trouver le trajet le plus court
-			double heureDepart = listeTrain[incrementTableau].heureDepart->heure * 100;			double heureArrivee = listeTrain[incrementTableau].heureArrivee->heure * 100;
-			double minuteDepart = listeTrain[incrementTableau].heureDepart->minute;
-			double minuteArrivee = listeTrain[incrementTableau].heureArrivee->minute;
-			double horaireDepart = heureDepart + minuteDepart;
-			printf("Horaire depart : %f\n", horaireDepart);
-			double horaireArrivee = heureArrivee + minuteArrivee;
-			printf("Horaire arrivee : %f\n", horaireArrivee);
+			int heureDepart = (listeTrain + incrementTableau)->heureDepart->heure * 100;
+			int heureArrivee = (listeTrain + incrementTableau)->heureArrivee->heure * 100;
+			int minuteDepart = (listeTrain + incrementTableau)->heureDepart->minute;
+			int minuteArrivee = (listeTrain + incrementTableau)->heureArrivee->minute;
+			int horaireDepart = heureDepart + minuteDepart;
+
+			int horaireArrivee = heureArrivee + minuteArrivee;
+
 			tableauProvisoire[incrementTableau][2] = (horaireArrivee - horaireDepart);
-			printf("difference d'heure : %f\n", tableauProvisoire[incrementTableau][2]);
+
 
 			// index
 			tableauProvisoire[incrementTableau][3] = incrementTableau;
@@ -301,7 +314,7 @@ int trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, c
 
 			struct Train* trainFiltre;
 			trainFiltre = listeTrain + index;
-			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %.2f Reduc : %d Prix final : %.2f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, plusPetit);
+			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %.2f Reduc : %d Prix final : %.2f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, tableauProvisoire[index][1]);
 			/*printf("Départ %s: \n", trainFiltre->villeDepart);
 			printf("Arrivee %s: \n", trainFiltre->villeArrivee);
 			printf("heureDepart %d: \n", trainFiltre->heureDepart->heure);
@@ -329,7 +342,7 @@ int trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, c
 			printf("index : %d\n", index);
 			struct Train* trainFiltre;
 			trainFiltre = listeTrain + index;
-			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %.2f Reduc : %d Prix final : %.2f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, plusPetit);
+			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %.2f Reduc : %d Prix final : %.2f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, tableauProvisoire[index][1]);
 			return 1;
 		}
 		else
