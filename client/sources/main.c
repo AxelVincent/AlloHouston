@@ -15,7 +15,7 @@
 #define SIZE_MSG 1024
 
 /**
-* @file main.c
+* @file client/main.c
 * @date 5 Dec 2017
 * @brief Main du client
 *
