@@ -49,8 +49,10 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 	// avec la structure contenant l'ensemble des trains de la base de données
 	// Crée un nouveau tableau contenant les structures Trains compatible
 	//printf("PASSAGE 1\n");
+	fprintf(stderr, "%s %s\n", villeArrivee, villeDepart);
 	int nbTrainFiltre = 0;
 	for (int increment = 0; increment < compteLigne; increment++) {
+		
 		//printf("PASSAGE boucle i \n");
 		if (strcmp (villeDepart, (listeTrain + increment)->villeDepart) == 0)
 		// Si les villes de départs sont identiques
