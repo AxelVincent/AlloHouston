@@ -32,7 +32,7 @@
 */
 int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * villeDepart, char * villeArrivee, int heureDepart, int minuteDepart, char* commandeAEnvoyer)
 {
-	//printf("Compte ligne : %d, villeDepart : %s, ville arrivee : %s, heure depart : %d, minute depart : %d\n",compteLigne, VD, VA, heureDepart, minuteDepart );
+	printf("Compte ligne : %d, villeDepart : %s, ville arrivee : %s, heure depart : %d, minute depart : %d\n",compteLigne, villeDepart, villeArrivee, heureDepart, minuteDepart );
 	/*for (int u = 0; u < compteLigne; u++) {
 		printf("Ville depart : %s, ville arrivee : %s\n", (listeTrain+u)->villeDepart, (listeTrain+u)->villeDepart);
 	}*/
@@ -64,9 +64,12 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 				if (heureConcat < tempsVersInt((listeTrain + index)->heureDepart))
 				//Si l'heure du train est après l'heure souhaitée
 				{
+					fprintf(stderr,"%d\n", nbTrainFiltre);
 					//printf("PASSAGE heure concat \n");
 					*(trainFiltre + nbTrainFiltre) = *(listeTrain + index);
+					fprintf(stderr,"plop\n");
 					nbTrainFiltre++;
+
 				}
 			}
 		}
