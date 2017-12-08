@@ -1,6 +1,6 @@
 #ifndef COLOR_H
 #define COLOR_H
-
+// DEFINE POUR UTILISER LA COULEUR DANS LA CONSOLE
 #define RED   "\x1B[31m"
 #define GRN   "\x1B[32m"
 #define YEL   "\x1B[33m"
