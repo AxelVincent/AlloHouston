@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Iheaders
 SRCS =   ./sources/main.c
 OBJS = $(SRCS:.c=.o)
-EXEC = AlloHoustonClient
+EXEC = ./bin/AlloHoustonClient
 
 all: $(EXEC)
 $(EXEC): $(OBJS)
