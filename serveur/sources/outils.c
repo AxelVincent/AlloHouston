@@ -24,3 +24,18 @@ void strToUpper(char * temp)
   }
 
 }
+
+/**
+ * @fn void trimwhitespace(char * s)
+ * @brief Retire les whitespace de la chaine fournit
+ * @param temp Pointeur de la chaine à modifier
+ */
+void trimwhitespace(char * s) {
+    char * p = s;
+    int l = strlen(p);
+
+    while(isspace(p[l - 1])) p[--l] = 0;
+    while(* p && isspace(* p)) ++p, --l;
+
+    memmove(s, p, l + 1);
+}
