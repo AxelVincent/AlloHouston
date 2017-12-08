@@ -36,12 +36,12 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 	/*for (int u = 0; u < compteLigne; u++) {
 		printf("Ville depart : %s, ville arrivee : %s\n", (listeTrain+u)->villeDepart, (listeTrain+u)->villeDepart);
 	}*/
-	struct Train* trainFiltre;
+	Train *trainFiltre = malloc(compteLigne * sizeof(Train));
 	/*// Concatenation de l'heure et minutes de départ souhaité
 	char concatenation[8];
 	strcat(concatenation,heureDepart);
 	strcat(concatenation,minuteDepart);
-	int heureConcat = atoi(concatenation);*/
+	int heureConcat = atoitrainFiltre(concatenation);*/
 
 	heureDepart = heureDepart * 100;
 	int heureConcat = heureDepart + minuteDepart;
@@ -65,9 +65,7 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 				//Si l'heure du train est après l'heure souhaitée
 				{
 					fprintf(stderr,"%d\n", nbTrainFiltre);
-					//printf("PASSAGE heure concat \n");
 					*(trainFiltre + nbTrainFiltre) = *(listeTrain + index);
-					fprintf(stderr,"plop\n");
 					nbTrainFiltre++;
 
 				}
@@ -110,7 +108,7 @@ int trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char * v
 	printf("Le plus petit nombre est : %d, son index est : %d\n", plusPetit, index);
 	printf("VIlle de depart %d\n", trainFiltre[index].heureDepart->minute );
 	printTrain(trainFiltre + index);
-	trainFiltre = trainFiltre + index;
+	Train trainFiltreDef = *(trainFiltre + index);
 	if(nbTrainFiltre > 0)
 	{
 		snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %.2f Reduc : %d\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc);
