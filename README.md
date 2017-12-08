@@ -1,6 +1,6 @@
 # AlloHouston
 
-## Convetion de nommages
+## Convention de nommages
 
 ```c
 /**

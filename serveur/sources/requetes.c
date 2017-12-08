@@ -123,7 +123,7 @@ Train * trouverTrainLePlusProche(struct Train* listeTrain, int compteLigne, char
 
 
 }
-
+// REQUETE 2
 Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char * villeDepart, char * villeArrivee, int heureDepartDebut, int minuteDepartDebut, int heureDepartFin, int minuteDepartFin, char* commandeAEnvoyer)
 {
 	strToUpper(villeDepart);
@@ -165,11 +165,11 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 	if (nbTrains > 0)
 	{
 		char * commande;
-		snprintf(commande, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s : ", MAG, RESET);
+		snprintf(commande, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s : \n", MAG, RESET);
 		for (int i=0; i< nbTrains; i++)
 		{
 			char * trainString;
-			snprintf(trainString, SIZE_MSG, "\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n\n", (trainFiltre+i)->id, (trainFiltre+i)->villeDepart, (trainFiltre+i)->villeArrivee, (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute, (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute, (trainFiltre+i)->prix, (trainFiltre+i)->reduc);
+			snprintf(trainString, SIZE_MSG, "%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n", (trainFiltre+i)->id, (trainFiltre+i)->villeDepart, (trainFiltre+i)->villeArrivee, (trainFiltre+i)->heureDepart->heure, (trainFiltre+i)->heureDepart->minute, (trainFiltre+i)->heureArrivee->heure, (trainFiltre+i)->heureArrivee->minute, (trainFiltre+i)->prix, (trainFiltre+i)->reduc);
 			strcat(commande, trainString);
 		}
 		return trainFiltre;
@@ -181,7 +181,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 		return NULL;
 	}
 }
-
+// REQUETE 3
 Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * villeDepart, char * villeArrivee, char* commandeAEnvoyer)
 {
 	int tab[*compteLigne];
@@ -251,7 +251,6 @@ Train * trajetSelonCritere(struct Train* listeTrain, int compteLigne, int criter
 			// Prise en compte de la reduction pour trouver le prix le plus faible
 			if (listeTrain[incrementTableau].reduc == 0)
 			{
-				tableauProvisoire[incrementTableau][1] = listeTrain[incrementTableau].prix;
 			}
 			if (listeTrain[incrementTableau].reduc == 1)
 			{
