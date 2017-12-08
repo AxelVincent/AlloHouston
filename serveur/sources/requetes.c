@@ -214,14 +214,40 @@ Train * listeTrainParVille(struct Train * listeTrain, int * compteLigne, char * 
 	if(nbTrainFiltre > 0)
 	{
 		Train * trainFiltre = malloc(sizeof(Train)*nbTrainFiltre);
-		/*char * commande;
-		snprintf(commande, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s : ", MAG, RESET);*/
+		/*char * commande;*/
+		snprintf(commandeAEnvoyer, SIZE_MSG,"%sVoici le(s) train(s) correspondant a votre recherche%s : \n", MAG, RESET);
 		for (int inc = 0; inc < nbTrainFiltre; inc++) {
 			trainFiltre[inc] = listeTrain[tableauProvisoire[inc]];
 
 			char * trainString;
 			/*snprintf(trainString, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n\n", MAG, RESET, trainFiltre[inc].id, trainFiltre[inc].villeDepart, trainFiltre[inc].villeArrivee, trainFiltre[inc].heureDepart->heure, trainFiltre[inc].heureDepart->minute, trainFiltre[inc].heureArrivee->heure, trainFiltre[inc].heureArrivee->minute, trainFiltre[inc].prix, trainFiltre[inc].reduc);
 			strcat(commande, trainString);*/
+			strcat(commandeAEnvoyer, "");
+			int someInt;
+			char str[12];
+			// ID
+			someInt = (trainFiltre + inc)->id;
+			sprintf(str, "%d : ", someInt);
+			strcat(commandeAEnvoyer, str);
+			// villeDepart
+			strcat(commandeAEnvoyer, (trainFiltre + inc)->villeDepart);
+			// villeArrivee
+			strcat(commandeAEnvoyer, " -> ");
+			strcat(commandeAEnvoyer, (trainFiltre + inc)->villeArrivee);
+			// heureDepart->heure
+			sprintf(str, "%d:%d", (trainFiltre + inc)->heureDepart->heure, (trainFiltre + inc)->heureDepart->minute);
+			strcat(commandeAEnvoyer, " Départ ");
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " arrivée ");
+			sprintf(str, "%d:%d", (trainFiltre + inc)->heureArrivee->heure, (trainFiltre + inc)->heureArrivee->minute);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Prix : ");
+			sprintf(str, "%.2f", (trainFiltre + inc)->prix);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Reduc : ");
+			sprintf(str, "%d", (trainFiltre + inc)->reduc);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, "\n");
 		}
 
 		*compteLigne = nbTrainFiltre;
@@ -307,7 +333,35 @@ int trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, c
 
 			struct Train* trainFiltre;
 			trainFiltre = listeTrain + index;
-			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %.2f Reduc : %d Prix final : %.2f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, tableauProvisoire[index][1]);
+			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;"MAG"\nVoici le train correspondant le plus a votre recherche :\n"GRN);
+			int someInt;
+			char str[12];
+			// ID
+			someInt = trainFiltre->id;
+			sprintf(str, "%d : ", someInt);
+			strcat(commandeAEnvoyer, str);
+			// villeDepart
+			strcat(commandeAEnvoyer, trainFiltre->villeDepart);
+			// villeArrivee
+			strcat(commandeAEnvoyer, " -> ");
+			strcat(commandeAEnvoyer, trainFiltre->villeArrivee);
+			// heureDepart->heure
+			sprintf(str, "%d:%d", trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute);
+			strcat(commandeAEnvoyer, " Départ ");
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " arrivée ");
+			sprintf(str, "%d:%d", trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Prix : ");
+			sprintf(str, "%.2f", trainFiltre->prix);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Reduc : ");
+			sprintf(str, "%d", trainFiltre->reduc);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Prix final : ");
+			sprintf(str, "%.2f", tableauProvisoire[index][1]);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, "\n"RESET);
 			/*printf("Départ %s: \n", trainFiltre->villeDepart);
 			printf("Arrivee %s: \n", trainFiltre->villeArrivee);
 			printf("heureDepart %d: \n", trainFiltre->heureDepart->heure);
@@ -335,7 +389,35 @@ int trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, c
 			printf("index : %d\n", index);
 			struct Train* trainFiltre;
 			trainFiltre = listeTrain + index;
-			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %.2f Reduc : %d Prix final : %.2f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, tableauProvisoire[index][1]);
+			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;"MAG"\nVoici le train correspondant le plus a votre recherche :\n"GRN);
+			int someInt;
+			char str[12];
+			// ID
+			someInt = trainFiltre->id;
+			sprintf(str, "%d : ", someInt);
+			strcat(commandeAEnvoyer, str);
+			// villeDepart
+			strcat(commandeAEnvoyer, trainFiltre->villeDepart);
+			// villeArrivee
+			strcat(commandeAEnvoyer, " -> ");
+			strcat(commandeAEnvoyer, trainFiltre->villeArrivee);
+			// heureDepart->heure
+			sprintf(str, "%d:%d", trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute);
+			strcat(commandeAEnvoyer, " Départ ");
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " arrivée ");
+			sprintf(str, "%d:%d", trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Prix : ");
+			sprintf(str, "%.2f", trainFiltre->prix);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Reduc : ");
+			sprintf(str, "%d", trainFiltre->reduc);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, " Prix final : ");
+			sprintf(str, "%.2f", tableauProvisoire[index][1]);
+			strcat(commandeAEnvoyer, str);
+			strcat(commandeAEnvoyer, "\n"RESET);
 			return 1;
 		}
 		else

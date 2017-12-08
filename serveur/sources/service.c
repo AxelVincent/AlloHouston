@@ -222,8 +222,8 @@ void nouveauService(int descripteurSocketService)
 				/* Affichage du train qui répond soit :
 					- Au trajet au meilleur prix (reduction comprise) critere = 1
 					- Au trajet de durée optimum critere = 2*/
-
-				envoyerMessage(descripteurSocketService, "Quel critere faut-il appliquer ?\n 1 : Meilleur prix\n 2 : Trajet le plus court\n Choix : ");
+				strcat(commandeAEnvoyer, "\nQuel critere faut-il appliquer ?\n 1 : Meilleur prix\n 2 : Trajet le plus court\n Choix : ");
+				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				int critere = 0;
 				switch(atoi(commandeRecu))
