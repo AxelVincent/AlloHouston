@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <string.h>
 #include "../headers/outils.h"
 
 /**
@@ -23,4 +24,19 @@ void strToUpper(char * temp)
     s++;
   }
 
+}
+
+/**
+ * @fn void trimwhitespace(char * s)
+ * @brief Retire les whitespace de la chaine fournit
+ * @param temp Pointeur de la chaine à modifier
+ */
+void trimwhitespace(char * s) {
+    char * p = s;
+    int l = strlen(p);
+
+    while(isspace(p[l - 1])) p[--l] = 0;
+    while(* p && isspace(* p)) ++p, --l;
+
+    memmove(s, p, l + 1);
 }
