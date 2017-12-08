@@ -120,7 +120,6 @@ int creationClient(char* adresse, int numeroPort)
   {
     printf("socket fonctionne\n");
 
-    // int connect(int descripteur, const struct sockaddr *p, int len);
     if(connect(descripteur,(struct sockaddr *) &socketService,sizeof(socketService)) == 0)
     {
       printf("Connexion sur %s:%d\n", inet_ntoa(socketService.sin_addr), htons(socketService.sin_port));
@@ -145,13 +144,11 @@ int creationClient(char* adresse, int numeroPort)
 
 void lectureEntreeClient(int descripteurSocketClient, char * messageAEnvoyer)
 {
-  //char messageAEnvoyer[SIZE_MSG];
   int resultWrite;
   fgets(messageAEnvoyer, SIZE_MSG, stdin);
   strtok(messageAEnvoyer, "\n");
   printf("Message envoye : %s \n",messageAEnvoyer );
   resultWrite = write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
-  //return messageAEnvoyer;
 }
 
 void receptionMessageServeur(int descripteurSocketClient, char *commandeRecu){

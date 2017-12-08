@@ -18,7 +18,6 @@
   * @fn void printfrintTrain(Train* train)
   * @brief Affiche les informations d'un train
   * @param train Le pointeur train pour lequel on souhaite afficher les informations.
-  * @TODO ajuster l'affichage de la réduc.
   */
 void printTrain(Train* train)
 {
@@ -111,26 +110,25 @@ Train * trainFromFile(char* nomFichier, int* nbTrain){
 	int compteLigne = 0;
 	if (fichier != NULL)
 	{
-		char ligne [ 256 ]; /* or other suitable maximum ligne size */
+		char ligne [ 256 ];
 		int lineCount = 0;
-		while (fgets(ligne, sizeof ligne, fichier) != NULL) /* read a ligne */
+		while (fgets(ligne, sizeof ligne, fichier) != NULL) /* lit une ligne */
 		{
 			compteLigne ++;
 		}
 		printf("%d ligne dans le fichier Trains.txt\n", compteLigne);
 		rewind(fichier);
 		listeToutTrain = malloc(compteLigne * sizeof(Train));
-		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* read a ligne */
+		while (fgets ( ligne, sizeof ligne, fichier ) != NULL) /* lit une ligne */
 		{
 			*(listeToutTrain + lineCount) = *trainFromCSV(ligne);
-			//printTrain((listeToutTrain + lineCount));
 			lineCount ++;
 		}
 		fclose (fichier);
 	}
 	else
 	{
-		perror ( nomFichier ); /* why didn't the fichier open? */
+		perror ( nomFichier ); /* Pourquoi le fichier ne s'est pas ouvert ? */
 	}
   *nbTrain = compteLigne;
 	return listeToutTrain;

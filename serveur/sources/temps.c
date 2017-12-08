@@ -23,7 +23,7 @@ Temps* tempsFromCSV(char* csv){
 
   struct Temps* temps = malloc(sizeof(Temps));
   char *token, *str, *tofree;
-  tofree = str = strdup(csv);  // We own str's memory now.
+  tofree = str = strdup(csv);  // copie de csv en local
   // heure
   token = strsep(&str, ":");
   temps->heure = atoi(token);
@@ -32,6 +32,6 @@ Temps* tempsFromCSV(char* csv){
   token = strsep(&str, ":");
   temps->minute = atoi(token);
 
-  free(tofree); // We free the str we made
+  free(tofree); // On libére le tofree malloc
   return temps;
 }
