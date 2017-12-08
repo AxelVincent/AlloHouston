@@ -305,7 +305,7 @@ Train * trajetSelonCritere(struct Train* listeTrain, int compteLigne, int criter
 			printf("prix final %f: \n", plusPetit);*/
 			return trainFiltre;
 		}
-		if (critere == 2) {
+		else if (critere == 2) {
 			/* trajet de durée optimum */
 			double plusPetit = tableauProvisoire[0][2];
 			int index = tableauProvisoire[0][3];
@@ -324,7 +324,15 @@ Train * trajetSelonCritere(struct Train* listeTrain, int compteLigne, int criter
 			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %f Reduc : %d Prix final : %f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, plusPetit);
 			return trainFiltre;
 		}
+		else
+		{
+			return NULL;
+		}
 
+	}
+	else
+	{
+		return NULL;
 	}
 }
 

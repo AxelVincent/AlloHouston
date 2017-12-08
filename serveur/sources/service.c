@@ -192,23 +192,47 @@ void nouveauService(int descripteurSocketService)
 				fprintf(stderr,"Compte LIGNE :%d\n", compteLigne);
 				Train * lstTrainParVille = malloc(sizeof(Train));
 				lstTrainParVille = listeTrainParVille(listeTrain, &compteLigne, villeDepartRequete3, villeArriveeRequete3, commandeAEnvoyer);
-				//fprintf(stderr, "%s\n", commandeAEnvoyer);
+				//fprintf(stderr, "TEEEST : %s\n", commandeAEnvoyer);
 				//envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 
-				//envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+
 				// Demander s'il veut le trajet le moins cher ou le plus court
 				/* Affichage du train qui répond soit :
-					- Au trajet au meilleur prix (reduction comprise) critere = 0
-					- Au trajet de durée optimum critere = 1*/
+					- Au trajet au meilleur prix (reduction comprise) critere = 1
+					- Au trajet de durée optimum critere = 2*/
 
-				int critere = 2;
-				printf("Critere : %d\n", critere);
-				Train * trainSelonCritere = malloc(sizeof(Train));
-				trainSelonCritere = trajetSelonCritere(lstTrainParVille, compteLigne, critere, commandeAEnvoyer);
-				fprintf(stderr, "%s\n", commandeAEnvoyer);
-				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-				printf("PASSAGE B\n");
-				printTrain(trainSelonCritere);
+				envoyerMessage(descripteurSocketService, "Quel critere faut-il appliquer ?\n 1 : Meilleur prix\n 2 : Trajet le plus court\n Choix : ");
+				recevoirMessage(descripteurSocketService, commandeRecu);
+				int critere = 0;
+				switch(atoi(commandeRecu))
+				{
+					case 1:
+						//Trajet au meilleur prix
+						critere = 1;
+						break;
+					case 2:
+						//trajet au court
+						critere = 2;
+						break;
+					default:
+						critere = 0;
+
+				}
+				if(critere !=0)
+				{
+					printf("Critere : %d\n", critere);
+					Train * trainSelonCritere = malloc(sizeof(Train));
+					trainSelonCritere = trajetSelonCritere(lstTrainParVille, compteLigne, critere, commandeAEnvoyer);
+					fprintf(stderr, "%s\n", commandeAEnvoyer);
+					envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+					printf("PASSAGE B\n");
+					printTrain(trainSelonCritere);
+				}
+				else
+				{
+					envoyerMessage(descripteurSocketService, "noread;"RED"Mauvais choix du critere."RESET"\n");
+				}
+
 				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				if(atoi(commandeRecu)==2)
