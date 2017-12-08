@@ -52,6 +52,12 @@ void nouveauService(int descripteurSocketService)
 	Train *listeTrain;
 	int nbTrain;
 	listeTrain = trainFromFile(nomFichier, &nbTrain); // Récupération de la liste de train
+	const char *listeVilleDepart[nbTrain];
+	const char *listeVilleArrive[nbTrain];
+	for(int iterateurTrain = 0; iterateurTrain<nbTrain; iterateurTrain++){
+		listeVilleDepart[iterateurTrain] = (listeTrain + iterateurTrain)->villeDepart;
+		listeVilleArrive[iterateurTrain] = (listeTrain + iterateurTrain)->villeArrivee;
+	}
 
 	//Affichage d'un petit train et envoie du message au client
 	strcpy(commandeAEnvoyer, "noread;___________________________________________________________________\n       /\\                    /\\															 \n   ____\\/____============____\\/___    ___==========================\n /__|     OOOOOOOOOOOOO    [_]   |    |  |[]|  [_]    [_]    [_] \n/             S N C F            |    |  |  |										 \n\\________________________________|_ii_|__|__|______________________\n   ()==()    === ++++ ===  ()==()       ()==()     +++   ++++++++\n===================================================================\n\n");
