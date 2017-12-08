@@ -43,6 +43,7 @@ void nouveauService(int descripteurSocketService)
 	int pid = getpid();
 	printf("nouveauService ok : %d\n",pid);
 	int sizeRead;
+	int connecter = 0;
 
 	//Recuépration du fichier Trains.txt a chaque client
 	//Cela permet que chaque client ets le dernier fichier bien a jour
@@ -58,7 +59,7 @@ void nouveauService(int descripteurSocketService)
 	do{
 		printf("%d "MAG"MENU"RESET"\n", pid);
 		// Envoie du menu au client
-		strcpy(commandeAEnvoyer,"---"CYN"MENU"RESET" ---\n 1: Recherche du premier train a partir de l'heure de depart \n 2: Recherche de trains dans une tranche horaire\n 3: Recherche tous les trains pour une ville de depart et d'arrivee\n Choix : ");
+		strcpy(commandeAEnvoyer,"---"CYN"MENU"RESET" ---\n 1: Recherche du premier train a partir de l'heure de depart \n 2: Recherche de trains dans une tranche horaire\n 3: Recherche tous les trains pour une ville de depart et d'arrivee\n 42 : Connexion en administrateur\nChoix : ");
 		envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 		recevoirMessage(descripteurSocketService, commandeRecu);
 
@@ -243,6 +244,31 @@ void nouveauService(int descripteurSocketService)
 				}
 
 			break;
+			case 42:
+
+				do {
+					printf("test\n");
+					envoyerMessage(descripteurSocketService, "login : ");
+					recevoirMessage(descripteurSocketService, commandeRecu);
+					char * login = strdup(commandeRecu);
+					envoyerMessage(descripteurSocketService, "password : ");
+					recevoirMessage(descripteurSocketService, commandeRecu);
+					char * pass = strdup(commandeRecu);
+
+					if(strcmp(login,"admin") == 0 && strcmp(commandeRecu,"root") == 0)
+					{
+						connecter =1;
+						envoyerMessage(descripteurSocketService, "noread;"CYN"Bienvenue admin"RESET"\n\n\n");
+						envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
+					}
+					else
+					{
+						envoyerMessage(descripteurSocketService, "noread;"RED"Erreur d'authentification"RESET"\n\n\n");
+					}
+				} while(connecter == 0);
+
+
+				break;
 			default:
 				//Erreur dans une entree client, on retourne au menu
 				printf("%d "RED"MAUVAIS ENTREE UTILISATEUR"RESET"\n", pid);
