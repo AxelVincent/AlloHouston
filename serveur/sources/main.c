@@ -12,6 +12,23 @@
 #include "../headers/color.h"
 #include "../headers/requetes.h"
 
+
+/**
+* @file main.c
+* @date 5 Dec 2017
+* @brief Main du serveur
+*
+* @see ../headers/main.h
+*/
+
+
+/**
+* @fn int main(int argc, char *argv[])
+* @brief Fonction main du serveur
+* @param argc le nombre de paramètres
+* @param argv[] les paramètres de la commande
+* @return 1 si reussite, 0 sinon
+*/
 int main(int argc, char *argv[])
 {
 	if(argc == 2)
@@ -29,6 +46,12 @@ int main(int argc, char *argv[])
 
 }
 
+/**
+* @fn int creationServeur(int numeroPort)
+* @brief fait le bind et le listen et renvoie le descripteur du socket
+* @param numeroPort le numero du port a connecter
+* @return le descripteur
+*/
 int creationServeur(int numeroPort)
 {
 	//Creation du serveur
@@ -83,6 +106,13 @@ int creationServeur(int numeroPort)
 
 }
 
+
+/**
+* @fn void ecouteServeur(int descripteur)
+* @brief generer les fils et appeler leurs fonctions
+* @param descripteur le descripteur de fichier
+* @return void
+*/
 void ecouteServeur(int descripteur)
 {
 

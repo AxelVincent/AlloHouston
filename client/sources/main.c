@@ -14,7 +14,22 @@
 #define INVALID_SOCKET -1
 #define SIZE_MSG 1024
 
+/**
+* @file client/main.c
+* @date 5 Dec 2017
+* @brief Main du client
+*
+* @see ../headers/main.h
+*/
 
+
+/**
+* @fn int main(int argc, char *argv[])
+* @brief Fonction main du client
+* @param argc le nombre de paramètres
+* @param argv[] les paramètres de la commande
+* @return 1 si reussite, 0 sinon
+*/
 int main(int argc, char *argv[])
 {
    if(argc == 3)
@@ -77,7 +92,15 @@ int main(int argc, char *argv[])
 
 }
 
-char* getHostName(char* host_name){
+
+/**
+* @fn char* getHostName(char* host_name)
+* @brief Recupère le hostname grace a la fonction gethostbyname
+* @param host_name le nom de l'host
+* @return le nom de l'adresse
+*/
+char* getHostName(char* host_name)
+{
   struct hostent* host_info;
   host_info = gethostbyname(host_name);
 
@@ -105,6 +128,14 @@ char* getHostName(char* host_name){
 
 }
 
+
+/**
+* @fn int creationClient(char* adresse, int numeroPort)
+* @brief Créer le client
+* @param adresse le nom de l'host
+* @param numeroPort le numero de port
+* @return le descripteur de fichier
+*/
 int creationClient(char* adresse, int numeroPort)
 {
 
@@ -141,7 +172,13 @@ int creationClient(char* adresse, int numeroPort)
 }
 
 
-
+/**
+* @fn void lectureEntreeClient(int descripteurSocketClient, char * messageAEnvoyer)
+* @brief Ecrit au serveur
+* @param descripteurSocketClient le socket a qui parler
+* @param messageAEnvoyer le message a envoyer
+* @return void
+*/
 void lectureEntreeClient(int descripteurSocketClient, char * messageAEnvoyer)
 {
   int resultWrite;
@@ -151,6 +188,14 @@ void lectureEntreeClient(int descripteurSocketClient, char * messageAEnvoyer)
   resultWrite = write(descripteurSocketClient, messageAEnvoyer, SIZE_MSG);
 }
 
+
+/**
+* @fn void receptionMessageServeur(int descripteurSocketClient, char *commandeRecu)
+* @brief recoit les messages
+* @param descripteurSocketClient le socket a qui parler
+* @param commandeRecu la command recu
+* @return void
+*/
 void receptionMessageServeur(int descripteurSocketClient, char *commandeRecu){
 
   //Reception des messages serveur
