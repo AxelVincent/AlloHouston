@@ -66,48 +66,53 @@ void nouveauService(int descripteurSocketService)
 		// Lecture de la commande reçu et gestion des differents cas
 		int commande = atoi(commandeRecu);
 		printf("La commande que veux effectuer le client est %d\n", commande);
+		char* villeDepart;
+		char* villeArrivee;
 		int h,m, h2,m2;
 		switch (commande) {
 			case 1:
 				//Fonction 1 : Ville de départ + ville d'arrivée +  horaire de départ
 				// Envoie et reception des informations a propos de la ville de depart
-				printf("%d "MAG"CHOIX DEPART"RESET"\n", pid);
-				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville de de depart : ");
-				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-				recevoirMessage(descripteurSocketService, commandeRecu);
-				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
-				char* villeDepart = strdup(commandeRecu);
+				fprintf(stderr, "%s\n", villeDepart);
+				demanderVille(descripteurSocketService, commandeRecu, commandeAEnvoyer, &villeDepart,&villeArrivee, pid);
 
 				// Envoie et reception des informations a propos de la ville d'arrivee
-				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
-				strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
-				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-				recevoirMessage(descripteurSocketService, commandeRecu);
-				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
-				char* villeArrivee = strdup(commandeRecu);
 
-				// Envoie et reception des informations a propos de l'horaire
-				printf("%d "MAG"CHOIX HORAIRE"RESET"\n", pid);
-				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de depart (HH:MN) : ");
-				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
-				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 
-				strToUpper(villeDepart);
-				strToUpper(villeArrivee);
+				printf("%s  %s\n", villeDepart, villeArrivee);
 
-			
-				trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
-				
-				fprintf(stderr, "%s\n", commandeAEnvoyer);
-				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
-				recevoirMessage(descripteurSocketService, commandeRecu);
-				if(atoi(commandeRecu)==2)
+
+				if(strcmp(villeArrivee, villeDepart) == 0)
 				{
-					envoyerMessage(descripteurSocketService,"stop");
-					close(descripteurSocketService);
-					exit(0);
+					printf("%d "RED"MAUVAIS ENTREE UTILISATEUR "MAG"VILLES IDENTIQUES"RESET"\n", pid);
+					envoyerMessage(descripteurSocketService, "noread;"RED"Les villes sont identiques."RESET"\n\n");
+					break;
 				}
+
+					// Envoie et reception des informations a propos de l'horaire
+					printf("%d "MAG"CHOIX HORAIRE"RESET"\n", pid);
+					strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de depart (HH:MN) : ");
+					choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
+					printf("Le client veut partir a partir de : %d:%d\n", h,m);
+
+					strToUpper(villeDepart);
+					strToUpper(villeArrivee);
+
+
+					trouverTrainLePlusProche(listeTrain, nbTrain, villeDepart, villeArrivee, h, m, commandeAEnvoyer);
+
+					fprintf(stderr, "%s\n", commandeAEnvoyer);
+					envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+					envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
+					recevoirMessage(descripteurSocketService, commandeRecu);
+					if(atoi(commandeRecu)==2)
+					{
+						envoyerMessage(descripteurSocketService,"stop");
+						close(descripteurSocketService);
+						exit(0);
+					}
+
+
 				//free(t);
 				break;
 			case 2:
@@ -127,37 +132,47 @@ void nouveauService(int descripteurSocketService)
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
 				villeArrivee = strdup(commandeRecu);
 
-				// Envoie et reception des informations a propos de l'horaire de debut
-				printf("%d "MAG"CHOIX HORAIRE 1/2"RESET"\n", pid);
-				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de debut (HH:MN) : ");
-				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
-				printf("Le client veut partir a partir de : %d:%d\n", h,m);
 
-				// Envoie et reception des informations a propos de l'horaire de fin
-				printf("%d "MAG"CHOIX HORAIRE 2/2"RESET"\n", pid);
-				strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de fin (HH:MN) : ");
-				choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h2,&m2, pid);
-
-				printf("Le client veut par a partir de : %d:%d\n", h2,m2);
-
-				int tempNbTrain = nbTrain;
-
-				 Train* trainsTrouves = trouverTrainParTranche(listeTrain, &tempNbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
-
-				//printf("Trains : %d \n", nbTrain);
-				//printf("Train n 1 : %s ", trainsTrouves.villeDepart);
-
-
-				printf("\n");
-				envoyerMessage(descripteurSocketService, commandeAEnvoyer);
-				envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
-				recevoirMessage(descripteurSocketService, commandeRecu);
-				if(atoi(commandeRecu)==2)
+				if(strcmp(villeArrivee, villeDepart) == 0)
 				{
-					envoyerMessage(descripteurSocketService,"stop");
-					close(descripteurSocketService);
-					exit(0);
+					printf("%d "RED"MAUVAIS ENTREE UTILISATEUR "MAG"VILLES IDENTIQUES"RESET"\n", pid);
+					envoyerMessage(descripteurSocketService, "noread;"RED"Les villes sont identiques."RESET"\n");
+					break;
 				}
+
+					// Envoie et reception des informations a propos de l'horaire de debut
+					printf("%d "MAG"CHOIX HORAIRE 1/2"RESET"\n", pid);
+					strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de debut (HH:MN) : ");
+					choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h,&m, pid);
+					printf("Le client veut partir a partir de : %d:%d\n", h,m);
+
+					// Envoie et reception des informations a propos de l'horaire de fin
+					printf("%d "MAG"CHOIX HORAIRE 2/2"RESET"\n", pid);
+					strcpy(commandeAEnvoyer, "\nVeuillez entrer l'heure de fin (HH:MN) : ");
+					choixHoraire(descripteurSocketService, commandeRecu, commandeAEnvoyer, &h2,&m2, pid);
+
+					printf("Le client veut par a partir de : %d:%d\n", h2,m2);
+
+					int tempNbTrain = nbTrain;
+
+					 Train* trainsTrouves = trouverTrainParTranche(listeTrain, &tempNbTrain, villeDepart, villeArrivee, h, m, h2, m2, commandeAEnvoyer);
+
+					//printf("Trains : %d \n", nbTrain);
+					//printf("Train n 1 : %s ", trainsTrouves.villeDepart);
+
+
+					printf("\n");
+					envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+					envoyerMessage(descripteurSocketService, "Voulez vous retourner au menu ou quitter?\n 1 : Retourner au menu\n 2 : Quitter\n Choix : ");
+					recevoirMessage(descripteurSocketService, commandeRecu);
+					if(atoi(commandeRecu)==2)
+					{
+						envoyerMessage(descripteurSocketService,"stop");
+						close(descripteurSocketService);
+						exit(0);
+					}
+
+
 
 
 			break;
@@ -177,6 +192,14 @@ void nouveauService(int descripteurSocketService)
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
 				char* villeArriveeRequete3 = strdup(commandeRecu);
+
+
+				if(strcmp(villeArriveeRequete3, villeDepartRequete3) == 0)
+				{
+					printf("%d "RED"MAUVAIS ENTREE UTILISATEUR "MAG"VILLES IDENTIQUES"RESET"\n", pid);
+					envoyerMessage(descripteurSocketService, "noread;"RED"Les villes sont identiques."RESET"\n");
+					break;
+				}
 
 				// Affichage de la liste de tous les trains satisfaisant les critères ville de départ et ville d'arrivée
 				strToUpper(villeDepartRequete3);
@@ -340,5 +363,26 @@ void choixHoraire(int descripteurSocketService, char *commandeRecu, char *comman
 
 	}
 	while(valide == 0);
+
+}
+
+void demanderVille(int descripteurSocketService, char *commandeRecu, char *commandeAEnvoyer, char **villeDepart, char **villeArrivee, int pid)
+{
+
+	printf("%d "MAG"CHOIX DEPART"RESET"\n", pid);
+	strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville de de depart : ");
+	envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+	recevoirMessage(descripteurSocketService, commandeRecu);
+	printf("Le client veut partir de : %s\n", commandeRecu);
+	*villeDepart = strdup(commandeRecu);
+	strToUpper(*villeDepart);
+
+	printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
+	strcpy(commandeAEnvoyer, "\nVeuillez entrer la ville d'arrivee : ");
+	envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+	recevoirMessage(descripteurSocketService, commandeRecu);
+	printf("Le client veut aller a : %s\n", commandeRecu);
+	*villeArrivee = strdup(commandeRecu);
+	strToUpper(*villeArrivee);
 
 }
