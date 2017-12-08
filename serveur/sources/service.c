@@ -77,7 +77,6 @@ void nouveauService(int descripteurSocketService)
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut partir de : %s (taille = %d)\n", commandeRecu, sizeRead);
 				char* villeDepart = strdup(commandeRecu);
-				trimwhitespace(villeDepart);
 
 				// Envoie et reception des informations a propos de la ville d'arrivee
 				printf("%d "MAG"CHOIX ARRIVEE"RESET"\n", pid);
@@ -86,7 +85,6 @@ void nouveauService(int descripteurSocketService)
 				recevoirMessage(descripteurSocketService, commandeRecu);
 				printf("Le client veut aller a : %s (taille = %d)\n", commandeRecu, sizeRead);
 				char* villeArrivee = strdup(commandeRecu);
-				trimwhitespace(villeArrivee);
 
 				// Envoie et reception des informations a propos de l'horaire
 				printf("%d "MAG"CHOIX HORAIRE"RESET"\n", pid);
@@ -287,6 +285,7 @@ void recevoirMessage(int descripteurSocketService, char *commandeRecu)
 		fprintf(stderr, RED"Erreur lecture socket!\n"RESET);
 		exit(-1);
 	}
+	trimwhitespace(commandeRecu);
 	printf("Commande reçu du client : %s (taille = %d)\n", commandeRecu, sizeRead);
 }
 
