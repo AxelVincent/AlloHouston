@@ -143,12 +143,12 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 		{
 			if(strcmp(villeArrivee, listeTrain[trainCourant].villeArrivee) == 0)
 			{
-			// Heure où le train doit partir
+				// Heure où le train doit partir
 				int heureDebut = tempsVersInt(listeTrain[trainCourant].heureDepart);
 
 				if (heureDebut >= trancheDebut && heureDebut <= trancheFin)
 				{
-				// On ajoute ce train à la nouvelle liste
+					// On ajoute ce train à la nouvelle liste
 					tab[nbTrains] = trainCourant;
 					nbTrains++;
 				}
@@ -182,7 +182,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 	}
 }
 
-Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * villeDepart, char * villeArrivee)
+Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * villeDepart, char * villeArrivee, char* commandeAEnvoyer)
 {
 	int tab[*compteLigne];
 	// Permet de matcher la ville de départ et la ville d'arrivée souhaitées
@@ -202,16 +202,133 @@ Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * vi
 		}
 	}
 
-	Train * trainFiltre = malloc(sizeof(Train)*nbTrainFiltre);
+
+	/*Train * trainFiltre = malloc(sizeof(Train)*nbTrainFiltre);
 	for (int inc = 0; inc < nbTrainFiltre; inc++) {
-		trainFiltre[inc] = listeTrain[tab[inc]];
+	trainFiltre[inc] = listeTrain[tab[inc]];}*/
+
+	if(nbTrainFiltre > 0)
+	{
+		Train * trainFiltre = malloc(sizeof(Train)*nbTrainFiltre);
+		/*char * commande;
+		snprintf(commande, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s : ", MAG, RESET);*/
+		for (int inc = 0; inc < nbTrainFiltre; inc++) {
+			trainFiltre[inc] = listeTrain[tab[inc]];
+
+			char * trainString;
+			/*snprintf(trainString, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n\n", MAG, RESET, trainFiltre[inc].id, trainFiltre[inc].villeDepart, trainFiltre[inc].villeArrivee, trainFiltre[inc].heureDepart->heure, trainFiltre[inc].heureDepart->minute, trainFiltre[inc].heureArrivee->heure, trainFiltre[inc].heureArrivee->minute, trainFiltre[inc].prix, trainFiltre[inc].reduc);
+			strcat(commande, trainString);*/
+		}
+
+		*compteLigne = nbTrainFiltre;
+		return trainFiltre;
+
+	}
+	else
+	{
+
+		printf("Aucun train ne correspond à ces critères\n");
+		snprintf(commandeAEnvoyer, SIZE_MSG,"noread;%sAucun train ne correspond à ces critères.%s\n", MAG, RESET);
+
+		*compteLigne = nbTrainFiltre;
+		return NULL;
 	}
 
-
-	*compteLigne = nbTrainFiltre;
-	return trainFiltre;
-
 }
+
+Train * trajetSelonCritere(struct Train* listeTrain, int compteLigne, int critere, char * commandeAEnvoyer)
+{
+
+	struct Train* trainFiltre = malloc(sizeof(Train));
+	printf("Compte ligne : %d, critere : %d\n",compteLigne,critere );
+	printf("villeDepart : %s\n",(listeTrain + 0)->villeDepart );
+	if (compteLigne > 0) {
+		double tableauProvisoire[compteLigne][4];
+		int incrementTableau;
+		for (incrementTableau = 0; incrementTableau < compteLigne; incrementTableau++) {
+			/* creation d'un tableau provisoire qui contient le prix, le prix avec reduc, la difference de temps et l'index afin de pouvoir trouver le plus petit */
+			tableauProvisoire[incrementTableau][0] = listeTrain[incrementTableau].prix;
+			// Prise en compte de la reduction pour trouver le prix le plus faible
+			if (listeTrain[incrementTableau].reduc == 0)
+			{
+				tableauProvisoire[incrementTableau][1] = listeTrain[incrementTableau].prix;
+			}
+			if (listeTrain[incrementTableau].reduc == 1)
+			{
+				tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix * 0.8);
+			}
+			if (listeTrain[incrementTableau].reduc == -1)
+			{
+				tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix * 1.1);
+			}
+
+			// Calcul de la difference de temps pour trouver le trajet le plus court
+			double heureDepart = listeTrain[incrementTableau].heureDepart->heure * 100;			double heureArrivee = listeTrain[incrementTableau].heureArrivee->heure * 100;
+			double minuteDepart = listeTrain[incrementTableau].heureDepart->minute;
+			double minuteArrivee = listeTrain[incrementTableau].heureArrivee->minute;
+			double horaireDepart = heureDepart + minuteDepart;
+			printf("Horaire depart : %f\n", horaireDepart);
+			double horaireArrivee = heureArrivee + minuteArrivee;
+			printf("Horaire arrivee : %f\n", horaireArrivee);
+			tableauProvisoire[incrementTableau][2] = (horaireArrivee - horaireDepart);
+			printf("difference d'heure : %f\n", tableauProvisoire[incrementTableau][2]);
+
+			// index
+			tableauProvisoire[incrementTableau][3] = incrementTableau;
+
+		}
+
+		if (critere == 1) {
+			double plusPetit = tableauProvisoire[0][1];
+			int index = tableauProvisoire[0][3];
+			// Comparer chaque ligne au plus petit, remplacer le plus petit
+			// si : valeur < plus petit
+			for (incrementTableau = 0; incrementTableau < compteLigne; incrementTableau++)
+			{
+				if (tableauProvisoire[incrementTableau][1] < plusPetit) {
+					plusPetit = tableauProvisoire[incrementTableau][1];
+					index = tableauProvisoire[incrementTableau][3];
+				}
+			}
+
+			struct Train* trainFiltre = malloc(sizeof(Train));
+			trainFiltre = listeTrain + index;
+			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %f Reduc : %d Prix final : %f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, plusPetit);
+			/*printf("Départ %s: \n", trainFiltre->villeDepart);
+			printf("Arrivee %s: \n", trainFiltre->villeArrivee);
+			printf("heureDepart %d: \n", trainFiltre->heureDepart->heure);
+			printf("minuteDepart %d: \n", trainFiltre->heureDepart->minute);
+			printf("heureArrivee %d: \n", trainFiltre->heureArrivee->heure);
+			printf("minuteArrivee %d: \n", trainFiltre->heureArrivee->minute);
+			printf("prix %f: \n", trainFiltre->prix);
+			printf("reduc %d: \n", trainFiltre->reduc);
+			printf("prix final %f: \n", plusPetit);*/
+			return trainFiltre;
+		}
+		if (critere == 2) {
+			/* trajet de durée optimum */
+			double plusPetit = tableauProvisoire[0][2];
+			int index = tableauProvisoire[0][3];
+			// Comparer chaque ligne au plus petit, remplacer le plus petit
+			// si : valeur < plus petit
+			for (incrementTableau = 0; incrementTableau < compteLigne; incrementTableau++)
+			{
+				if (tableauProvisoire[incrementTableau][2] < plusPetit) {
+					plusPetit = tableauProvisoire[incrementTableau][2];
+					index = tableauProvisoire[incrementTableau][3];
+				}
+			}
+			printf("index : %d\n", index);
+			struct Train* trainFiltre = malloc(sizeof(Train));
+			trainFiltre = listeTrain + index;
+			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %f Reduc : %d Prix final : %f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, plusPetit);
+			return trainFiltre;
+		}
+
+	}
+}
+
+
 int tempsVersInt(struct Temps* temp)
 {
 	int test = temp->heure * 100 + temp->minute;
