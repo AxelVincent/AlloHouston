@@ -143,7 +143,7 @@ Train * trouverTrainParTranche(struct Train* listeTrain, int* tailleListe , char
 		{
 			if(strcmp(villeArrivee, listeTrain[trainCourant].villeArrivee) == 0)
 			{
-			// Heure où le train doit partir
+				// Heure où le train doit partir
 				int heureDebut = tempsVersInt(listeTrain[trainCourant].heureDepart);
 
 				if (heureDebut >= trancheDebut && heureDebut <= trancheFin)
@@ -210,10 +210,14 @@ Train * listeTrainParVille(struct Train* listeTrain, int* compteLigne, char * vi
 	if(nbTrainFiltre > 0)
 	{
 		Train * trainFiltre = malloc(sizeof(Train)*nbTrainFiltre);
+		/*char * commande;
+		snprintf(commande, SIZE_MSG,"noread;%sVoici le(s) train(s) correspondant a votre recherche%s : ", MAG, RESET);*/
 		for (int inc = 0; inc < nbTrainFiltre; inc++) {
 			trainFiltre[inc] = listeTrain[tab[inc]];
 
-			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n\n", MAG, RESET, trainFiltre[inc].id, trainFiltre[inc].villeDepart, trainFiltre[inc].villeArrivee, trainFiltre[inc].heureDepart->heure, trainFiltre[inc].heureDepart->minute, trainFiltre[inc].heureArrivee->heure, trainFiltre[inc].heureArrivee->minute, trainFiltre[inc].prix, trainFiltre[inc].reduc);
+			char * trainString;
+			/*snprintf(trainString, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix : %f Reduc : %d\n\n", MAG, RESET, trainFiltre[inc].id, trainFiltre[inc].villeDepart, trainFiltre[inc].villeArrivee, trainFiltre[inc].heureDepart->heure, trainFiltre[inc].heureDepart->minute, trainFiltre[inc].heureArrivee->heure, trainFiltre[inc].heureArrivee->minute, trainFiltre[inc].prix, trainFiltre[inc].reduc);
+			strcat(commande, trainString);*/
 		}
 
 		*compteLigne = nbTrainFiltre;
@@ -236,56 +240,56 @@ Train * trajetSelonCritere(struct Train* listeTrain, int compteLigne, int criter
 {
 
 	struct Train* trainFiltre = malloc(sizeof(Train));
-	printf("Compte ligne : %d, critere : %s\n",compteLigne,critere );
+	printf("Compte ligne : %d, critere : %d\n",compteLigne,critere );
 	printf("villeDepart : %s\n",(listeTrain + 0)->villeDepart );
 	if (compteLigne > 0) {
-
-		printf("PASSAGE compte ligne\n");
-		if (critere == 0) {
-			printf("PASSAGE 1\n");
-			/* trajet au meilleur prix en tenant compte de la reduc (code 0), du prix normal ou du supplement(code -1)*/
-			double tableauProvisoire[compteLigne][3];
-			int incrementTableau;
-			for (incrementTableau = 0; incrementTableau < compteLigne; incrementTableau++) {
-				/* creation d'un tableau provisoire qui contient le prix, le prix avec reduc et l'index afin de pouvoir trouver le plus petit */
-				printf("prix : %f,", listeTrain[incrementTableau].prix);
-				tableauProvisoire[incrementTableau][0] = listeTrain[incrementTableau].prix;
-				printf("Tab 1 : %f,",tableauProvisoire[incrementTableau][0] );
-				// Prise en compte de la reduction pour trouver le prix le plus faible
-				printf("reduc : %d,",listeTrain[incrementTableau].reduc );
-				if (listeTrain[incrementTableau].reduc == 0)
-				{
-					tableauProvisoire[incrementTableau][1] = listeTrain[incrementTableau].prix;
-				}
-				if (listeTrain[incrementTableau].reduc == 1)
-				{
-					tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix * 0.8);
-				}
-				if (listeTrain[incrementTableau].reduc == -1)
-				{
-					tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix * 1.1);
-				}
-				printf("Tab 2 : %f, ",tableauProvisoire[incrementTableau][1] );
-				tableauProvisoire[incrementTableau][2] = incrementTableau;
-				printf("Tab 3 : %d\n",tableauProvisoire[incrementTableau][2] );
-
+		double tableauProvisoire[compteLigne][4];
+		int incrementTableau;
+		for (incrementTableau = 0; incrementTableau < compteLigne; incrementTableau++) {
+			/* creation d'un tableau provisoire qui contient le prix, le prix avec reduc, la difference de temps et l'index afin de pouvoir trouver le plus petit */
+			tableauProvisoire[incrementTableau][0] = listeTrain[incrementTableau].prix;
+			// Prise en compte de la reduction pour trouver le prix le plus faible
+			if (listeTrain[incrementTableau].reduc == 0)
+			{
+				tableauProvisoire[incrementTableau][1] = listeTrain[incrementTableau].prix;
+			}
+			if (listeTrain[incrementTableau].reduc == 1)
+			{
+				tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix * 0.8);
+			}
+			if (listeTrain[incrementTableau].reduc == -1)
+			{
+				tableauProvisoire[incrementTableau][1] = (listeTrain[incrementTableau].prix * 1.1);
 			}
 
-				printf("PASSAGE 3\n");
+			// Calcul de la difference de temps pour trouver le trajet le plus court
+			double heureDepart = listeTrain[incrementTableau].heureDepart->heure * 100;			double heureArrivee = listeTrain[incrementTableau].heureArrivee->heure * 100;
+			double minuteDepart = listeTrain[incrementTableau].heureDepart->minute;
+			double minuteArrivee = listeTrain[incrementTableau].heureArrivee->minute;
+			double horaireDepart = heureDepart + minuteDepart;
+			printf("Horaire depart : %f\n", horaireDepart);
+			double horaireArrivee = heureArrivee + minuteArrivee;
+			printf("Horaire arrivee : %f\n", horaireArrivee);
+			tableauProvisoire[incrementTableau][2] = (horaireArrivee - horaireDepart);
+			printf("difference d'heure : %f\n", tableauProvisoire[incrementTableau][2]);
+
+			// index
+			tableauProvisoire[incrementTableau][3] = incrementTableau;
+
+		}
+
+		if (critere == 1) {
 			double plusPetit = tableauProvisoire[0][1];
-			int index = tableauProvisoire[0][2];
+			int index = tableauProvisoire[0][3];
 			// Comparer chaque ligne au plus petit, remplacer le plus petit
 			// si : valeur < plus petit
 			for (incrementTableau = 0; incrementTableau < compteLigne; incrementTableau++)
 			{
 				if (tableauProvisoire[incrementTableau][1] < plusPetit) {
 					plusPetit = tableauProvisoire[incrementTableau][1];
-					index = tableauProvisoire[incrementTableau][2];
+					index = tableauProvisoire[incrementTableau][3];
 				}
 			}
-
-				printf("PASSAGE 4\n");
-				printf("Index : %d\n",index );
 
 			struct Train* trainFiltre = malloc(sizeof(Train));
 			trainFiltre = listeTrain + index;
@@ -299,14 +303,26 @@ Train * trajetSelonCritere(struct Train* listeTrain, int compteLigne, int criter
 			printf("prix %f: \n", trainFiltre->prix);
 			printf("reduc %d: \n", trainFiltre->reduc);
 			printf("prix final %f: \n", plusPetit);*/
-
-			/*printf("Voici le train correspondant a votre recherche :\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %f Reduc : %d Prix final : %f\n\n",trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, plusPetit );*/
-			printf("PASSAGE 5\n");
 			return trainFiltre;
 		}
-		if (critere == 1) {
+		if (critere == 2) {
 			/* trajet de durée optimum */
-			return NULL;
+			double plusPetit = tableauProvisoire[0][2];
+			int index = tableauProvisoire[0][3];
+			// Comparer chaque ligne au plus petit, remplacer le plus petit
+			// si : valeur < plus petit
+			for (incrementTableau = 0; incrementTableau < compteLigne; incrementTableau++)
+			{
+				if (tableauProvisoire[incrementTableau][2] < plusPetit) {
+					plusPetit = tableauProvisoire[incrementTableau][2];
+					index = tableauProvisoire[incrementTableau][3];
+				}
+			}
+			printf("index : %d\n", index);
+			struct Train* trainFiltre = malloc(sizeof(Train));
+			trainFiltre = listeTrain + index;
+			snprintf(commandeAEnvoyer, SIZE_MSG, "noread;%sVoici le train correspondant a votre recherche :%s\n%d : %s -> %s Départ %d:%d arrivée %d:%d Prix d'origine : %f Reduc : %d Prix final : %f\n\n", MAG, RESET, trainFiltre->id, trainFiltre->villeDepart, trainFiltre->villeArrivee, trainFiltre->heureDepart->heure, trainFiltre->heureDepart->minute, trainFiltre->heureArrivee->heure, trainFiltre->heureArrivee->minute, trainFiltre->prix, trainFiltre->reduc, plusPetit);
+			return trainFiltre;
 		}
 
 	}

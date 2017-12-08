@@ -192,21 +192,17 @@ void nouveauService(int descripteurSocketService)
 				fprintf(stderr,"Compte LIGNE :%d\n", compteLigne);
 				Train * lstTrainParVille = malloc(sizeof(Train));
 				lstTrainParVille = listeTrainParVille(listeTrain, &compteLigne, villeDepartRequete3, villeArriveeRequete3, commandeAEnvoyer);
-				printf("P3\n");
-				printf("Compte LIGNE :%d\n", compteLigne);
-				/*for (int i = 0; i < compteLigne; i++) {
-					printTrain(lstTrainParVille + i);
-					printf("\n");
-				}*/
 				//fprintf(stderr, "%s\n", commandeAEnvoyer);
 				//envoyerMessage(descripteurSocketService, commandeAEnvoyer);
 
+				//envoyerMessage(descripteurSocketService, commandeAEnvoyer);
+				// Demander s'il veut le trajet le moins cher ou le plus court
 				/* Affichage du train qui répond soit :
 					- Au trajet au meilleur prix (reduction comprise) critere = 0
 					- Au trajet de durée optimum critere = 1*/
 
-				printf("PASSAGE A\n");
-				int critere = 0;
+				int critere = 2;
+				printf("Critere : %d\n", critere);
 				Train * trainSelonCritere = malloc(sizeof(Train));
 				trainSelonCritere = trajetSelonCritere(lstTrainParVille, compteLigne, critere, commandeAEnvoyer);
 				fprintf(stderr, "%s\n", commandeAEnvoyer);
